@@ -1,0 +1,269 @@
+.detalhes-container-detail {
+  display: flex;
+  flex-direction: column;
+  background-color: #050821;
+  color: #fff;
+  padding: 2rem;
+}
+
+.btn-voltar-details {
+  background-color: transparent;
+  border: none;
+  color: #ff4da6;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  width: max-content;
+  margin-left: 8rem;
+}
+.btn-voltar-details:hover {
+  color: #ff85c1;
+}
+
+.hero-details {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 2rem;
+  margin-left: 8rem;
+  margin-bottom: 2rem;
+}
+
+.imagens-section-detail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imagem-principal-detail .imagem-zoom-detail-detail {
+  width: 100%;
+  max-width: 600px;
+  max-height: 500px;
+  border-radius: 10px;
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+}
+
+.imagem-principal-detail .imagem-zoom-detail-detail:hover {
+  transform: scale(1.05);
+}
+
+.carrossel-miniaturas-detail {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.miniatura {
+  width: 70px;
+  height: 70px;
+  border-radius: 6px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.miniatura.ativa {
+  border-color: #FF6EC7;
+}
+
+.info-section-detail {
+  flex: 1;
+  padding: 1rem;
+}
+
+.titulo-detail {
+  font-size: 2.3rem;
+  color: #FF6EC7;
+}
+
+.descricao-detail {
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+.preco-detail {
+  font-size: 1.8rem;
+  color: #00ffcc;
+}
+
+.quantidade-detail {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.quantidade-detail .btn-detail {
+  background-color: #FF6EC7;
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.quantidade-detail .input-detail {
+  width: 40px;
+  text-align: center;
+  margin: 0 0.5rem;
+  background: #333;
+  border: none;
+  color: white;
+  font-size: 1rem;
+}
+
+.botao-carrinho-detail {
+  background-color: #FF6EC7;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botao-carrinho-detail:hover {
+  background-color: #e60073;
+}
+
+.botao-whatsapp {
+  background-color: #25d366;
+  color: white;
+  border: none;
+  padding: 0.65rem 1.2rem;
+  margin-left: 2rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.botao-whatsapp img {
+  height: 20px;
+  margin-left: 10px;
+  margin-bottom: -4px;
+  /* margin-right: 10px; */
+}
+
+.botao-whatsapp:hover {
+  background-color: #1da851;
+}
+
+.frete-section {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.frete-section input {
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.frete-section button {
+  background-color: #ff2db1;
+  color: white;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.formas-pagamento {
+  margin-top: 1.5rem;
+  color: white;
+}
+.formas-pagamento ul {
+  list-style: none;
+  padding: 0;
+}
+.formas-pagamento li::before {
+  content: "✔️ ";
+}
+
+/* //////////////////////////// */
+
+.secao-avaliacoes {
+  margin: 40px 100px;
+}
+.section-title-av {
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #FF6EC7;
+}
+
+.lista-avaliacoes {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 20px;
+}
+
+.lista-avaliacoes li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item-avaliacao {
+  display: flex;
+  align-items: center;
+  background: #262238;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ffffff41;
+}
+
+.header-av {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 15px;
+}
+
+.header-av strong {
+  font-weight: bold;
+}
+
+.estrelas {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.coments {
+  margin-left: 15px;
+}
+
+.lixeira {
+  font-size: 22px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: color 0.5s ease;
+}
+.lixeira:hover {
+  color: red;
+}
+
+.react-confirm-alert-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.react-confirm-alert-button-group {
+  display: flex !important; 
+  justify-content: center !important;
+  gap: 1rem !important;
+  margin-top: 1.5rem !important;
+}
+
+.react-confirm-alert-button-group button {
+  padding: 0.6rem 2rem !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  border-radius: 5px !important;
+}

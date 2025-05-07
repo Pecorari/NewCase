@@ -1,0 +1,81 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-section {
+  background-color: #050821;
+  padding: 80px;
+  text-align: center;
+}
+
+.login-container {
+  background-color: rgb(177, 177, 177);
+  max-width: 600px;
+  margin: auto;
+  padding: 40px;
+  border-radius: 12px;
+}
+
+.login-section h2 {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 2rem;
+  margin-bottom: 35px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-form input {
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.login-form textarea {
+  resize: none;
+}
+
+.login-form button {
+  background-color: #FF6EC7;
+  color: white;
+  border: 3px solid #FF6EC7;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.4s;
+  margin-top: 15px;
+}
+
+.login-form button:hover {
+  background-color: #c23a8e;
+}
+
+.login-footer {
+  text-align: center;
+  font-size: 16px;
+}
+
+.login-footer a {
+  color: #9c3675;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+.erro {
+  color: red;
+}

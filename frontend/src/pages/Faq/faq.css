@@ -1,0 +1,66 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.faq {
+  background-color: #050821;
+  color: white;
+  padding-bottom: 50px;
+}
+
+.faq-section {
+  max-width: 800px;
+  margin: auto;
+  padding-top: 50px;
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+}
+
+.faq-section h1 {
+  text-align: center;
+  margin-bottom: 60px;
+  font-size: 2.5rem;
+}
+
+.faq-category h2 {
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: white;
+}
+
+details {
+  background-color: #f4f4f4;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  justify-content: center;
+}
+
+summary {
+  font-weight: bold;
+  font-size: 1.05rem;
+  list-style: none;
+  color: black;
+  padding: 15px;
+}
+
+summary::marker {
+  display: none;
+}
+
+details[open] summary {
+  color: #050821;
+}
+
+details p {
+  padding: 15px 25px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: black;
+  background-color: #dddddd;
+  border-radius: 6px;
+}

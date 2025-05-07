@@ -1,0 +1,128 @@
+.myPedido {
+  background-color: #050821;
+  color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pedido-detalhes {
+  width: 80%;
+  margin: 10px auto;
+  padding: 20px;
+}
+
+.pedido-detalhes h1 {
+  color: #ff4da6;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.btn-voltar {
+  background-color: transparent;
+  border: none;
+  color: #ff4da6;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+.btn-voltar:hover {
+  color: #ff85c1;
+}
+
+.column-container {
+  display: flex;
+  gap: 200px;
+  margin-top: 80px;
+  flex-wrap: wrap;
+}
+
+.left-column,
+.right-column {
+  flex: 1 1 40%;
+}
+
+.secao-info,
+.secao-endereco,
+.secao-itens,
+.secao-pagamento {
+  margin-bottom: 30px;
+}
+
+.secao-info h2,
+.secao-endereco h2,
+.secao-itens h2,
+.secao-pagamento h2 {
+  color: #ff85c1;
+  font-size: 20px;
+  border-bottom: 1px solid #333;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.secao-info p,
+.secao-pagamento p {
+  margin: 6px 0;
+  line-height: 1.6;
+}
+.secao-endereco p {
+  line-height: 1.6;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.item-pd {
+  display: flex;
+  margin-bottom: 12px;
+  padding: 10px;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+.item-pd:hover {
+  transform: scale(1.005);
+  border: 1px solid #ff40a042;
+}
+
+
+.img-item {
+  width: 100px;
+  border-radius: 8px;
+}
+
+.item-pd-info {
+  /* background-color: red; */
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 10px 25px;
+  font-size: 15px;
+}
+.boxes-info-pd {
+  display: flex;
+  flex-direction: column;
+  gap: 20%;
+}
+.boxes-valor-pd {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: right;
+}
+.item-pd-info h3 {
+  font-weight: 600;
+}
+
+.rodape {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 14px;
+  color: #ccc;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+}

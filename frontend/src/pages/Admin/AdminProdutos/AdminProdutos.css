@@ -1,0 +1,196 @@
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-container {
+  margin: auto;
+  padding: 2rem;
+}
+
+.form-wrapper {
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.3s ease;
+}
+
+.form-wrapper.fechado {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-wrapper.aberto {
+  max-height: 10000px;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.form-btn {
+  padding: 1rem;
+  cursor: pointer;
+  border-radius: 10px;
+
+}
+.form-btn:hover {
+  background-color: #2a2a2a57;
+}
+
+.title-admin-produto {
+  color: #ff2fa0;
+  font-size: 30px;
+  margin-bottom: 1rem;
+}
+
+.form-admin-produto {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-admin-produto,
+.form-btn-admin-produto {
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+.input-admin-produto {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.input-admin-produto::placeholder {
+  color: #aaa;
+}
+
+.input-admin-produto[type="file"] {
+  background-color: transparent;
+}
+
+.form-btn-admin-produto {
+  background-color: #ff2fa0;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.form-btn-admin-produto:hover {
+  background-color: #e60073;
+}
+
+.form-btn-admin-produto-cancel {
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background-color: #5f2645;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.form-btn-admin-produto-cancel:hover {
+  background-color: #471a31;
+}
+
+
+.ul-admin-produto {
+  list-style: none;
+  padding: 0;
+}
+
+.li-admin-produto {
+  background-color: #2a2a2a;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.img-admin-produto {
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  width: 130px;
+}
+
+.containerBtn-produtos-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.li-btn-admin-produto {
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #444;
+  color: white;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.li-btn-admin-produto:hover {
+  background-color: #666;
+}
+
+.li-btn-admin-produto:first-of-type {
+  background-color: #ffaa00;
+}
+
+.li-btn-admin-produto:first-of-type:hover {
+  background-color: #b47800;
+}
+
+.li-btn-admin-produto:last-of-type {
+  background-color: #ff3b3b;
+}
+
+.li-btn-admin-produto:last-of-type:hover {
+  background-color: #a00000;
+}
+
+.preview-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.preview-item {
+  position: relative;
+}
+
+.preview-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+.preview-item button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 20px;
+  padding: 3px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.erro {
+  color: red;
+  margin: 0px;
+}
+

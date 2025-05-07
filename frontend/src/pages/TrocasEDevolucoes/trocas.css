@@ -1,0 +1,34 @@
+.trocas {
+  background-color: #050821;
+  color: white;
+  min-height: 100vh;
+}
+
+.trocas-container {
+  max-width: 900px;
+  margin: 0px auto;
+  padding: 40px 20px;
+}
+
+.trocas-container h1 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #ff4ec9;
+}
+
+.trocas-container h2 {
+  font-size: 1.4rem;
+  margin-top: 30px;
+  color: #ff4ec9;
+}
+
+.trocas-container p, .trocas-container ul {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 10px;
+}
+
+.trocas-container ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}

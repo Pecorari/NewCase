@@ -1,0 +1,153 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.home {
+  color: white;
+}
+
+.body{
+  padding-bottom: 35px;
+  background-color: #050821;
+}
+
+.social-icons {
+  position: fixed;
+  top: 50%;
+  right: 40px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 1000;
+}
+
+.social-icons a {
+  color: white;
+  font-size: 19px;
+  text-decoration: none;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+  color: #FF6EC7;
+}
+
+
+.hero {
+  color: #FF6EC7;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -80px;
+}
+
+.backgroundImg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 82%;
+  height: 100%;
+  z-index: 1;
+  background-color: #00000000;
+}
+
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 1100px;
+  background-color: #00000000;
+  z-index: 2;
+}
+
+.hero-text .title-hero {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: bolder;
+  letter-spacing: 1.5px;
+  line-height: 90px;
+  text-align: left;
+  font-size: 5.2rem;
+  color: #FF6EC7;
+  margin-bottom: 1rem;
+  background-color: #00000000;
+  z-index: 3;
+}
+
+.hero-text .subtitle-hero {
+  color: #ffffff;
+  margin-bottom: 4rem;
+  font-size: 1.1rem;
+  font-weight: 200;
+  line-height: 25px;
+  background-color: #00000000;
+  z-index: 3;
+}
+
+.hero-button {
+  border: 2px solid #FF6EC7;
+  padding: 1.25rem 3rem;
+  color: #FF6EC7;
+  text-decoration: none;
+  border-radius: 50px;
+  transition: background 0.3s;
+  background-color: #00000000;
+  z-index: 3;
+}
+
+.hero-button:hover {
+  background-color: #FF6EC7;
+  color: #0a1128;
+  z-index: 3;
+}
+
+.produto-banner {
+  width: 720px;
+  border: none;
+  background-color: #00000000;
+  z-index: 3;
+}
+
+.produtos-destaque {
+  width: 100vw;
+  height: 100vh;
+}
+
+.titulo {
+  color: #FF6EC7;
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.8rem;
+  margin-bottom: 80px;
+  position: relative;
+}
+
+.ver-mais {
+  text-align: center;
+  width: max-content;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  margin-top: 70px;
+  margin-bottom: 80px;
+  background-color: red;
+  transition: transform 0.2s ease;
+}
+.ver-mais-a {
+  text-decoration: none;
+  background-color: #FF6EC7;
+  color: #000000;
+  padding: 20px 70px;
+  transition: transform 0.2s ease;
+}
+
+.ver-mais-a:hover, .ver-mais:hover {
+  transform: translateX(-50%) scale(1.03);
+  filter: brightness(1.05);
+  cursor: pointer;
+}

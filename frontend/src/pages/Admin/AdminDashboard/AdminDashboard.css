@@ -1,0 +1,43 @@
+.admin-dashboard {
+  background-color: #121212;
+  color: #fff;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+  color: #ff2fa0;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.admin-tabs button {
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #ff2fa0;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.admin-tabs button:hover {
+  background-color: #ff2fa0;
+  color: #121212;
+}
+
+.admin-content {
+  background-color: #1e1e1e;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255, 0, 128, 0.3);
+}

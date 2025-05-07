@@ -1,0 +1,107 @@
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-container {
+  margin: auto;
+  padding: 2rem;
+}
+
+.title-admin-aparelho {
+  color: #ff2fa0;
+  margin-bottom: 1rem;
+}
+
+.form-admin-aparelho {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-admin-aparelho,
+.form-btn-admin-aparelho {
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+}
+
+.input-admin-aparelho {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.input-admin-aparelho::placeholder {
+  color: #aaa;
+}
+
+.form-btn-admin-aparelho {
+  background-color: #ff2fa0;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.form-btn-admin-aparelho:hover {
+  background-color: #e60073;
+}
+
+.ul-admin-aparelho {
+  list-style: none;
+  padding: 0;
+}
+
+.li-admin-aparelho {
+  background-color: #2a2a2a;
+  padding: 1rem 2.5rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+}
+
+.dados-aparelhos {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+}
+
+.nome-aparelho {
+  width: 45%;
+}
+
+.li-btn-admin-aparelho {
+  width: 150px;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #444;
+  color: white;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.li-btn-admin-aparelho:last-of-type {
+  background-color: #ff3b3b;
+}
+
+.li-btn-admin-aparelho:last-of-type:hover {
+  background-color: #790000;
+}
+
+
+.erro {
+  color: red;
+  margin: 0px;
+}
+

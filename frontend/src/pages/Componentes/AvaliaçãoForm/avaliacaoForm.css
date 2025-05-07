@@ -1,0 +1,77 @@
+.container-form {
+  margin-top: 80px;
+  margin-left: 20%;
+  background: #040418b4;
+  padding: 30px 50px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 60%;
+}
+
+.container-form h3 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.form-avaliacao {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-avaliacao input,
+.form-avaliacao textarea {
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.form-avaliacao textarea {
+  resize: none;
+}
+
+.estrelas-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.estrelas {
+  display: flex;
+  gap: 8px;
+  margin-left: 15px;
+}
+
+.estrela {
+  font-size: 28px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.estrela.ativa {
+  color: #ffc107;
+}
+
+.btn-avaliar {
+  background-color: #e91e63;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.btn-avaliar:hover {
+  background-color: #a5214d;
+}
+
+.login-av {
+  display: flex;
+  gap: 10px;
+}

@@ -1,0 +1,99 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.contato {
+  background-color: #050821;
+  color: white;
+  padding: 75px;
+  text-align: center;
+}
+
+.contato-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+.contato h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.contato p {
+  font-size: 1rem;
+  margin-bottom: 40px;
+  color: #ccc;
+}
+
+.contato-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contato-form input,
+.contato-form textarea {
+  padding: 12px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.contato-form textarea {
+  resize: none;
+}
+
+.contato-form button {
+  background-color: #ff0055;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.contato-form button:hover {
+  background-color: #e6004a;
+}
+
+.contato-redes {
+  margin-top: 50px;
+}
+
+.contato-redes p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #ccc;
+}
+
+.redes-links {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.redes-links img {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s;
+}
+
+.redes-links img:hover {
+  transform: scale(1.15);
+}
+
+.custom-ui {
+  background: #4d4d4d;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}

@@ -1,0 +1,84 @@
+.verificar-email {
+  height: 100vh;
+  background-color: #050821;
+  display: flex;
+}
+
+strong {
+  font-weight: bold;
+}
+
+.verificar-email-page {
+  padding: 3rem 1.5rem;
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.verificar-email-page h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.verificar-email-page p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.verificar-email-page button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #ff0066;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 2rem 0;
+  transition: background-color 0.3s ease;
+}
+.verificar-email-page button:hover {
+  background-color: #aa0044;
+}
+
+.verificar-email-page button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.verificar-email-page .reenviado {
+  color: green;
+  margin-top: 25px;
+  margin-bottom: 50px;
+}
+
+.faq-email {
+  text-align: left;
+  margin-top: 4rem;
+}
+
+.faq-email h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.faq-email ul {
+  padding-left: 1rem;
+}
+
+.faq-email li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.voltar-link {
+  display: block;
+  margin-top: 4rem;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: #ff4da6;
+  transition: color 0.3s ease;
+}
+.voltar-link:hover {
+  color: #ff85c1;
+}

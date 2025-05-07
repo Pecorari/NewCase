@@ -1,0 +1,268 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+.loja-container {
+  background-color: #050821;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 30px;
+  padding: 0px 20px 10vh 0px;
+  text-align: center;
+}
+
+.barra-pesquisa {
+  display: flex;
+  margin-top: -50px;
+  margin-left: 300px;
+  grid-column: 1 / -1;
+  justify-content: flex-start;
+}
+
+.input-pesquisa {
+  width: 80%;
+  max-width: 700px;
+  padding: 15px 20px;
+  font-size: 18px;
+  border: 2px solid #FF6EC7;
+  border-radius: 10px;
+  outline: none;
+  background-color: #00000000;
+  color: white;
+}
+
+.input-pesquisa::placeholder {
+  color: #ccc;
+}
+
+.sugestoes-dropdown {
+  position: absolute;
+  background-color: #2b2b2b;
+  border: 1px solid #444;
+  border-radius: 10px;
+  width: 700px;
+  z-index: 100;
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  top: 145px;
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+  font-size: 16px;
+}
+
+.sugestoes-dropdown li {
+  padding: 10px 16px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sugestoes-dropdown li:hover {
+  background-color: #444;
+}
+
+.sugestoes-dropdown li + li {
+  border-top: 1px solid #3a3a3a;
+}
+.sidebar {
+  background-color: rgb(64, 35, 73);
+  color: white;
+  padding: 20px 30px;
+  width: 100%;
+  text-align: left;
+}
+
+.filtro-grupo {
+  margin-bottom: 50px;
+}
+
+.filtro-grupo h3 {
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+.filtro-grupo ul {
+  list-style: none;
+  padding: 0;
+}
+
+.filtro-grupo li {
+  font-size: 15px;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.stars {
+  font-size: 18px;
+  color: #f5a623;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.filtro-grupo label {
+  font-size: 17px;
+}
+.filtro-grupo input {
+  margin-bottom: 10px;
+}
+
+.color-dots {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.dot.blue { background-color: #1e3a8a; }
+.dot.pink { background-color: #ec4899; }
+.dot.red { background-color: #ac1515; }
+.dot.green { background-color: #10b981; }
+.dot.orange { background-color: #f97316; }
+
+.reset-filter {
+  background-color: #00000000;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin-left: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  border: 2px solid hotpink;
+  width: 85%;
+}
+.reset-filter:hover {
+  background-color: #e600002d;
+}
+
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  align-items: start;
+}
+
+.card-produto {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.card-produto:hover {
+  transform: scale(1.03);
+}
+
+.imagem-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.imagem-container .imagem-produto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.imagem-container .seta {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(148, 148, 148, 0.3);
+  border: 1px solid #ffffff91;
+  padding: 5px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.imagem-container .seta:hover {
+  background-color: rgba(148, 148, 148, 0.6);
+}
+
+.imagem-container .seta-esquerda {
+  left: 5px;
+}
+
+.imagem-container .seta-direita {
+  right: 5px;
+}
+
+.title-produto {
+  color: #111428;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.preco {
+  font-weight: bold;
+  margin: 10px 0;
+  color: #111428;
+}
+
+.card-produto button {
+  background-color: #111428;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.card-produto button:hover {
+  background-color: #2d3354;
+}
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 40px;
+  grid-column: 1 / -1;
+}
+
+.paginacao button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #ddd;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.paginacao button:hover {
+  background-color: #bbb;
+}
+
+.paginacao button.ativo {
+  background-color: #333;
+  color: #fff;
+}

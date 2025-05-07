@@ -1,0 +1,206 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.custom-ui {
+  background: #4d4d4d;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+.modal-btn {
+  padding: 8px 20px;
+  background-color: #4BB543;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 25px;
+}
+
+.minha-conta {
+  background-color: #050821;
+}
+
+.boxes {
+  display: flex;
+  max-width: 80%;
+  margin: auto;
+  gap: 150px;
+}
+
+.meus-dados {
+  width: 50%;
+}
+.meus-pedidos {
+  width: 40%;
+}
+
+.h1-account {
+  margin-bottom: 35px;
+}
+
+.h3-account {
+  margin-top: 35px;
+  margin-bottom: 25px;
+}
+
+form .label-account {
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 15px;
+  font-weight: 500;
+}
+
+.submit {
+  padding: 10px 16px;
+  margin-top: 35px;
+  margin-right: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: 0.3s;
+  margin-bottom: 35px;
+}
+.submit:hover {
+  background-color: #00438a;
+}
+
+.input-account {
+  width: 70%;
+  padding: 8px 15px;
+  margin-left: 10px;
+  font-size: 18px;
+  border: 2px solid #FF6EC7;
+  border-radius: 10px;
+  outline: none;
+  background-color: #00000000;
+  color: white;
+}
+.input-account::placeholder {
+  color: white;
+}
+
+.input-account[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1)!important;
+}
+.disabled {
+  width: 70%;
+  padding: 8px 15px;
+  margin-left: 10px;
+  font-size: 18px;
+  border: 2px solid #FF6EC7;
+  border-radius: 10px;
+  outline: none;
+  background-color: #00000000;
+  color: white;
+  color: #6b6b6b;
+}
+.endereco-card p {
+  margin-bottom: 10px;
+}
+
+.submit-endereco {
+  padding: 10px 16px;
+  margin-top: 5px;
+  margin-right: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: 0.3s;
+}
+
+.submit-endereco:hover {
+  background-color: #0056b3;
+}
+
+.enderecos, .pedidos {
+  margin-top: 20px;
+}
+
+.endereco-card {
+  padding: 20px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+  color: black;
+}
+
+.pedido-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  color: black;
+  padding: 20px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+.pedido-card:hover {
+  transform: scale(1.02);
+}
+.pedido-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-add-endereco {
+  padding: 10px 16px;
+  margin-right: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  transition: 0.3s;
+  background-color: #28a745;
+  margin-top: 10px;
+  margin-bottom: 35px;
+}
+.btn-add-endereco:hover {
+  background-color: #2b693a;
+}
+
+.btn-logout {
+  padding: 10px 16px;
+  margin-right: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  transition: 0.3s;
+  background-color: #dc3545;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.btn-logout:hover {
+  background-color: #8d222c;
+}
+
+
+/* .card-produto {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.card-produto:hover {
+  transform: scale(1.03);
+} */
