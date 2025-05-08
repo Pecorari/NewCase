@@ -2,7 +2,7 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const connection = async config => {
-    return mysql.connection({
+    return mysql.createPool({
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWD,
         database: process.env.MYSQL_NAME,
