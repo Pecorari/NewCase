@@ -17,6 +17,11 @@ frontend/node_modules
 .DS_Store
 
 # environments
+frontend/.env
+frontend/.venv
+frontend/env/
+frontend/venv/
+frontend/.env
 backend/.env
 backend/.venv
 backend/env/
