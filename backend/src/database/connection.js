@@ -14,8 +14,10 @@ const connection = async config => {
 
 async function testConnection() {
     try {
-        await connection.getConnection();
+        const pool = await connection();
+        const connection = await pool.getConnection();
         console.log('Conexão com o MySQL estabelecida com sucesso!');
+        connection.release();
     } catch (error) {
         console.error('Erro ao conectar com o MySQL:', error.message);
     }
