@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../context/AuthContext";
 
 import api from '../../hooks/useApi';
+import { calcularFrete } from '../services/freteService';
 
 import Header from '../Componentes/Header';
 import AvaliacaoForm from '../Componentes/AvaliaçãoForm';
@@ -22,6 +23,9 @@ const ProdutoDetails = () => {
   const [quantidade, setQuantidade] = useState(1);
   const [imagemSelecionada, setImagemSelecionada] = useState(0);
   const [avaliacoes, setAvaliacoes] = useState([]);
+  const [cep, setCep] = useState('');
+  const [fretes, setFretes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const { id } = useParams();
   const { usuario } = useAuth();
@@ -55,6 +59,18 @@ const ProdutoDetails = () => {
     const link = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
     window.open(link, '_blank');
   };
+
+  async function handleFrete() {
+    setLoading(true);
+    try {
+      const resultado = await calcularFrete(cep, produto);
+      setFretes(resultado);
+    } catch (e) {
+      console.log('Erro ao calcular o frete', e);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const renderEstrelas = (media) => {
     const estrelas = [];
@@ -145,10 +161,28 @@ const ProdutoDetails = () => {
             <p className="preco-detail">R$ {produto.preco}</p>
 
             <div className="quantidade-detail">
-              <button className='btn-detail' onClick={diminuir}>-</button>
-              <input className='input-detail' type="text" value={quantidade} readOnly />
-              <button className='btn-detail' onClick={aumentar}>+</button>
+              <div className='quantidade-selector'>
+                <button className='btn-detail' onClick={diminuir}>-</button>
+                <input className='input-detail' type="text" value={quantidade} readOnly />
+                <button className='btn-detail' onClick={aumentar}>+</button>
+              </div>
+              <p>Disponível: {produto.estoque}</p>
             </div>
+
+            <div className="frete-container">
+              <input type="text" placeholder="Digite seu CEP" value={cep} onChange={(e) => setCep(e.target.value)} maxLength={8} />
+              <button onClick={handleFrete} disabled={loading}>{loading ? 'Calculando...' : 'Calcular Frete'}</button>
+            </div>
+              {fretes.length > 0 && (
+                <div className="resultado-frete">
+                  <h4>Opções de envio:</h4>
+                  <ul>
+                    {fretes.map((opcao, index) => (
+                      <li key={index}>{opcao.name} - R$ {opcao.price} - {opcao.delivery_time} dias úteis</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
             <button className="botao-carrinho-detail" onClick={adicionarAoCarrinho}>
               Adicionar ao Carrinho
@@ -158,32 +192,17 @@ const ProdutoDetails = () => {
               Compartilhar 
               <img src={whatsapp} alt='whatsapp' />
             </button>
+
+            <div className="formas-pagamento">
+              <h4>Formas de Pagamento</h4>
+              <ul>
+                <li>💳 Cartão de Crédito (até 3x sem juros)</li>
+                <li>💵 Pix (5% de desconto)</li>
+                <li>🏦 Boleto Bancário</li>
+              </ul>
+            </div>
           </div>
 
-          {/* <div className="frete-section">
-            <label htmlFor="cep">Calcular Frete:</label>
-            <input
-              type="text"
-              id="cep"
-              name="cep"
-              placeholder="Digite seu CEP"
-              maxLength="9"
-              onChange={handleCepChange}
-            />
-            <button onClick={calcularFrete}>Calcular</button>
-            {frete && (
-              <p>Frete: R$ {frete.valor} - Entrega em até {frete.prazo} dias úteis</p>
-            )}
-          </div> */}
-
-          <div className="formas-pagamento">
-            <h4>Formas de Pagamento</h4>
-            <ul>
-              <li>💳 Cartão de Crédito (até 3x sem juros)</li>
-              <li>💵 Pix (5% de desconto)</li>
-              <li>🏦 Boleto Bancário</li>
-            </ul>
-          </div>
         </section>
       
 

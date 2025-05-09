@@ -21,7 +21,7 @@ const { validarRequisicao, validarId } = require('./middlewares/globalMiddleware
 const { autenticarToken, verificarPermissao, verificarProprietario } = require('./middlewares/authMiddleware');
 
 const  { enviarContatoEmail } = require('./utils/contatoEmail');
-const { calcularFrete } = require('./controllers/freteController');
+const freteController = require('./controllers/freteController');
 
 const router = express.Router();
 
@@ -34,7 +34,8 @@ router.post('/contato-email', async (req, res) => {
   });
 });
 
-router.post('/calcular-frete', calcularFrete);
+router.post('/oauth/callback', freteController.obterToken);
+router.post('/calcular-frete', freteController.calcularFrete);
 
 router.post('/produtos/add', autenticarToken, verificarPermissao(['admin']), validarProduto, validarRequisicao, produtosController.createProduto);
 router.get('/produtos', produtosController.getAllProdutos);

@@ -85,26 +85,29 @@
 }
 
 .preco-detail {
+  margin-top: 1.6rem;
   font-size: 1.8rem;
   color: #00ffcc;
 }
 
-.quantidade-detail {
+.quantidade-selector {
   display: flex;
   align-items: center;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
-.quantidade-detail .btn-detail {
+.quantidade-selector .btn-detail {
   background-color: #FF6EC7;
   color: #fff;
   border: none;
   padding: 0.5rem;
+  line-height: 0.7rem;
   font-size: 1.2rem;
   cursor: pointer;
+  border-radius: 25px;
 }
 
-.quantidade-detail .input-detail {
+.quantidade-selector .input-detail {
   width: 40px;
   text-align: center;
   margin: 0 0.5rem;
@@ -114,12 +117,42 @@
   font-size: 1rem;
 }
 
+.frete-container {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.frete-container input {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.frete-container button {
+  background-color: #ff2db1;
+  color: white;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.resultado-frete {
+  margin-top: 0.5rem;
+  margin-left: 5px;
+}
+
+
 .botao-carrinho-detail {
   background-color: #FF6EC7;
   color: #fff;
   border: none;
   padding: 0.75rem 1.5rem;
-  margin-top: 1rem;
+  margin-top: 1.2rem;
   font-size: 1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -150,28 +183,6 @@
 
 .botao-whatsapp:hover {
   background-color: #1da851;
-}
-
-.frete-section {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.frete-section input {
-  padding: 0.4rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-.frete-section button {
-  background-color: #ff2db1;
-  color: white;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
 }
 
 .formas-pagamento {
