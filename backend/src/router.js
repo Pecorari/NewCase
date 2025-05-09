@@ -34,7 +34,7 @@ router.post('/contato-email', async (req, res) => {
   });
 });
 
-router.post('/oauth/callback', freteController.obterToken);
+router.get('/oauth/callback', freteController.obterToken);
 router.post('/calcular-frete', freteController.calcularFrete);
 
 router.post('/produtos/add', autenticarToken, verificarPermissao(['admin']), validarProduto, validarRequisicao, produtosController.createProduto);
