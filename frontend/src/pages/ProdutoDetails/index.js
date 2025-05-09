@@ -207,7 +207,7 @@ const ProdutoDetails = () => {
                       </div>
                       <p className='coments'>{avaliacao.comentario}</p>
                     </div>
-                    {avaliacao.usuario_id === usuario.id ?
+                    {usuario && avaliacao.usuario_id === usuario.id ?
                       <BsTrash3 className='lixeira' onClick={() => {delAvaliacao(avaliacao.id)}} /> : <></>
                     }
                   </li>
