@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from "../../context/AuthContext";
 
 import api from '../../hooks/useApi';
-import { calcularFrete } from '../services/freteService';
+import { calcularFrete } from '../../services/freteService';
 
 import Header from '../Componentes/Header';
 import AvaliacaoForm from '../Componentes/AvaliaçãoForm';
