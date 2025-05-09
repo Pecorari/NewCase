@@ -7,7 +7,7 @@ export async function calcularFrete(cepDestino, produto) {
       comprimento: produto.comprimento,
       altura: produto.altura,
       largura: produto.largura,
-      valor: produto.valor
+      valor: produto.preco
     }
   );
   

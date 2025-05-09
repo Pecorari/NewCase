@@ -16,9 +16,6 @@ async function obterToken(req, res) {
 
     const tokenData = response.data;
     
-    console.log('TokenData:', tokenData);
-    console.log('Access Token:', tokenData.access_token.length);
-
     const now = Math.floor(Date.now() / 1000);
     const expiresAt = now + tokenData.expires_in;
     
