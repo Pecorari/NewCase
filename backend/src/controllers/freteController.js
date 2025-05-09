@@ -6,7 +6,7 @@ async function obterToken(req, res) {
   if (!req.query.code) return res.status(400).json({ erro: 'Código de autorização não fornecido' });
 
   try {
-    const response = await axios.post('https://api.melhorenvio.com.br/oauth/token', {
+    const response = await axios.post('https://melhorenvio.com.br/oauth/token', {
       grant_type: 'authorization_code',
       client_id: process.env.ME_CLIENT_ID,
       client_secret: process.env.ME_CLIENT_SECRET,
@@ -39,7 +39,7 @@ async function getValidToken() {
 
   if (token.expires_at <= now) {
     try {
-      const refreshResponse = await axios.post('https://api.melhorenvio.com.br/oauth/token', {
+      const refreshResponse = await axios.post('https://melhorenvio.com.br/oauth/token', {
         grant_type: 'refresh_token',
         refresh_token: token.refresh_token,
         client_id: process.env.ME_CLIENT_ID,
@@ -73,7 +73,7 @@ const calcularFrete = async (req, res) => {
   try {
     const accessToken = await getValidToken();
 
-    const response = await axios.post('https://api.melhorenvio.com.br/api/v2/me/shipment/calculate', {
+    const response = await axios.post('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
       from: {
         postal_code: '01001-000'
       },
