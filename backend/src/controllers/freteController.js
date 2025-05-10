@@ -91,7 +91,7 @@ const calcularFrete = async (req, res) => {
           width: largura
         }
       ],
-      services: [1, 2, 31, 33], // ARRUMAR****
+      services: "1, 2, 31, 33",
       options: {
         own_hand: false,
         receipt: false,

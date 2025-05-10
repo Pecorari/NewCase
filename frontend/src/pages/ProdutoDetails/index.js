@@ -176,9 +176,25 @@ const ProdutoDetails = () => {
               {fretes.length > 0 && (
                 <div className="resultado-frete">
                   <h4>Opções de envio:</h4>
-                  <ul>
+                  <ul className="frete-lista">
                     {fretes.map((opcao, index) => (
-                      <li key={index}>{opcao.name} - R$ {opcao.price} - {opcao.delivery_time} dias úteis</li>
+                      <li className="frete-item" key={index}>
+                        <img
+                          src={opcao.company.picture}
+                          alt={opcao.name}
+                          className="frete-logo"
+                        />
+                        <div className="frete-detalhes">
+                          <h4>{opcao.name}</h4>
+                          {opcao.error ? (
+                            <p className="frete-erro">{opcao.error}</p>
+                          ) : (
+                            <p>
+                              R$ {opcao.price} - {opcao.delivery_time} dias úteis
+                            </p>
+                          )}
+                        </div>
+                      </li>
                     ))}
                   </ul>
                 </div>
