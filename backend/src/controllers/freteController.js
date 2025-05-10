@@ -91,7 +91,7 @@ const calcularFrete = async (req, res) => {
           width: largura
         }
       ],
-      services: [], // se quiser especificar Correios, Jadlog, etc
+      services: [0, 1, 10, 12],
       options: {
         own_hand: false,
         receipt: false,
