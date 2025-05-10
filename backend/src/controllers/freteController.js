@@ -72,7 +72,7 @@ const calcularFrete = async (req, res) => {
 
   try {
     const accessToken = await getValidToken();
-    console.log(cep_destino, peso, comprimento, altura, largura, valor, 'accessToken:', accessToken)
+    
     const response = await axios.post('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
       from: {
         postal_code: '13454-056'

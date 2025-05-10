@@ -187,7 +187,7 @@ const ProdutoDetails = () => {
                         <div className="frete-detalhes">
                           <h4>{opcao.name}</h4>
                           {opcao.error ? (
-                            <p className="frete-erro">{opcao.error}</p>
+                            <p>{opcao.error}</p>
                           ) : (
                             <p>
                               R$ {opcao.price} - {opcao.delivery_time} dias úteis
