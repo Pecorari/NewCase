@@ -99,7 +99,7 @@ const calcularFrete = async (req, res) => {
       }
     }, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'User-Agent': 'MyCellStore (mycell.store.official@gmail.com)'
