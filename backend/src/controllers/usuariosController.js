@@ -104,11 +104,15 @@ const loginUsuario = async (req, res) => {
 
     const usuario = await usuarioModel.loginUsuario(email);
 
-    if (usuario.length === 0 || !senhaValida) {
+    if (!usuario || usuario.length === 0) {
       return res.status(401).json({ mensagem: 'Email ou senha inválidas.' });
     }
 
     const senhaValida = await bcrypt.compare(senha, usuario.senha);
+
+    if (!senhaValida) {
+      return res.status(401).json({ mensagem: 'Email ou senha inválidas.' });
+    }
     
     const token = jwt.sign({ id: usuario.id, tipo: usuario.tipo }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
