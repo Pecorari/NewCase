@@ -93,7 +93,7 @@ const Carrinho = () => {
 
               <span className="nome">{produto.nome}</span>
               <span className="preco-carrinho">QTD: {produto.quantidade}</span>
-              <span className="preco-carrinho">R$ {produto.preco}</span>
+              <span className="preco-carrinho">R$ {produto.preco * produto.quantidade}</span>
               <button className="remover" onClick={(e) => {e.preventDefault(); removeCart(produto.carrinho_id)}}>Remover</button>
             </li>
           );

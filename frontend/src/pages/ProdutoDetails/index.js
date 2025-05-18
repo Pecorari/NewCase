@@ -55,6 +55,7 @@ const ProdutoDetails = () => {
     try {
       await api.post('/carrinho/add', { produto_id: id, quantidade });
       atualizarQtdCarrinho();
+      navigate('/carrinho');
     } catch (error) {
       console.log("Erro ao adicionar no carrinho:", error.response.data);
     }
@@ -199,9 +200,9 @@ const ProdutoDetails = () => {
               </ul>
             </div>
 
-            <Link to="/carrinho" className="botao-carrinho-detail" onClick={adicionarAoCarrinho}>
+            <button className="botao-carrinho-detail" onClick={adicionarAoCarrinho}>
               Adicionar ao Carrinho
-            </Link>
+            </button>
 
             <button className="botao-whatsapp" onClick={compartilharNoWhatsApp}>
               Compartilhar 
