@@ -23,6 +23,7 @@ export const CarrinhoProvider = ({ children }) => {
 
   useEffect(() => {
     atualizarQtdCarrinho();
+    // eslint-disable-next-line
   }, []);
 
   return (
