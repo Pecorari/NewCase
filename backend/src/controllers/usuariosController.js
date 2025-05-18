@@ -130,9 +130,13 @@ const loginUsuario = async (req, res) => {
   }
 };
 const logout = async (req, res) => {
-  try {
-    res.clearCookie('token');
-    
+  try {    
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+    });
+
     return res.status(200).json({ message: 'Logout efetuado com sucesso' });
   } catch (error) {
     console.error('Erro no logout:', error);
