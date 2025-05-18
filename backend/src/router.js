@@ -65,6 +65,7 @@ router.get('/profile', autenticarToken, usuariosController.profile);
 
 router.post('/carrinho/add', autenticarToken, verificarPermissao(['admin', 'cliente']), validarCarrinho, validarRequisicao, carrinhosController.createCarrinho);
 router.get('/carrinho', autenticarToken, verificarPermissao(['admin', 'cliente']), carrinhosController.getCarrinhoByUser);
+router.get('/carrinhoQtd', autenticarToken, verificarPermissao(['admin', 'cliente']), carrinhosController.getQtdCarrinhoUser);
 router.delete('/carrinho/del/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), verificarProprietario('carrinho', 'usuario_id'), validarId, validarRequisicao, carrinhosController.deleteCarrinho);
 
 router.post('/enderecos/add', autenticarToken, verificarPermissao(['admin', 'cliente']), validarEndereco, validarRequisicao, enderecosController.createEndereco);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from "../../context/AuthContext";
+import { useCarrinho } from '../../context/CarrinhoContext';
 
 import api from '../../hooks/useApi';
 import { calcularFrete } from '../../services/freteService';
@@ -29,6 +30,7 @@ const ProdutoDetails = () => {
 
   const { id } = useParams();
   const { usuario } = useAuth();
+  const { atualizarQtdCarrinho } = useCarrinho();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,11 +38,11 @@ const ProdutoDetails = () => {
       try {
         const response = await api.get(`/produtos/${id}`);
         setProduto(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error("Erro ao buscar produto:", error);
       }
     };
-
     getProduto();
     getAvaliacoes();
     // eslint-disable-next-line
@@ -49,8 +51,13 @@ const ProdutoDetails = () => {
   const aumentar = () => setQuantidade(q => q + 1);
   const diminuir = () => setQuantidade(q => (q > 1 ? q - 1 : 1));
 
-  const adicionarAoCarrinho = () => {
-    navigate('/carrinho')
+  const adicionarAoCarrinho = async () => {
+    try {
+      await api.post('/carrinho/add', { produto_id: id, quantidade });
+      atualizarQtdCarrinho();
+    } catch (error) {
+      console.log("Erro ao adicionar no carrinho:", error.response.data);
+    }
   };
 
   const compartilharNoWhatsApp = () => {
@@ -124,6 +131,20 @@ const ProdutoDetails = () => {
     getAvaliacoes();
   };
 
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+
+    let formattedValue = value;
+
+    formattedValue = value
+      .replace(/\D/g, '')
+      .slice(0, 8) 
+      .replace(/(\d{2})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1-$2');
+
+    setCep(formattedValue);
+  }
+
   if (!produto) return <div>Produto não encontrado</div>;
 
   return (
@@ -169,8 +190,27 @@ const ProdutoDetails = () => {
               <p>Disponível: {produto.estoque}</p>
             </div>
 
+            <div className="formas-pagamento">
+              <h4>Formas de Pagamento</h4>
+              <ul>
+                <li>💳 Cartão de Crédito (até 3x sem juros)</li>
+                <li>💵 Pix (5% de desconto)</li>
+                <li>🏦 Boleto Bancário</li>
+              </ul>
+            </div>
+
+            <Link to="/carrinho" className="botao-carrinho-detail" onClick={adicionarAoCarrinho}>
+              Adicionar ao Carrinho
+            </Link>
+
+            <button className="botao-whatsapp" onClick={compartilharNoWhatsApp}>
+              Compartilhar 
+              <img src={whatsapp} alt='whatsapp' />
+            </button>
+
+
             <div className="frete-container">
-              <input type="text" placeholder="Digite seu CEP" value={cep} onChange={(e) => setCep(e.target.value)} maxLength={8} />
+              <input type="text" placeholder="Digite seu CEP" value={cep} onChange={handleInputChange} maxLength={10} />
               <button onClick={handleFrete} disabled={loading}>{loading ? 'Calculando...' : 'Calcular Frete'}</button>
             </div>
               {fretes.length > 0 && (
@@ -200,27 +240,26 @@ const ProdutoDetails = () => {
                 </div>
               )}
 
-            <button className="botao-carrinho-detail" onClick={adicionarAoCarrinho}>
-              Adicionar ao Carrinho
-            </button>
-
-            <button className="botao-whatsapp" onClick={compartilharNoWhatsApp}>
-              Compartilhar 
-              <img src={whatsapp} alt='whatsapp' />
-            </button>
-
-            <div className="formas-pagamento">
-              <h4>Formas de Pagamento</h4>
-              <ul>
-                <li>💳 Cartão de Crédito (até 3x sem juros)</li>
-                <li>💵 Pix (5% de desconto)</li>
-                <li>🏦 Boleto Bancário</li>
-              </ul>
-            </div>
           </div>
 
         </section>
       
+
+        <section className="secao-caracteristicas">
+          <h2 className='section-title-ct'>Características</h2>
+
+          <div>
+            <p className='caracteristicas'>Altura: {produto.altura}</p>
+            <p className='caracteristicas'>Largura: {produto.largura}</p>
+            <p className='caracteristicas'>comprimento: {produto.comprimento}</p>
+            <br/>
+            <p className='caracteristicas'>Material: </p>
+            <p className='caracteristicas'>Peso: {produto.peso}</p>
+            <p className='caracteristicas'>Cor: {produto.cor}</p>
+            <br/>
+            <p className='caracteristicas'>Compatibilidade: {produto.aparelho_id}</p>
+          </div>
+        </section>
 
         <section className="secao-avaliacoes">
           <h2 className='section-title-av'>Avaliações</h2>

@@ -3,12 +3,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdLogin } from "react-icons/md";
 import { BsBag, BsSearch } from "react-icons/bs";
 import { useAuth } from "../../../context/AuthContext";
+import { useCarrinho } from '../../../context/CarrinhoContext';
 import api from '../../../hooks/useApi';
 
 import "./header.css";
 
 function Header() {
   const { usuario } = useAuth();
+  const { qtdCarrinho } = useCarrinho();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -27,8 +29,7 @@ function Header() {
       } else {
         setSugestoes([]);
       }
-    }, 300);
-
+    }, 100);
     return () => clearTimeout(delayDebounce);
   }, [busca]);
 
@@ -82,7 +83,7 @@ function Header() {
             )}
             <Link to="/carrinho" className="cart">
               <BsBag fontSize={27} />
-              <span className="cart-count">0</span>
+              <p className="cart-count">{qtdCarrinho}</p>
             </Link>
           </div>
         </div>

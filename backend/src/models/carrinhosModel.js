@@ -13,8 +13,32 @@ const createCarrinho = async (dataCarrinho, idLogado) => {
 };
 
 const getCarrinhoByUser = async (idLogado) => {
-    const [produtos] = await connection.execute('SELECT * FROM carrinho WHERE usuario_id = ?', [idLogado]);
+    const [produtos] = await connection.execute(`SELECT 
+        c.id AS carrinho_id,
+        c.usuario_id,
+        c.produto_id,
+        c.quantidade,
+        p.nome,
+        p.preco,
+        GROUP_CONCAT(i.url) AS imagens
+        FROM 
+        carrinho c
+        JOIN 
+        produtos p ON c.produto_id = p.id
+        LEFT JOIN 
+        produto_imagens i ON p.id = i.produto_id
+        WHERE 
+        c.usuario_id = ?
+        GROUP BY 
+        c.id, c.usuario_id, c.produto_id, c.quantidade, p.nome, p.preco`,
+        [idLogado]);
     return produtos;
+};
+
+const getQtdCarrinhoUser = async (idLogado) => {
+    const [quantidade] = await connection.execute('SELECT COUNT(*) AS quantidade FROM carrinho WHERE usuario_id = ?', [idLogado]);
+
+    return quantidade[0].quantidade;
 };
 
 
@@ -27,5 +51,6 @@ const deleteCarrinho = async (id) => {
 module.exports = {
     createCarrinho,
     getCarrinhoByUser,
+    getQtdCarrinhoUser,
     deleteCarrinho
 };

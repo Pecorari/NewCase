@@ -13,11 +13,28 @@ const createCarrinho = async (req, res) => {
 
 const getCarrinhoByUser = async (req, res) => {
     try {
-        const carrinhos = await carrinhosModel.getCarrinhoByUser(req.usuario.id);
+        const results = await carrinhosModel.getCarrinhoByUser(req.usuario.id);
+
+        const carrinhos = results.map(carrinho => ({
+            ...carrinho,
+            imagens: carrinho.imagens ? carrinho.imagens.split(',') : []
+          })
+        );
 
         return res.status(200).json(carrinhos);
     } catch (error) {
         console.error('Erro em getCarrinhoByUser:', error);
+        return res.status(500).json({ error: 'Erro interno no servidor' });
+    }
+};
+
+const getQtdCarrinhoUser = async (req, res) => {
+    try {
+        const result = await carrinhosModel.getQtdCarrinhoUser(req.usuario.id);
+
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log('Erro em getQtdCarrinhoUser:', error);
         return res.status(500).json({ error: 'Erro interno no servidor' });
     }
 };
@@ -38,5 +55,6 @@ const deleteCarrinho = async (req, res) => {
 module.exports = {
     createCarrinho,
     getCarrinhoByUser,
+    getQtdCarrinhoUser,
     deleteCarrinho
 };

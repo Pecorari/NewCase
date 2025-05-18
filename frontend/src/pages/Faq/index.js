@@ -1,4 +1,6 @@
 import React from 'react';
+import { FaFacebookF, FaInstagram, FaWhatsapp   } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 import Header from '../Componentes/Header/index';
 import Footer from '../Componentes/Footer/index';
@@ -9,6 +11,12 @@ const Faq = () => {
   return (
     <div className="faqPage">
       <Header />
+      <div className="social-icons">
+        <a href="/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+        <a href="/" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
+        <a href="/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+        <a href="/" target="_blank" rel="noopener noreferrer"><FaWhatsapp /></a>
+      </div>
       <div className='faq'>
         <section className="faq-section">
           <h1>Perguntas Frequentes</h1>
