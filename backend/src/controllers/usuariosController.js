@@ -103,19 +103,19 @@ const loginUsuario = async (req, res) => {
     const { email, senha } = req.body;
 
     const usuario = await usuarioModel.loginUsuario(email);
-    
-    const senhaValida = await bcrypt.compare(senha, usuario.senha);
 
     if (usuario.length === 0 || !senhaValida) {
       return res.status(401).json({ mensagem: 'Email ou senha inválidas.' });
     }
 
+    const senhaValida = await bcrypt.compare(senha, usuario.senha);
+    
     const token = jwt.sign({ id: usuario.id, tipo: usuario.tipo }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
       maxAge: 1000 * 60 * 60 * 24,
     });
 
