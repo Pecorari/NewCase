@@ -4,7 +4,7 @@ import { FaFacebookF, FaInstagram, FaWhatsapp   } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 import capaDestaque1 from '../../utils/capaDestaque1.png';
-import colorExplosion from '../../utils/color-explosion.jpeg'
+import colorExplosion from '../../utils/color-explosion2.jpg'
 import "./home.css";
 
 import ProdutosDestaque from "../Componentes/ProdutosDestaque/index";

@@ -4,6 +4,7 @@ import { MdLogin } from "react-icons/md";
 import { BsBag, BsSearch } from "react-icons/bs";
 import { useAuth } from "../../../context/AuthContext";
 import { useCarrinho } from '../../../context/CarrinhoContext';
+import logoMyCellStore from '../../../utils/logo_semFundo.png'
 import api from '../../../hooks/useApi';
 
 import "./header.css";
@@ -44,8 +45,7 @@ function Header() {
     <header className="header">
       <div className="logo-area">
         <Link to="/">
-          <p className="logo">MC</p>
-          <p className="subtitle">MyCell Store</p>
+          <img src={logoMyCellStore} className="logo"/>
         </Link>
       </div>
 
@@ -73,7 +73,7 @@ function Header() {
             </div>
             {usuario ? (
               <Link to="/perfil" className="loginIcon">
-                <span style={{ fontWeight: 600, fontSize: 16 }}>Olá, {usuario.nome.split(" ")[0]}</span>
+                <p style={{ fontWeight: 600, fontSize: 16 }}>Olá, {usuario.nome.split(" ")[0]}</p>
               </Link>
             ) : (
               <Link to="/login" className="loginIcon">
