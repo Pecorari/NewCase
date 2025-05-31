@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdLogin } from "react-icons/md";
 import { BsBag, BsSearch } from "react-icons/bs";
@@ -19,6 +19,10 @@ function Header() {
   const [sugestoes, setSugestoes] = useState([]);
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
 
+  const logoRef = useRef(null);
+  const headerRef = useRef(null);
+  const subHeaderRef = useRef(null);
+
   const isActive = (path) => location.pathname === path ? 'active' : '';
 
   useEffect(() => {
@@ -34,6 +38,38 @@ function Header() {
     return () => clearTimeout(delayDebounce);
   }, [busca]);
 
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > 10) {
+        logoRef.current?.classList.add('scrolled');
+        headerRef.current?.classList.add('scrolled');
+
+        if (currentScrollY > 150  && currentScrollY > lastScrollY) {
+          // Scrolling down
+          subHeaderRef.current?.classList.add('merge');
+        } else {
+          // Scrolling up
+          subHeaderRef.current?.classList.remove('merge');
+        }
+        
+        subHeaderRef.current?.classList.add('scrolled');
+      } else {
+        logoRef.current?.classList.remove('scrolled');
+        headerRef.current?.classList.remove('scrolled');
+        subHeaderRef.current?.classList.remove('scrolled', 'merge');
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleSelectSugestao = (id) => {
     setBusca("");
     setSugestoes([]);
@@ -43,13 +79,14 @@ function Header() {
 
   return (
     <header className="header">
-      <div className="logo-area">
-        <Link to="/">
-          <img src={logoMyCellStore} className="logo"/>
-        </Link>
-      </div>
+      <div className="box-nav-actions" ref={headerRef}>
+        
+        <div className="logo-area"  ref={logoRef}>
+          <Link to="/">
+            <img src={logoMyCellStore} className="logo" alt="logo" />
+          </Link>
+        </div>
 
-      <div className="box-nav-actions">
         <div className="top-bar">
           <div className="actions">
             <div className="search">
@@ -77,24 +114,25 @@ function Header() {
               </Link>
             ) : (
               <Link to="/login" className="loginIcon">
-                <MdLogin fontSize={25} />
+                <MdLogin className="iconLogin"/>
                 <span>Login</span>
               </Link>
             )}
             <Link to="/carrinho" className="cart">
-              <BsBag fontSize={27} />
+              <BsBag className="iconCart"/>
               <p className="cart-count">{qtdCarrinho}</p>
             </Link>
           </div>
         </div>
 
-        <nav className="nav">
-          <Link to="/" className={isActive('/')}>Início</Link>
-          <Link to="/sobre" className={isActive('/sobre')}>Sobre</Link>
-          <Link to="/loja" className={isActive('/loja')}>Loja</Link>
-          <Link to="/perguntas" className={isActive('/perguntas')}>Perguntas Frequentes</Link>
-          <Link to="/contato" className={isActive('/contato')}>Contato</Link>
-        </nav>
+      </div>
+      
+      <div className="nav" ref={subHeaderRef}>
+        <Link to="/" className={isActive('/')}>Início</Link>
+        <Link to="/sobre" className={isActive('/sobre')}>Sobre</Link>
+        <Link to="/loja" className={isActive('/loja')}>Loja</Link>
+        <Link to="/perguntas" className={isActive('/perguntas')}>Perguntas Frequentes</Link>
+        <Link to="/contato" className={isActive('/contato')}>Contato</Link>
       </div>
     </header>
   );

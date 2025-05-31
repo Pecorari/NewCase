@@ -17,13 +17,6 @@ function Home() {
       <Header />
 
       <div className="body">
-        <div className="social-icons">
-          <a href="/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
-          <a href="/" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
-          <a href="/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-          <a href="/" target="_blank" rel="noopener noreferrer"><FaWhatsapp /></a>
-        </div>
-
         <section className="hero">
           <div className="hero-content">
             <div className="hero-text">
@@ -44,6 +37,13 @@ function Home() {
 
           <h2 className="ver-mais"><Link to="/loja" className="ver-mais-a">VEJA MAIS</Link></h2>
         </section>
+
+        <div className="social-icons">
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaWhatsapp /></a>
+        </div>
       </div>
 
       <Footer />

@@ -4,14 +4,13 @@
 
 .sobre-container {
   padding: 40px 20px;
-  /* background-color: #050821; */
-  background: linear-gradient(0deg, #050821, #1b0529 95%, #050821 100%);
+  background: linear-gradient(0deg, #050821, #1b0529 80%, #050821 100%);
 }
 
 .sobre-hero {
   text-align: center;
   margin-bottom: 150px;
-  margin-top: 25px;
+  margin-top: 140px;
 }
 
 .sobre-hero h1 {

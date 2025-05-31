@@ -11,12 +11,6 @@ const Faq = () => {
   return (
     <div className="faqPage">
       <Header />
-      <div className="social-icons">
-        <a href="/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
-        <a href="/" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
-        <a href="/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-        <a href="/" target="_blank" rel="noopener noreferrer"><FaWhatsapp /></a>
-      </div>
       <div className='faq'>
         <section className="faq-section">
           <h1>Perguntas Frequentes</h1>
@@ -87,6 +81,13 @@ const Faq = () => {
             </details>
           </div>
         </section>
+        
+        <div className="social-icons">
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaWhatsapp /></a>
+        </div>
       </div>
       <Footer />
     </div>

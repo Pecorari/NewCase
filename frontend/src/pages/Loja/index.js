@@ -169,74 +169,76 @@ const Loja = () => {
     <div className='loja'>
       <Header />
       <div className="loja-container">
-      <div className="barra-pesquisa">
-        <input
-          type="text"
-          placeholder="Qual o seu celular?"
-          className="input-pesquisa"
-          value={buscaCelular}
-          onChange={handleBuscaCelular}
-        />
-        {sugestoes.length > 0 && (
-          <ul className="sugestoes-dropdown">
-            {sugestoes.map((celular, index) => (
-              <li
-                key={index}
-                onClick={() => {
-                  setBuscaCelular(celular.nome);
-                  handleAparelhoChange(celular.nome);
-                  setSugestoes([]);
-                }}
-              >
-                {celular.nome}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+        <div className="barra-pesquisa">
+          <input
+            type="text"
+            placeholder="Qual o seu celular?"
+            className="input-pesquisa"
+            value={buscaCelular}
+            onChange={handleBuscaCelular}
+          />
+          {sugestoes.length > 0 && (
+            <ul className="sugestoes-dropdown">
+              {sugestoes.map((celular, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    setBuscaCelular(celular.nome);
+                    handleAparelhoChange(celular.nome);
+                    setSugestoes([]);
+                  }}
+                >
+                  {celular.nome}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         
         <aside className="sidebar">
-          <div className="filtro-grupo">
-            <h3>Categoria</h3>
-            <ul>
-            {categorias.map((categoria) => (
-              <li key={categoria.id} onClick={() => {handleCategoriaChange(categoria.nome)}}>{categoria.nome}</li>
-            ))}
-            </ul>
-          </div>
-
-          <div className="filtro-grupo">
-            <h3>Preço</h3>
-            <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(0, 15)}}/> Até R$15</label><br />
-            <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(15, 25)}}/> R$15 a R$25</label><br />
-            <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(25, 35)}}/> R$25 a R$35</label><br />
-            <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(35, 50)}}/> R$35 a R$50</label><br />
-            <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(50, 1000)}}/> Acima de R$50</label>
-          </div>
-
-          <div className="filtro-grupo">
-            <h3>Cores</h3>
-            <div className="color-dots">
-              <span onClick={() => {handleCorChange('Azul')}} className="dot blue"></span>
-              <span onClick={() => {handleCorChange('Rosa')}} className="dot pink"></span>
-              <span onClick={() => {handleCorChange('Vermelho')}} className="dot red"></span>
-              <span onClick={() => {handleCorChange('Verde')}} className="dot green"></span>
-              <span onClick={() => {handleCorChange('Laranja')}} className="dot orange"></span>
+          <div className='sidebar-content'>
+            <div className="filtro-grupo">
+              <h3>Categoria</h3>
+              <ul>
+              {categorias.map((categoria) => (
+                <li key={categoria.id} onClick={() => {handleCategoriaChange(categoria.nome)}}>{categoria.nome}</li>
+              ))}
+              </ul>
             </div>
+
+            <div className="filtro-grupo">
+              <h3>Preço</h3>
+              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(0, 15)}}/> Até R$15</label><br />
+              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(15, 25)}}/> R$15 a R$25</label><br />
+              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(25, 35)}}/> R$25 a R$35</label><br />
+              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(35, 50)}}/> R$35 a R$50</label><br />
+              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(50, 1000)}}/> Acima de R$50</label>
+            </div>
+
+            <div className="filtro-grupo">
+              <h3>Cores</h3>
+              <div className="color-dots">
+                <span onClick={() => {handleCorChange('Azul')}} className="dot blue"></span>
+                <span onClick={() => {handleCorChange('Rosa')}} className="dot pink"></span>
+                <span onClick={() => {handleCorChange('Vermelho')}} className="dot red"></span>
+                <span onClick={() => {handleCorChange('Verde')}} className="dot green"></span>
+                <span onClick={() => {handleCorChange('Laranja')}} className="dot orange"></span>
+              </div>
+            </div>
+
+            {/* <div className="filtro-grupo">
+              <h3>Avaliação</h3>
+              <div onClick={() => {handleAvaliacaoChange(5)}} className="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+              <div onClick={() => {handleAvaliacaoChange(4)}} className="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+              <div onClick={() => {handleAvaliacaoChange(3)}} className="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+              <div onClick={() => {handleAvaliacaoChange(2)}} className="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</div>
+              <div onClick={() => {handleAvaliacaoChange(1)}} className="stars">&#9733;&#9734;&#9734;&#9734;&#9734;</div>
+            </div> */}
+
+            <button className='reset-filter' onClick={limparFiltros}>
+              Limpar filtros
+            </button>
           </div>
-
-          {/* <div className="filtro-grupo">
-            <h3>Avaliação</h3>
-            <div onClick={() => {handleAvaliacaoChange(5)}} className="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <div onClick={() => {handleAvaliacaoChange(4)}} className="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-            <div onClick={() => {handleAvaliacaoChange(3)}} className="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
-            <div onClick={() => {handleAvaliacaoChange(2)}} className="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</div>
-            <div onClick={() => {handleAvaliacaoChange(1)}} className="stars">&#9733;&#9734;&#9734;&#9734;&#9734;</div>
-          </div> */}
-
-          <button className='reset-filter' onClick={limparFiltros}>
-            Limpar filtros
-          </button>
         </aside>
 
         <div className="grid-produtos">

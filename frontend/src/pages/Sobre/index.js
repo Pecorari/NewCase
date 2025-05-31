@@ -12,12 +12,6 @@ function Sobre() {
   return (
     <div className='sobre'>
       <Header />
-      <div className="social-icons">
-        <a href="/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
-        <a href="/" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
-        <a href="/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-        <a href="/" target="_blank" rel="noopener noreferrer"><FaWhatsapp /></a>
-      </div>
       <div className="sobre-container">
         <section className="sobre-hero">
           <h1>Sobre a MyCell Store</h1>
@@ -94,7 +88,15 @@ function Sobre() {
         <section className="sobre-extra">
           <h2>Feito com ❤️ por apaixonados por tecnologia e estilo.</h2>
         </section>
+      
+        <div className="social-icons">
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+          <a href="/" target="_blank" rel="noopener noreferrer"><FaWhatsapp /></a>
+        </div>
       </div>
+
       <Footer />
     </div>
   );
