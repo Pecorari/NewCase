@@ -11,7 +11,8 @@
   margin-top: 140px;
 }
 
-.contato h2 {
+.contato h1 {
+  color: #FF6EC7;
   font-size: 2rem;
   margin-bottom: 10px;
 }
@@ -89,4 +90,62 @@
   border-radius: 10px;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+@media (max-width: 425px) {
+  .contato {
+    padding: 50px;
+  }
+  .contato-container {
+    max-width: 350px;
+    margin-top: 110px;
+  }
+
+
+  .contato h1 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  .contato p {
+    font-size: 0.8rem;
+    margin-bottom: 25px;
+  }
+
+  .contato-form {
+    gap: 15px;
+  }
+  .contato-form input,
+  .contato-form textarea {
+    padding: 10px 13px;
+    font-size: 0.8rem;
+  }
+
+  .contato-form button {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+
+  .contato-redes p {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+  }
+  .redes-links img {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .custom-ui {
+    width: 80%;
+    height: min-content;
+    margin: auto;
+  }
+  .custom-ui h1{
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  .custom-ui p{
+    font-size: 0.9rem;
+  }
 }

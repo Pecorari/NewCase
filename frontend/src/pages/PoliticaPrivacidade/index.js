@@ -12,7 +12,7 @@ function PoliticaPrivacidade() {
       <main className="politica-container">
         <h1>Política de Privacidade</h1>
 
-        <p>Na <strong>MyCell Store</strong>, respeitamos a sua privacidade e estamos comprometidos em proteger os dados pessoais que você compartilha conosco.</p>
+        <p>Na MyCell Store, respeitamos a sua privacidade e estamos comprometidos em proteger os dados pessoais que você compartilha conosco.</p>
 
         <h2>1. Coleta de Informações</h2>
         <p>Coletamos informações pessoais como nome, e-mail, telefone e endereço quando você realiza um pedido ou se cadastra em nosso site.</p>

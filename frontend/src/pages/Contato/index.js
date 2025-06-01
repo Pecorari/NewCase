@@ -42,7 +42,7 @@ function Contato() {
       customUI: ({ onClose }) => {
         return (
           <div className='custom-ui'>
-            <h1 style={{ color: '#4BB543' }}>Mensagem enviada com sucesso!</h1>
+            <h1 style={{ color: '#4BB543' }}>Mensagem enviada!</h1>
             <p>Responderemos o mais breve possivel.</p>
             <button className='modal-btn' onClick={onClose}>OK</button>
           </div>
@@ -56,7 +56,7 @@ function Contato() {
       <Header />
         <section className="contato">
           <div className="contato-container">
-            <h2>Fale com a gente</h2>
+            <h1>Fale com a gente</h1>
             <p>Preencha o formulário e entraremos em contato o mais rápido possível.</p>
             <form className="contato-form" onSubmit={handleSubmit}>
               <input type="text" placeholder="Seu nome" value={nome} onChange={(e) => setNome(e.target.value)} required />

@@ -1,6 +1,8 @@
 import React from 'react';
 import { FaFacebookF, FaInstagram, FaWhatsapp   } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { motion } from 'framer-motion';
+import { SlArrowDown  } from "react-icons/sl";
 import homecell from '../../utils/parceiros/logo.png';
 
 import Header from '../Componentes/Header/index';
@@ -20,9 +22,15 @@ function Sobre() {
             Valorizamos a experiência completa — desde o momento em que você navega na loja até o recebimento rápido do seu pedido, embalado com carinho e prontinho pra uso. <br/><br/>
             O hype é constante. Aqui você quem dita a tendência.
           </p>
+
+          <motion.div className='motion' animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <a href='#diferenciais'><SlArrowDown className='nextSection'/></a>
+          </motion.div>
         </section>
 
-        <section className="diferenciais">
+        <section id='diferenciais' className="diferenciais">
           <h2>Nossos Diferenciais</h2>
           <div className="diferenciais-container">
             <div className="diferencial">
@@ -55,7 +63,7 @@ function Sobre() {
 
         <section className="parcerias">
           <h2>Parcerias</h2>
-          <p>Trabalhamos em conjunto com marcas e criadores que compartilham os mesmos valores que a nossa loja.</p>
+          <p>Trabalhamos em conjunto com marcas que compartilham os mesmos valores que a nossa loja.</p>
           <div className="logos">
             <a href='https://homecellofficial.com.br/' target='blank'><img src={homecell} alt="HomeCell" /></a>
           </div>
@@ -86,7 +94,7 @@ function Sobre() {
         </section>
 
         <section className="sobre-extra">
-          <h2>Feito com ❤️ por apaixonados por tecnologia e estilo.</h2>
+          <p>Feito com ❤️ por apaixonados por tecnologia e estilo.</p>
         </section>
       
         <div className="social-icons">

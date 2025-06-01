@@ -12,7 +12,7 @@ const TrocasEDevolucoes = () => {
       <main className="trocas-container">
         <h1>Trocas e Devoluções</h1>
 
-        <p>Na MyCell Store, queremos que você tenha a melhor experiência possível. Por isso, oferecemos uma política de trocas e devoluções transparente e conforme o Código de Defesa do Consumidor.</p>
+        <p>Queremos que você tenha a melhor experiência possível. Por isso, oferecemos uma política de trocas e devoluções transparente e conforme o Código de Defesa do Consumidor.</p>
 
         <h2>1. Prazo para Troca ou Devolução</h2>
         <p>Você tem até <strong>7 dias corridos</strong> após o recebimento do pedido para solicitar a troca ou devolução do produto, conforme o direito de arrependimento (Art. 49 do CDC).</p>

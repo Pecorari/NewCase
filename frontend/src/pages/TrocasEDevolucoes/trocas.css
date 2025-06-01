@@ -6,7 +6,7 @@
 
 .trocas-container {
   max-width: 900px;
-  margin: 0px auto;
+  margin: 0px auto 25px;
   padding: 40px 20px;
 }
 
@@ -14,13 +14,13 @@
   font-size: 2.2rem;
   margin-top: 150px;
   margin-bottom: 20px;
-  color: #ff4ec9;
+  color: #FF6EC7;
 }
 
 .trocas-container h2 {
   font-size: 1.4rem;
   margin-top: 30px;
-  color: #ff4ec9;
+  color: #FF6EC7;
 }
 
 .trocas-container p, .trocas-container ul {
@@ -32,4 +32,23 @@
 .trocas-container ul {
   padding-left: 20px;
   list-style-type: disc;
+}
+
+@media (max-width: 425px) {
+  .trocas-container h1 {
+    font-size: 1.5rem;
+    margin-top: 110px;
+        border-bottom: 1px solid #FF6EC7;
+    padding-bottom: 10px;
+  }
+
+  .trocas-container h2 {
+    font-size: 1.2rem;
+  }
+
+  .trocas-container p, .trocas-container ul {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-top: 5px;
+  }
 }

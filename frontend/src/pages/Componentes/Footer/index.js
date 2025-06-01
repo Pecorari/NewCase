@@ -41,7 +41,7 @@ function Footer() {
 
         <div className="footer-section">
           <h3>Contato</h3>
-          <p>Email: contato@mycell.com</p>
+          <p className="contato-email">Email: contato@mycell.com</p>
           <p>WhatsApp: (19) 97401-2628</p>
           <div className="socials">
             <a href="/"><img src={facebook} alt="Facebook" /></a>
