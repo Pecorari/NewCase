@@ -219,7 +219,7 @@
   }
 }
 
-@media (max-width: 425px) {
+@media (max-width: 480px) {
   .hero {
     display: flex;
     margin-bottom: 0px;

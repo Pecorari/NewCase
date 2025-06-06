@@ -34,7 +34,7 @@
   list-style-type: disc;
 }
 
-@media (max-width: 425px) {
+@media (max-width: 480px) {
   .trocas-container h1 {
     font-size: 1.5rem;
     margin-top: 110px;

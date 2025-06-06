@@ -69,7 +69,7 @@
   color: red;
 }
 
-@media (max-width: 425px) {
+@media (max-width: 480px) {
   .login-section {
     padding: 35px;
   }

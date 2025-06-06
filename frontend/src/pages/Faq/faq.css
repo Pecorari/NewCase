@@ -60,7 +60,7 @@ details p {
   border-radius: 6px;
 }
 
-@media (max-width: 425px) {
+@media (max-width: 480px) {
   .faq {
     padding-bottom: 25px;
   }

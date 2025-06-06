@@ -90,7 +90,7 @@
   }
 }
 
-@media (max-width: 425px) {
+@media (max-width: 480px) {
   .container-form {
     margin: 40px auto;
     padding: 15px 20px;

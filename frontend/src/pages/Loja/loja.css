@@ -334,7 +334,7 @@
 
 
 
-@media (max-width: 425px) {
+@media (max-width: 480px) {
   .loja-container {
     grid-template-columns: 35% 1fr;
     gap: 15px;

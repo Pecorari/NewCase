@@ -41,7 +41,7 @@
   color: #fff;
 }
 
-@media (max-width: 425px) {
+@media (max-width: 480px) {
   .politica-container h1 {
     font-size: 1.5rem;
     margin-top: 110px;

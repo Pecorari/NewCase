@@ -229,7 +229,7 @@
   }
 }
 
-@media (max-width: 425px) {
+@media (max-width: 480px) {
   .logo-area {
     margin-left: 2rem;
     height: 3.2rem;
