@@ -20,6 +20,7 @@ function Header() {
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
 
   const logoRef = useRef(null);
+  const searchRef = useRef(null);
   const headerRef = useRef(null);
   const subHeaderRef = useRef(null);
 
@@ -46,6 +47,7 @@ function Header() {
 
       if (currentScrollY > 10) {
         logoRef.current?.classList.add('scrolled');
+        searchRef.current?.classList.add('scrolled');
         headerRef.current?.classList.add('scrolled');
 
         if (currentScrollY > 150  && currentScrollY > lastScrollY) {
@@ -59,6 +61,7 @@ function Header() {
         subHeaderRef.current?.classList.add('scrolled');
       } else {
         logoRef.current?.classList.remove('scrolled');
+        searchRef.current?.classList.remove('scrolled');
         headerRef.current?.classList.remove('scrolled');
         subHeaderRef.current?.classList.remove('scrolled', 'merge');
       }
@@ -89,8 +92,8 @@ function Header() {
 
         <div className="top-bar">
           <div className="actions">
-            <div className="search">
-              <input placeholder="Buscar" type="text" value={busca}
+            <div className="search"  ref={searchRef}>
+              <input placeholder="Buscar" type="text" value={busca} className="search-header"
                 onChange={(e) => {setBusca(e.target.value); setMostrarSugestoes(true);}}
                 onBlur={() => setTimeout(() => setMostrarSugestoes(false), 200)}
                 onFocus={() => busca && setMostrarSugestoes(true)}
@@ -115,7 +118,7 @@ function Header() {
             ) : (
               <Link to="/login" className="loginIcon">
                 <MdLogin className="iconLogin"/>
-                <span>Login</span>
+                <span className="login-span">Login</span>
               </Link>
             )}
             <Link to="/carrinho" className="cart">

@@ -178,7 +178,7 @@ const ProdutoDetails = () => {
 
           <div className="info-section-detail">
             <h2 className="titulo-detail">{produto.nome}</h2>
-            <br />{renderEstrelas(produto.avaliacao_media)}
+            <br className='entre-title-star' />{renderEstrelas(produto.avaliacao_media)}
             <p className="descricao-detail">{produto.descricao}</p>
             <p className="preco-detail">R$ {produto.preco}</p>
 

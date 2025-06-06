@@ -1,7 +1,3 @@
-.data_nasc[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0) !important;
-}
-
 .cadastro {
   background-color: #050821;
   color: rgba(0, 0, 0, 0.85);
@@ -42,9 +38,21 @@
   background-color: #f1f1f1;
   color: #333;
 }
-
-.cadastro-form textarea {
-  resize: none;
+.cadastro-form .data-container {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+.cadastro-form .data-container .calendar {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: #777;
+}
+.cadastro-form .data-container .data_nasc {
+  width: 100%;
 }
 
 .cadastro-form button {
@@ -64,19 +72,19 @@
   background-color: #c23a8e;
 }
 
-.login-footer {
+.cadastro-footer {
   grid-column: span 2;
   text-align: center;
-  font-size: 16px;
 }
 
-.login-footer a {
+.cadastro-footer a {
   color: #9c3675;
   text-decoration: none;
   margin: 0 10px;
+  font-size: 1rem;
 }
 
-.login-footer a:hover {
+.cadastro-footer a:hover {
   text-decoration: underline;
 }
 
@@ -84,4 +92,45 @@
   text-align: left;
   margin: 10px;
   color: red;
+}
+
+@media (max-width: 425px) {
+  .cadastro {
+    padding: 35px;
+  }
+  .cadastro-container {
+    margin-top: 110px;
+    padding: 25px;
+  }
+  .cadastro h2 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  .cadastro p {
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+  }
+
+  .cadastro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cadastro-form input {
+    padding: 10px 13px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+  .cadastro-form button {
+    padding: 10px;
+  }
+    
+  .cadastro-footer a {
+    font-size: 0.75rem;
+  }
+
+  .cadastro-form .data-container .calendar {
+    font-size: 0.9rem;
+    color: #777;
+  }
 }

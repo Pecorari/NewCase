@@ -75,3 +75,27 @@
   display: flex;
   gap: 10px;
 }
+
+@media (max-width: 768px) {
+  .container-form {
+    margin: 80px auto;
+    padding: 20px 30px;
+    width: 80%;
+  }
+  .container-form h3 {
+    font-size: 1rem;
+  }
+  .login-av {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .container-form {
+    margin: 40px auto;
+    padding: 15px 20px;
+  }
+  .login-av {
+    font-size: 0.8rem;
+  }
+}

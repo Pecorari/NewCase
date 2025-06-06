@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Footer from '../Componentes/Footer/index';
 import Header from '../Componentes/Header/index';
+import { FaRegCalendar } from "react-icons/fa";
 
 import './cadastro.css';
 
@@ -67,6 +68,14 @@ function Cadastro() {
         .replace(/(-\d{4})\d+?$/, '$1');
     }
 
+    if (name === 'data_nasc') {
+      formattedValue = value
+        .replace(/\D/g, '')
+        .slice(0, 8)
+        .replace(/(\d{2})(\d)/, '$1/$2')
+        .replace(/(\d{2})(\d)/, '$1/$2');
+    }
+
     setForm({ ...form, [name]: formattedValue });
   };
 
@@ -84,14 +93,17 @@ function Cadastro() {
             <input type="password" placeholder="Crie sua senha" name='senha' value={form.senha} onChange={handleInputChange} autoComplete='new-password' required />
             <input type="text" placeholder="Telefone celular" name='telefone' value={form.telefone} onChange={handleInputChange} />
             <input type="password" placeholder="Confirme sua senha" name='senha_confirm' value={form.senha_confirm} onChange={handleInputChange} required />
-            <input type="date" placeholder="Data de Nascimento" name='data_nasc' className='data_nasc' value={form.data_nasc}   onInput={(e) => {if (e.target.value.length > 10) e.target.value = e.target.value.slice(0, 10)}} max="2025-12-31" onChange={handleInputChange} />
+            <div className='data-container'>
+              <input type="text" placeholder="Data de Nascimento" name='data_nasc' className='data_nasc' value={form.data_nasc}   onInput={(e) => {if (e.target.value.length > 10) e.target.value = e.target.value.slice(0, 10)}} max="2025-12-31" onChange={handleInputChange} />
+              <FaRegCalendar className='calendar' />
+            </div>
 
             {erro ? <span className='erro'>{erro}</span> : <></>}
             
             <button type="submit">Criar conta</button>
 
-            <div className='login-footer'>
-              <a href="/login">Já possui uma conta? Faça o Login</a>
+            <div className='cadastro-footer'>
+              <Link to="/login">Já possui uma conta? Faça o Login</Link>
             </div>
           </form>
         </div>

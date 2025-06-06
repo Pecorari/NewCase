@@ -57,7 +57,7 @@ function Login() {
 
             <div className='login-footer'>
               <Link to="/esqueci-senha">Esqueceu a senha?</Link>
-              <span> | </span>
+              <span>|</span>
               <Link to="/cadastro">Cadastre-se agora</Link>
             </div>
           </form>

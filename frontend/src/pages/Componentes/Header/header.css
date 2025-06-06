@@ -109,7 +109,7 @@
   width: 100%;
 }
 
-.search input {
+.search .search-header {
   background: transparent;
   border: none;
   outline: none;
@@ -117,7 +117,7 @@
   font-size: 0.95rem;
   padding-left: 5px;
 }
-.search input::placeholder {
+.search .search-header::placeholder {
   color: white;
   opacity: 1;
 }
@@ -127,6 +127,7 @@
   right: 0px;
   color: #FF6EC7;
   font-size: 1rem;
+  pointer-events: none;
 }
 
 .loginIcon {
@@ -212,7 +213,7 @@
   .search {
     width: 9rem;
   }
-  .search input {
+  .search .search-header {
     font-size: 0.9rem;
   }
   .search-icon {
@@ -239,7 +240,7 @@
   }
 
   .box-nav-actions {
-    padding: 15px 10px 15px 0px;
+    padding: 15px 20px 15px 0px;
   }
   .box-nav-actions.scrolled {
     padding: 11px 10px 11px 0px;
@@ -254,13 +255,26 @@
   
   .search {
     width: 6rem;
+    justify-content: end;
   }
-  .search input {
+  .search.scrolled {
+    width: 10rem;
+  }
+  .search .search-header {
     width: 100%;
     font-size: 0.7rem;
+    z-index: 1000;
   }
+  .search .search-header::placeholder {
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+  .search .search-header:focus::placeholder {
+    opacity: 1;
+  }
+
   .search-icon {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
   .actions {
     gap: 1.2rem;
@@ -269,8 +283,11 @@
     gap: 5px;
     font-size: 0.7rem;
   }
+  .login-span {
+    display: none;
+  }
   .iconLogin {
-    font-size: 20px;
+    font-size: 1.5rem;
   }
   .iconCart {
     font-size: 22px;

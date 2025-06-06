@@ -27,7 +27,6 @@
   gap: 2rem;
   padding: 2rem 2rem 0rem 2rem;
   margin-left: 8rem;
-  /* margin-bottom: 2rem; */
 }
 
 .imagens-section-detail {
@@ -258,6 +257,8 @@
   line-height: 1.5rem;
 }
 
+/* //////////////////////////// */
+
 .secao-avaliacoes {
   margin: 40px 100px;
 }
@@ -336,4 +337,164 @@
   font-size: 1rem !important;
   cursor: pointer !important;
   border-radius: 5px !important;
+}
+
+@media (max-width: 768px) {
+  .btn-voltar-details {
+    font-size: 1rem;
+    margin-left: 0rem;
+    margin-top: 140px;
+    margin-bottom: 10px;
+  }
+
+  .hero-details {
+    gap: 2rem;
+    padding: 1rem 1rem 0rem 1rem;
+    margin-left: 0rem;
+  }
+
+  .info-section-detail {
+    padding: 0rem;
+  }
+  .titulo-detail {
+    font-size: 1.7rem;
+    margin-bottom: 0.3rem;
+  }
+  .entre-title-star {
+    display: none;
+  }
+  .descricao-detail {
+    margin: 0.5rem 0;
+    line-height: 1;
+    font-size: 0.9rem;
+  }
+  .preco-detail {
+    margin-top: 1.1rem;
+    font-size: 1.4rem;
+  }
+  .quantidade-detail p {
+    font-size: 0.8rem;
+  }
+  .quantidade-selector {
+    margin: 0.5rem 0;
+  }
+  .quantidade-selector .btn-detail {
+    padding: 0.3rem;
+    line-height: 0.6rem;
+    font-size: 1rem;
+  }
+  .quantidade-selector .input-detail {
+    width: 30px;
+    margin: 0 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .formas-pagamento {
+    margin-top: 1rem;
+    margin-bottom: 0.8rem;
+  }
+  .formas-pagamento h4 {
+    font-size: 0.9rem;
+  }
+  .formas-pagamento ul {
+    font-size: 0.8rem;
+  }
+  .formas-pagamento li::before {
+    content: none;
+  }
+
+  .botao-carrinho-detail {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+  .botao-whatsapp {
+    padding: 0.75rem 1rem;
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+  }
+  .botao-whatsapp img {
+    height: 15px;
+    margin-left: 7px;
+  }
+
+  .frete-container {
+    margin-top: 1rem;
+  }
+  .frete-container input {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.7rem;
+  }
+  .frete-container button {
+    padding: 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  /* //////////////////////////// */
+
+  .secao-caracteristicas {
+    margin: 5rem 1rem;
+  }
+  .section-title-ct {
+    margin-bottom: 15px;
+    font-size: 1.7rem;
+  }
+  .secao-caracteristicas .caracteristicas {
+    line-height: 1.3rem;
+    font-size: 1rem;
+  }
+
+  /* //////////////////////////// */
+
+  .secao-avaliacoes {
+    margin: 0px 1rem;
+  }
+  .section-title-av {
+    margin-bottom: 15px;
+    font-size: 1.7rem;
+  }
+  .item-avaliacao {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+  .estrelas {
+    margin-left: 0px;
+  }
+  .coments {
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 425px) {
+  .btn-voltar-details {
+    font-size: 0.9rem;
+    margin-top: 110px;
+  }
+  .hero-details {
+    flex-direction: column;
+    padding: 1rem 0rem 0rem 0rem;
+  }
+
+  
+  .secao-caracteristicas {
+    margin: 4rem 0rem;
+  }
+  .section-title-ct {
+    font-size: 1.5rem;
+  }
+  .secao-caracteristicas .caracteristicas {
+    font-size: 0.8rem;
+  }
+
+
+  
+  .secao-avaliacoes {
+    margin: 0rem;
+  }
+  .section-title-av {
+    font-size: 1.5rem;
+  }
+  .item-avaliacao {
+    padding: 10px;
+    font-size: 0.8rem;
+  }
 }
