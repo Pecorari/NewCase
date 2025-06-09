@@ -112,7 +112,7 @@
   opacity: 100;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .produto-dstq {
     gap: 30px;
   }

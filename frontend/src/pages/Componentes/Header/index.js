@@ -113,7 +113,7 @@ function Header() {
             </div>
             {usuario ? (
               <Link to="/perfil" className="loginIcon">
-                <p style={{ fontWeight: 600, fontSize: 16 }}>Olá, {usuario.nome.split(" ")[0]}</p>
+                <p className="account-user">Olá, {usuario.nome.split(" ")[0]}</p>
               </Link>
             ) : (
               <Link to="/login" className="loginIcon">

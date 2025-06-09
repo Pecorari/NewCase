@@ -6,6 +6,7 @@
 
 .faq-section {
   max-width: 800px;
+  width: 90%;
   margin: auto;
   padding-top: 50px;
   font-family: 'Montserrat', sans-serif;
@@ -58,6 +59,12 @@ details p {
   color: black;
   background-color: #dddddd;
   border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .faq-section {
+    /* max-width: 90%; */
+  }
 }
 
 @media (max-width: 480px) {

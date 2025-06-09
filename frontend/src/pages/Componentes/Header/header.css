@@ -129,7 +129,10 @@
   font-size: 1rem;
   pointer-events: none;
 }
-
+.account-user {
+  font-weight: 600;
+  font-size: 1rem;
+}
 .loginIcon {
   display: flex;
   align-items: center;
@@ -201,8 +204,12 @@
   .logo-area {
     height: 4rem;
   }
+  .account-user {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
   .search {
-    width: 11rem;
+    width: 10rem;
   }
 }
 
@@ -213,19 +220,40 @@
   .search {
     width: 9rem;
   }
+  .search .search-header::placeholder {
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+  .search .search-header:focus::placeholder {
+    opacity: 1;
+  }
   .search .search-header {
     font-size: 0.9rem;
   }
   .search-icon {
       font-size: 0.95rem;
   }
-
   .actions {
     gap: 2.5rem;
+  }
+  .login-span {
+    display: none;
   }
 
   .nav {
     gap: 1rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .logo-area.scrolled {
+    margin-left: 1.5rem;
+  }
+  .box-nav-actions.scrolled {
+    padding: 20px 20px 10px 0px;
+  }
+  .actions {
+    gap: 1.2rem;
   }
 }
 
@@ -235,7 +263,6 @@
     height: 3.2rem;
   }
   .logo-area.scrolled {
-    margin-left: 1.2rem;
     height: 2.5rem;
   }
 
@@ -243,7 +270,7 @@
     padding: 15px 20px 15px 0px;
   }
   .box-nav-actions.scrolled {
-    padding: 11px 10px 11px 0px;
+    padding: 11px 20px 11px 0px;
   }
   .nav {
     justify-content: center;
@@ -276,15 +303,9 @@
   .search-icon {
     font-size: 1rem;
   }
-  .actions {
-    gap: 1.2rem;
-  }
   .loginIcon {
     gap: 5px;
     font-size: 0.7rem;
-  }
-  .login-span {
-    display: none;
   }
   .iconLogin {
     font-size: 1.5rem;
