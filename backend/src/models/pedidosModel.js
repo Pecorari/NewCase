@@ -34,9 +34,16 @@ const getAllMyPedidos = async (idLogado) => {
 
 const getUniquePedido = async (id, idLogado) => {
   const [pedido] = await connection.execute('SELECT * FROM pedidos WHERE id = ? AND usuario_id = ?', [id, idLogado]);
-  const [itens] = await connection.execute(`SELECT pedido_itens.*, produtos.nome AS produto_nome,  aparelhos.nome AS aparelho_nome, GROUP_CONCAT(produto_imagens.url) AS imagens
-    FROM pedido_itens JOIN produtos ON pedido_itens.produto_id = produtos.id LEFT JOIN produto_imagens ON pedido_itens.produto_id = produto_imagens.produto_id
-    LEFT JOIN aparelhos ON produtos.aparelho_id = aparelhos.id WHERE pedido_itens.pedido_id = 5 GROUP BY pedido_itens.id`, [id]);
+  const [itens] = await connection.execute(`
+     SELECT pedido_itens.*,
+            produtos.nome AS produto_nome,
+            aparelhos.nome AS aparelho_nome,
+            GROUP_CONCAT(produto_imagens.url) AS imagens
+          FROM pedido_itens JOIN produtos ON pedido_itens.produto_id = produtos.id
+          LEFT JOIN produto_imagens ON pedido_itens.produto_id = produto_imagens.produto_id
+          LEFT JOIN aparelhos ON produtos.aparelho_id = aparelhos.id
+          WHERE pedido_itens.pedido_id = ?
+          GROUP BY pedido_itens.id`, [id]);
   const [pagamento] = await connection.execute('SELECT * FROM pagamentos WHERE pedido_id = ?', [id]);
 
   const pedidoCompleto = {
@@ -59,50 +66,228 @@ const cancelarPedido = async (id, idLogado) => {
 };
 
 const getAdminPedidos = async () => {
-  const [pedidos] = await connection.execute('SELECT * FROM pedidos');
-  const [itens] = await connection.execute('SELECT * FROM pedido_itens');
-  const [pagamentos] = await connection.execute('SELECT * FROM pagamentos');
+  const [rows] = await connection.execute(`
+SELECT
+      -- Pedido
+      p.id AS pedido_id,
+      p.usuario_id,
+      p.total,
+      p.status AS status_pedido,
+      p.endereco_rua,
+      p.endereco_numero,
+      p.endereco_bairro,
+      p.endereco_cidade,
+      p.endereco_estado,
+      p.endereco_cep,
+      p.endereco_complemento,
+      p.frete_nome,
+      p.frete_logo,
+      p.frete_valor,
+      p.frete_prazo,
+      p.criado_em,
+      
+      -- Usuário
+      u.nome AS usuario_nome,
+      u.cpf AS usuario_cpf,
+      u.telefone AS usuario_telefone,
+      u.email AS usuario_email,
+      
+      -- Itens do pedido
+      pi.id AS item_id,
+      pi.produto_id,
+      pr.nome AS produto_nome,
+      pi.quantidade,
+      pi.preco_unitario,
+      
+      -- Pagamento
+      pg.id AS pagamento_id,
+      pg.metodo_pagamento,
+      pg.status_pagamento,
+      pg.valor_pago,
+      pg.pago_em,
+      
+      -- Imagem do produto
+      pri.url AS produto_imagem_url,
 
-  const pedidosCompletos = pedidos.map(pedido => {
-    const pedidoItens = itens.filter(item => item.pedido_id === pedido.id);
-    const pagamento = pagamentos.find(p => p.pedido_id === pedido.id);
+      -- Compatibilidade do produto
+      aparelhos.nome AS aparelho_nome
 
-    return {
-      ...pedido,
-      itens: pedidoItens,
-      pagamento: pagamento || null
+    FROM pedidos AS p
+    JOIN usuarios AS u ON u.id = p.usuario_id
+    LEFT JOIN pedido_itens AS pi ON pi.pedido_id = p.id
+    LEFT JOIN produtos AS pr ON pr.id = pi.produto_id
+    LEFT JOIN pagamentos AS pg ON pg.pedido_id = p.id
+    LEFT JOIN produto_imagens AS pri ON pri.produto_id = pr.id
+    LEFT JOIN aparelhos ON pr.aparelho_id = aparelhos.id
+    ORDER BY p.id, pi.id;
+  `);
+
+  const pedidosMap = {};
+
+  rows.forEach(row => {
+    if (!pedidosMap[row.pedido_id]) {
+      pedidosMap[row.pedido_id] = {
+        pedido_id: row.pedido_id,
+        usuario_id: row.usuario_id,
+        total: row.total,
+        status: row.status_pedido,
+        endereco: {
+          rua: row.endereco_rua,
+          numero: row.endereco_numero,
+          bairro: row.endereco_bairro,
+          cidade: row.endereco_cidade,
+          estado: row.endereco_estado,
+          cep: row.endereco_cep,
+          complemento: row.endereco_complemento,
+        },
+        frete: {
+          nome: row.frete_nome,
+          logo: row.frete_logo,
+          valor: row.frete_valor,
+          prazo: row.frete_prazo,
+        },
+        criado_em: row.criado_em,
+        usuario: {
+          nome: row.usuario_nome,
+          cpf: row.usuario_cpf,
+          telefone: row.usuario_telefone,
+          email: row.usuario_email,
+        },
+        itens: [],
+        pagamento: row.pagamento_id
+          ? {
+              id: row.pagamento_id,
+              metodo: row.metodo_pagamento,
+              status: row.status_pagamento,
+              valor: row.valor_pago,
+              pago_em: row.pago_em,
+            }
+          : null,
+      }
     };
+
+    if (row.item_id) {
+      pedidosMap[row.pedido_id].itens.push({
+        id: row.item_id,
+        produto_id: row.produto_id,
+        produto_imagem_url: row.produto_imagem_url,
+        nome: row.produto_nome,
+        aparelho_nome: row.aparelho_nome,
+        quantidade: row.quantidade,
+        preco_unitario: row.preco_unitario,
+      });
+    }
   });
 
-  return pedidosCompletos;
+  return Object.values(pedidosMap);
 };
 
-const getAdminPedidoById = async (id) => {
-  const [pedido] = await connection.execute('SELECT * FROM pedidos WHERE id = ?', [id]);
-  const [itens] = await connection.execute('SELECT * FROM pedido_itens WHERE id = ?', [id]);
-  const [pagamento] = await connection.execute('SELECT * FROM pagamentos WHERE id = ?', [id]);
+const getAdminPedidoBySearch = async (value) => {
+  const [rows] = await connection.execute(`
+    SELECT 
+      -- Pedido
+      p.id AS pedido_id,
+      p.usuario_id,
+      p.total,
+      p.status AS status_pedido,
+      p.endereco_rua,
+      p.endereco_numero,
+      p.endereco_bairro,
+      p.endereco_cidade,
+      p.endereco_estado,
+      p.endereco_cep,
+      p.endereco_complemento,
+      p.frete_nome,
+      p.frete_logo,
+      p.frete_valor,
+      p.frete_prazo,
+      p.criado_em,
 
-  const pedidoCompleto = {
-    pedido,
-    itens: itens,
-    pagamento: pagamento
-  };
+      -- Usuário
+      u.nome AS usuario_nome,
+      u.cpf AS usuario_cpf,
+      u.telefone AS usuario_telefone,
+      u.email AS usuario_email,
 
-  return pedidoCompleto;
-};
+      -- Itens do pedido
+      pi.id AS item_id,
+      pi.produto_id,
+      pr.nome AS produto_nome,
+      pi.quantidade,
+      pi.preco_unitario,
 
-const getAdminPedidoByUser = async (id) => {
-  const [pedido] = await connection.execute('SELECT * FROM pedidos WHERE usuario_id = ?', [id]);
-  const [itens] = await connection.execute('SELECT * FROM pedido_itens WHERE pedido_id = ?', [pedido[0].id]);
-  const [pagamento] = await connection.execute('SELECT * FROM pagamentos WHERE pedido_id = ?', [pedido[0].id]);
+      -- Pagamento
+      pg.id AS pagamento_id,
+      pg.metodo_pagamento,
+      pg.status_pagamento,
+      pg.valor_pago,
+      pg.pago_em
 
-  const pedidoCompleto = {
-    pedido,
-    itens: itens,
-    pagamento: pagamento
-  };
+    FROM pedidos p
+    JOIN usuarios u ON u.id = p.usuario_id
+    LEFT JOIN pedido_itens pi ON pi.pedido_id = p.id
+    LEFT JOIN produtos pr ON pr.id = pi.produto_id
+    LEFT JOIN pagamentos pg ON pg.pedido_id = p.id
+    WHERE p.id = ? OR LOWER(u.nome) LIKE CONCAT('%', LOWER(?), '%')
+    ORDER BY p.id, pi.id;
+  `, [value, value]);
 
-  return pedidoCompleto;
+  const pedidosMap = {};
+
+  rows.forEach(row => {
+    if (!pedidosMap[row.pedido_id]) {
+      pedidosMap[row.pedido_id] = {
+        pedido_id: row.pedido_id,
+        usuario_id: row.usuario_id,
+        total: row.total,
+        status: row.status_pedido,
+        endereco: {
+          rua: row.endereco_rua,
+          numero: row.endereco_numero,
+          bairro: row.endereco_bairro,
+          cidade: row.endereco_cidade,
+          estado: row.endereco_estado,
+          cep: row.endereco_cep,
+          complemento: row.endereco_complemento,
+        },
+        frete: {
+          nome: row.frete_nome,
+          logo: row.frete_logo,
+          valor: row.frete_valor,
+          prazo: row.frete_prazo,
+        },
+        criado_em: row.criado_em,
+        usuario: {
+          nome: row.usuario_nome,
+          cpf: row.usuario_cpf,
+          telefone: row.usuario_telefone,
+          email: row.usuario_email,
+        },
+        itens: [],
+        pagamento: row.pagamento_id
+          ? {
+              id: row.pagamento_id,
+              metodo: row.metodo_pagamento,
+              status: row.status_pagamento,
+              valor: row.valor_pago,
+              pago_em: row.pago_em,
+            }
+          : null,
+      }
+    };
+
+    if (row.item_id) {
+      pedidosMap[row.pedido_id].itens.push({
+        id: row.item_id,
+        produto_id: row.produto_id,
+        nome: row.produto_nome,
+        quantidade: row.quantidade,
+        preco_unitario: row.preco_unitario,
+      });
+    }
+  });
+
+  return Object.values(pedidosMap);
 };
 
 
@@ -145,8 +330,7 @@ module.exports = {
   getUniquePedido,
   cancelarPedido,
   getAdminPedidos,
-  getAdminPedidoById,
-  getAdminPedidoByUser,
+  getAdminPedidoBySearch,
   updateAdminPedido,
   deletePedido
 }

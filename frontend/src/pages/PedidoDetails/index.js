@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../hooks/useApi';
 
-import Header from '../Componentes/Header';
-import Footer from '../Componentes/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 import './pedidoDetails.css';
 
@@ -66,12 +66,13 @@ function PedidoDetail() {
 
               <section className="secao-endereco">
                 <h2>Endereço a ser entregue</h2>
-                <p>Rua: Rua Curitiba</p>
-                <p>Número: 1317</p>
-                <p>Bairro: Cidade Nova</p>
-                <p>Cidade: Santa Barbára D'Oeste</p>
-                <p>Estado: SP</p>
-                <p>Complemento: Sobrado</p>
+                <p>Rua: {pedido.endereco_rua}</p>
+                <p>Número: {pedido.endereco_numero}</p>
+                <p>Bairro: {pedido.endereco_bairro}</p>
+                <p>Cidade: {pedido.endereco_cidade}</p>
+                <p>Estado: {pedido.endereco_estado}</p>
+                <p>Complemento: {pedido.endereco_complemento}</p>
+                <p>CEP: {pedido.endereco_cep}</p>
               </section>
 
               <section className="secao-itens">
@@ -82,12 +83,12 @@ function PedidoDetail() {
                       <img src={item.imagens[0]} alt='Imagem do produto' className='img-item'/>
                       <div className="item-pd-info">
                         <div className='boxes-info-pd'>
-                          <h3>{item.produto_nome}</h3>
-                          <p>{item.aparelho_nome}</p>
+                          <h3>{item.produto_nome} <span className='span-id'>ID: #{item.produto_id}</span></h3>
+                          <p className='compatibilidade'>{item.aparelho_nome}</p>
                         </div>
                         <div className='boxes-valor-pd'>
-                          <p>Quantidade: {item.quantidade}</p>
-                          <p>Valor Unitário: <br/> R$ {item.preco_unitario}</p>
+                          <p>Qtd: {item.quantidade}</p>
+                          <p>R$ {item.preco_unitario}</p>
                         </div>
                       </div>
                     </li>
@@ -104,6 +105,15 @@ function PedidoDetail() {
                   <p>Status do Pagamento: {pagamento.status_pagamento}</p>
                   {pagamento.pago_em ? <p>Valor a ser pago: {pagamento.valor_pago}</p> : <></>}
                   <p>Pago em {formatarDataHora(pagamento.pago_em)}</p>
+                </section>
+              )}
+              {pedido && (
+                <section className="secao-frete">
+                  <h2>Frete</h2>
+                  <img src={pedido.frete_logo} alt='logo-frete'/>
+                  <p>Serviço: {pedido.frete_nome}</p>
+                  <p>Entrega: {pedido.frete_prazo} dias úteis</p>
+                  <p>Valor: {pedido.frete_valor}</p>
                 </section>
               )}
             </div>

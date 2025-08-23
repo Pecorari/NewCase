@@ -1,75 +1,94 @@
+.solicitarRedefinicaoPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .solicitarRedefinicao-section {
-  background-color: #050821;
-  padding: 80px;
+  flex: 1;
+  background-color: var(--color-dark);
+  padding: 40px;
   text-align: center;
 }
 
 .solicitarRedefinicao-container {
   background-color: rgb(177, 177, 177);
-  max-width: 600px;
-  margin: auto;
-  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  margin: 7rem auto 0px;
+  padding: 25px;
   border-radius: 12px;
 }
 
 .solicitarRedefinicao-section h2 {
   color: rgba(0, 0, 0, 0.85);
-  font-size: 2rem;
-  margin-bottom: 35px;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
 }
 
 .solicitarRedefinicao-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .solicitarRedefinicao-form input {
   padding: 12px 15px;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   background-color: #f1f1f1;
   color: #333;
 }
 
-.solicitarRedefinicao-form textarea {
-  resize: none;
-}
-
 .solicitarRedefinicao-form button {
-  background-color: #FF6EC7;
+  background-color: var(--color-primary);
+  border: 3px solid var(--color-primary);
   color: white;
-  border: 3px solid #FF6EC7;
-  padding: 14px;
-  font-size: 1rem;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.8rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.4s;
-  margin-top: 15px;
+  transition: background-color 0.4s ease, border 0.4s ease;
 }
 
 .solicitarRedefinicao-form button:hover {
-  background-color: #c23a8e;
-}
-
-.solicitarRedefinicao-footer {
-  text-align: center;
-  font-size: 16px;
-}
-
-.solicitarRedefinicao-footer a {
-  color: #9c3675;
-  text-decoration: none;
-  margin: 0 10px;
-}
-
-.solicitarRedefinicao-footer a:hover {
-  text-decoration: underline;
+  background-color: var(--color-strong);
+  border: 3px solid var(--color-strong);
 }
 
 .solicitarRedefinicao-mensagem {
+  font-size: 0.8rem;
   text-align: left;
   margin-left: 5px;
   color: rgb(0, 143, 0);
 }
+
+@media (min-width: 1280px) {
+  .solicitarRedefinicao-container {
+    margin-top: 9rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .solicitarRedefinicao-container {
+    margin-top: 11rem;
+  }
+
+  .solicitarRedefinicao-section h2 {
+    font-size: 1.7rem;
+  }
+
+  .solicitarRedefinicao-form input {
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 2000px) {
+  .solicitarRedefinicao-container {
+    margin-top: 15rem;
+  }
+}
+
+

@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-import Header from '../Componentes/Header/index';
-import Footer from '../Componentes/Footer/index';
+import Header from '../../components/Header';
+import SidebarFiltros from '../../components/SidebarFiltros';
+import Footer from '../../components/Footer';
 
 import api from '../../hooks/useApi';
 import './loja.css';
@@ -23,48 +25,74 @@ const Loja = () => {
   const [buscaCelular, setBuscaCelular] = useState('');
   const [sugestoes, setSugestoes] = useState([]);
   const [filtrosVisiveis, setFiltrosVisiveis] = useState(false);
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
+  const itensPorPagina = 16;
+  
   const searchRef = useRef(null);
   const inputRef = useRef(null);
-  const [paginaAtual, setPaginaAtual] = useState(1);
-  const itensPorPagina = 16;
+  const dropdownRef = useRef(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAllProdutos();
     getAllCategorias();
-    getFilteredProdutos(filters);
-  }, [filters]);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
         searchRef.current?.classList.add('scrolled');
         inputRef.current?.classList.add('scrolled');
+        dropdownRef.current?.classList.add('scrolled');
       } else {
         searchRef.current?.classList.remove('scrolled');
         inputRef.current?.classList.remove('scrolled');
+        dropdownRef.current?.classList.remove('scrolled');
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
-  async function getAllProdutos() {
+
+  useEffect(() => {
+    getProdutosPagina(paginaAtual);
+    // eslint-disable-next-line
+  }, [filters, paginaAtual]);
+
+  const getProdutosPagina = async (pagina) => {
     try {
-      const produtos = await api.get('/produtos');
-      setProdutos(produtos.data);
+      const query = new URLSearchParams({
+        page: pagina,
+        limit: itensPorPagina,
+        categoria: filters.categoria || '',
+        aparelho: filters.aparelho || '',
+        preco_min: filters.preco_min || '',
+        preco_max: filters.preco_max || '',
+        cor: filters.cor || '',
+        avaliacao: filters.avaliacao || ''
+      });
+
+      const endpoint = Object.values(filters).some(f => f) ? '/produtos/filters' : '/produtos';
+      const response = await api.get(`${endpoint}?${query.toString()}`);
+
+      setProdutos(response.data.produtos);
+      setTotalPaginas(Math.ceil(response.data.total / itensPorPagina));
     } catch (err) {
       console.error('Erro ao buscar produtos:', err);
     }
-  }
+  };
+
+  const mudarPagina = (numeroPagina) => {
+    setPaginaAtual(numeroPagina);
+  };
 
   const handleBuscaCelular = async (e) => {
     const texto = e.target.value;
     setBuscaCelular(texto);
   
-    if (texto.length >= 2) {
+    if (texto.length >= 3) {
       try {
         const response = await api.get(`/aparelhos/search?busca=%${texto}%`);
         setSugestoes(response.data);
@@ -86,6 +114,7 @@ const Loja = () => {
   }
 
   const handleCategoriaChange = (categoriaSelected) => {
+    setPaginaAtual(1);
     setFilters(prev => ({
       ...prev,
       categoria: categoriaSelected
@@ -93,6 +122,7 @@ const Loja = () => {
   };
 
   const handleAparelhoChange = (aparelhoSelected) => {
+    setPaginaAtual(1);
     setFilters(prev => ({
       ...prev,
       aparelho: aparelhoSelected
@@ -100,6 +130,7 @@ const Loja = () => {
   };
   
   const handlePrecoChange = (preco_min, preco_max) => {
+    setPaginaAtual(1);
     setFilters(prev => ({
       ...prev,
       preco_min: preco_min,
@@ -108,46 +139,15 @@ const Loja = () => {
   };
 
   const handleCorChange = (corSelected) => {
+    setPaginaAtual(1);
     setFilters(prev => ({
       ...prev,
       cor: corSelected,
     }));
   };
-  
-  // const handleAvaliacaoChange = (nota) => {
-  //   setFilters(prev => ({
-  //     ...prev,
-  //     avaliacao: nota,
-  //   }));
-  // };
-
-  const getFilteredProdutos = async (filters) => {
-    const query = new URLSearchParams();
-  
-    if (filters.categoria)
-      query.append("categoria", filters.categoria);
-  
-    if (filters.aparelho)
-      query.append("aparelho", filters.aparelho);
-
-    if (filters.preco_min)
-      query.append("preco_min", filters.preco_min);
-
-    if (filters.preco_max)
-      query.append("preco_max", filters.preco_max);
-  
-    if (filters.cor.length)
-      query.append("cor", filters.cor);
-  
-    if (filters.avaliacao)
-      query.append("avaliacao", filters.avaliacao);
-  
-    const produtos = await api.get(`/produtos/filters?${query.toString()}`);
-
-    setProdutos(produtos.data);
-  };
 
   const limparFiltros = () => {
+    setPaginaAtual(1);
     setFilters({
       categoria: '',
       aparelho: '',
@@ -156,18 +156,8 @@ const Loja = () => {
       cor: '',
       avaliacao: ''
     });
-    setBuscaCelular([]);
+    setBuscaCelular('');
     document.querySelectorAll('input[name=preco]').forEach(r => r.checked = false);
-  };
-
-  const indexUltimoItem = paginaAtual * itensPorPagina;
-  const indexPrimeiroItem = indexUltimoItem - itensPorPagina;
-  const produtosPagina = produtos.slice(indexPrimeiroItem, indexUltimoItem);
-  
-  const totalPaginas = Math.ceil(produtos.length / itensPorPagina);
-  
-  const mudarPagina = (numeroPagina) => {
-    setPaginaAtual(numeroPagina);
   };
 
   const proximaImagem = (id, total) => {
@@ -186,126 +176,89 @@ const Loja = () => {
 
   return (
     <div className='loja'>
-      <Header />
+      <Header inLoja={true}/>
 
       <div className="loja-container">
-        <div className="barra-pesquisa" ref={searchRef}>
-          <input
-            type="text"
-            placeholder="Qual o seu celular?"
-            className="input-pesquisa"
-            value={buscaCelular}
-            onChange={handleBuscaCelular}
-            ref={inputRef}
-          />
-          {sugestoes.length > 0 && (
-            <ul className="sugestoes-dropdown">
-              {sugestoes.map((celular, index) => (
-                <li
-                  key={index}
-                  onClick={() => {
-                    setBuscaCelular(celular.nome);
-                    handleAparelhoChange(celular.nome);
-                    setSugestoes([]);
-                  }}
-                >
-                  {celular.nome}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
         <button className="btn-abrir-filtros" onClick={() => setFiltrosVisiveis(true)}>
           <HiAdjustmentsHorizontal />
         </button>
-        <aside className={`sidebar ${filtrosVisiveis ? 'ativo' : ''}`}>
-          <div className='sidebar-content'>
-            <button className="btn-fechar-filtros" onClick={() => setFiltrosVisiveis(false)}>x</button>
-            <div className="filtro-grupo">
-              <h3>Categoria</h3>
-              <ul>
-              {categorias.map((categoria) => (
-                <li key={categoria.id} onClick={() => {handleCategoriaChange(categoria.nome)}}>{categoria.nome}</li>
-              ))}
-              </ul>
-            </div>
-
-            <div className="filtro-grupo">
-              <h3>Preço</h3>
-              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(0, 15)}}/> Até R$15</label><br />
-              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(15, 25)}}/> R$15 a R$25</label><br />
-              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(25, 35)}}/> R$25 a R$35</label><br />
-              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(35, 50)}}/> R$35 a R$50</label><br />
-              <label><input type="radio" name="preco" onChange={() => {handlePrecoChange(50, 1000)}}/> Acima de R$50</label>
-            </div>
-
-            <div className="filtro-grupo">
-              <h3>Cores</h3>
-              <div className="color-dots">
-                <span onClick={() => {handleCorChange('Azul')}} className="dot blue"></span>
-                <span onClick={() => {handleCorChange('Rosa')}} className="dot pink"></span>
-                <span onClick={() => {handleCorChange('Vermelho')}} className="dot red"></span>
-                <span onClick={() => {handleCorChange('Verde')}} className="dot green"></span>
-                <span onClick={() => {handleCorChange('Laranja')}} className="dot orange"></span>
-              </div>
-            </div>
-
-            {/* <div className="filtro-grupo">
-              <h3>Avaliação</h3>
-              <div onClick={() => {handleAvaliacaoChange(5)}} className="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-              <div onClick={() => {handleAvaliacaoChange(4)}} className="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-              <div onClick={() => {handleAvaliacaoChange(3)}} className="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
-              <div onClick={() => {handleAvaliacaoChange(2)}} className="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</div>
-              <div onClick={() => {handleAvaliacaoChange(1)}} className="stars">&#9733;&#9734;&#9734;&#9734;&#9734;</div>
-            </div> */}
-
-            <button className='reset-filter' onClick={limparFiltros}>
-              Limpar filtros
-            </button>
-          </div>
-        </aside>
+        <SidebarFiltros
+          ativo={filtrosVisiveis}
+          setAtivo={setFiltrosVisiveis}
+          categorias={categorias}
+          handleCategoriaChange={handleCategoriaChange}
+          handlePrecoChange={handlePrecoChange}
+          handleCorChange={handleCorChange}
+          limparFiltros={limparFiltros}
+        />
         {filtrosVisiveis ? <div className='overlay-filtro' onClick={() => setFiltrosVisiveis(false)}></div>
         : <div style={{ display: 'none' }}></div>}
 
-        <div className="grid-produtos">
-          {produtosPagina.map((produto) => {
-            const imagens = produto.imagens || [];
-            const indice = indiceImagem[produto.id] || 0;
+        <div className='search-grid-pag'>
+          <div className="barra-pesquisa" ref={searchRef}>
+            <input
+              type="text"
+              placeholder="Qual o seu celular?"
+              className="input-pesquisa"
+              value={buscaCelular}
+              onChange={handleBuscaCelular}
+              ref={inputRef}
+            />
+            {sugestoes.length > 0 && (
+              <ul className="sugestoes-dropdown" ref={dropdownRef}>
+                {sugestoes.map((celular, index) => (
+                  <li key={index} onClick={() => {
+                      setBuscaCelular(celular.nome);
+                      handleAparelhoChange(celular.nome);
+                      setSugestoes([]);
+                    }}
+                  >
+                    {celular.nome}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
-            return (
-              <div key={produto.id} className="card-produto" onClick={() => navigate(`/produto/${produto.id}`)}>
-                <div className="imagem-container">
-                  {imagens.length > 0 && (
-                    <>
-                      <img src={imagens[indice]} alt={produto.nome} className="imagem-produto" />
-                      {imagens.length > 1 && (
-                        <>
-                          <button className="seta seta-esquerda" onClick={(e) =>  {e.stopPropagation(); imagemAnterior(produto.id, imagens.length)}}>&lt;</button>
-                          <button className="seta seta-direita" onClick={(e) => {e.stopPropagation(); proximaImagem(produto.id, imagens.length)}}>&gt;</button>
-                        </>
-                      )}
-                    </>
-                  )}
+          <div className="grid-produtos">
+            {produtos.map((produto) => {
+              const imagens = produto.imagens || [];
+              const indice = indiceImagem[produto.id] || 0;
+
+              return (
+                <div key={produto.id} className="card-produto" onClick={() => navigate(`/produto/${produto.id}`)}>
+                  <div className="imagem-container">
+                    {imagens.length > 0 && (
+                      <>
+                        <img src={imagens[indice] || '/placeholder.png'} alt={produto.nome} className="imagem-produto" />
+                        {imagens.length > 1 && (
+                          <>
+                            <button className="seta seta-esquerda" onClick={(e) =>  {e.stopPropagation(); imagemAnterior(produto.id, imagens.length)}}><IoIosArrowBack /></button>
+                            <button className="seta seta-direita" onClick={(e) => {e.stopPropagation(); proximaImagem(produto.id, imagens.length)}}><IoIosArrowForward /></button>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <h3 className='title-produto'>{produto.nome}</h3>
+                  <p className="preco">R$ {produto.preco}</p>
+                  <button className='btn-comprar' onClick={() => navigate(`/produto/${produto.id}`)}>Comprar</button>
                 </div>
-                <h3 className='title-produto'>{produto.nome}</h3>
-                <p className="preco">R$ {produto.preco}</p>
-                <button onClick={() => navigate(`/produto/${produto.id}`)}>Comprar</button>
-              </div>
-            )
-          })}
-        </div>
-        
-        <div className="paginacao">
-          {[...Array(totalPaginas)].map((_, index) => (
-            <button
-              key={index}
-              className={paginaAtual === index + 1 ? 'ativo' : ''}
-              onClick={() => mudarPagina(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
+              )
+            })}
+          </div>
+          
+          <div className="paginacao">
+            {[...Array(totalPaginas)].map((_, index) => (
+              <button
+                key={index}
+                className={`pagina ${paginaAtual === index + 1 ? 'ativo' : ''}`}
+                onClick={() => mudarPagina(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

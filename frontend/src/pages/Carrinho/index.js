@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { BsTrash3 } from "react-icons/bs";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-import Header from "../Componentes/Header";
-import Footer from "../Componentes/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 import { useNavigate } from 'react-router-dom';
 import { useCarrinho } from '../../context/CarrinhoContext';
@@ -64,48 +66,50 @@ const Carrinho = () => {
   return (
     <div className="carrinho">
       <Header />
-      <button className="btn-voltar-carrinho" onClick={() => navigate(-1)}>&larr; Voltar</button>
       <div className="carrinho-container">
-        <h2>Seu Carrinho</h2>
+      <button className="btn-voltar-carrinho" onClick={() => navigate(-1)}>&larr; Voltar</button>
+        <h2 className='title-cart'>Seu Carrinho</h2>
 
         <ul className="carrinho-itens">
+          {produtos.length !== 0 ? produtos.map((produto, index) => {
+            const imagens = produto.imagens || [];
+            const indice = indiceImagem[produto.carrinho_id] || 0;
 
-        {produtos.length !== 0 ? produtos.map((produto, index) => {
-          const imagens = produto.imagens || [];
-          const indice = indiceImagem[produto.carrinho_id] || 0;
+            return (
+              <li key={index} className="item" onClick={() => navigate(`/produto/${produto.produto_id}`)}>
+                <div className="imagem-carrinho-container">
+                  {imagens.length > 0 && (
+                    <>
+                      <img src={imagens[indice]} alt={produto.produto_nome} className="produto-img" />
+                      {imagens.length > 1 && (
+                        <>
+                          <button className="seta seta-esquerda" onClick={(e) =>  {e.stopPropagation(); imagemAnterior(produto.carrinho_id, imagens.length)}}><IoIosArrowBack /></button>
+                          <button className="seta seta-direita" onClick={(e) => {e.stopPropagation(); proximaImagem(produto.carrinho_id, imagens.length)}}><IoIosArrowForward /></button>
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
+                <div className='info-item'>
+                  <span className="title">{produto.produto_nome}</span>
+                  <span className="compativel">{produto.aparelho_nome}</span>
+                </div>
+                <div className='info-preco-item'>
+                  <span className="preco-carrinho">QTD: {produto.quantidade}</span>
+                  <span className="preco-carrinho">{(produto.preco * produto.quantidade).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                </div>
 
-          return (
-            <li key={index} className="item">
-
-              <div className="imagem-carrinho-container">
-                {imagens.length > 0 && (
-                  <>
-                    <img src={imagens[indice]} alt={produto.nome} className="produto-img" />
-                    {imagens.length > 1 && (
-                      <>
-                        <button className="seta seta-esquerda" onClick={(e) =>  {e.stopPropagation(); imagemAnterior(produto.carrinho_id, imagens.length)}}>&lt;</button>
-                        <button className="seta seta-direita" onClick={(e) => {e.stopPropagation(); proximaImagem(produto.carrinho_id, imagens.length)}}>&gt;</button>
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
-
-              <span className="nome">{produto.nome}</span>
-              <span className="preco-carrinho">QTD: {produto.quantidade}</span>
-              <span className="preco-carrinho">R$ {produto.preco * produto.quantidade}</span>
-              <button className="remover" onClick={(e) => {e.preventDefault(); removeCart(produto.carrinho_id)}}>Remover</button>
-            </li>
-          );
-        }) : <p className='msg-carrinho-vazio'>Seu carriho está vazio! <br/><br/> Você ainda não adicionou nenhum produto ao carriho.</p>
-        }
-
+                <button className="remover" onClick={(e) => {e.preventDefault(); e.stopPropagation(); removeCart(produto.carrinho_id)}}><BsTrash3 /></button>
+              </li>
+            );
+          }) : <p className='msg-carrinho-vazio'>Seu carriho está vazio! <br/><br/> Você ainda não adicionou nenhum produto ao carrinho.</p>
+          }
         </ul>
 
         <div className="total-container">
-          <button className="continuar-comprando" onClick={() => navigate('/loja')}>&larr; Voltar as compras</button>
-          <div className='total'>
-            <strong>Total: R$ {valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
+          <p className='total'>Total: {valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+          <div className='btn-total'>
+            <button className="continuar-comprando" onClick={() => navigate('/loja')}>&larr; Voltar as compras</button>
             <button className="finalizar" onClick={() => console.log('Finalizar compra!')} disabled={produtos.length === 0}>Finalizar Compra</button>
           </div>
         </div>

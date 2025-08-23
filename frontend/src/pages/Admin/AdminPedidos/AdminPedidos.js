@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
-
-import api from '../../../hooks/useApi';
-
-import './AdminPedidos.css';
+import React, { useEffect, useState } from "react";
+import api from "../../../hooks/useApi";
+import "./AdminPedidos.css";
 
 const AdminPedidos = () => {
   const [pedidos, setPedidos] = useState([]);
-  const [pedido, setPedido] = useState([]);
-  const [erro, setErro] = useState('');
-  const [form, setForm] = useState({
-    cliente_id: ''
-  });
+  const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
+  const [erro, setErro] = useState("");
+  const [form, setForm] = useState({ searchValue: "" });
 
   useEffect(() => {
     buscarPedidos();
@@ -18,75 +14,156 @@ const AdminPedidos = () => {
 
   const buscarPedidos = async () => {
     try {
-      const response = await api.get('/pedidosAdmin');
+      const response = await api.get("/pedidosAdmin");
       setPedidos(response.data);
     } catch (err) {
-      setErro(err.response.data.mensagem);
-      console.error('Erro ao buscar pedidos:', err);
+      setErro(err.response?.data?.mensagem || "Erro inesperado");
+      console.error("Erro ao buscar pedidos:", err);
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setForm({ [name]: value });
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    e.preventDefault();
-    
-    if (form.cliente_id.trim() === '') {
+    if (form.searchValue.trim() === "") {
       buscarPedidos();
-      setPedido([]);
       return;
     }
 
     try {
-
-      const response = await api.get(`/pedidosAdmin/user/${form.cliente_id}`);
-
-      setForm({cliente_id: ''});
-      setPedido(response.data);
+      const response = await api.get(`/pedidosAdmin/search/${form.searchValue}`);
+      setPedidos(response.data);
+      setForm({ searchValue: "" });
     } catch (err) {
-      setErro(err.response.data.mensagem);
-      console.error('Erro ao adicionar pedido:', err);
+      setErro(err.response?.data?.mensagem || "Erro inesperado");
+      console.error("Erro ao buscar pedidos:", err);
     }
   };
 
   return (
-    <div className='admin-container'>
-      {erro ? <span className='erro'>{erro}</span> : <></>}
-      <h2 className='title-admin-pedido'>Buscar Pedido</h2>
-      <form className='form-admin-pedido' onSubmit={handleSubmit}>
-        <input className='input-admin-pedido' type="text" name="cliente_id" placeholder="Cliente ID" value={form.cliente_id} onChange={handleInputChange} required />
-        <button className='form-btn-admin-pedido' type="submit">Buscar</button>
+    <div className="admin-container">
+      {erro && <span className="erro">{erro}</span>}
+
+      <h2 className="title-admin-pedido">Buscar Pedido</h2>
+      <form className="form-admin-pedido" onSubmit={handleSubmit}>
+        <input
+          className="input-admin-pedido"
+          type="text"
+          name="searchValue"
+          placeholder="ID / Nome do usuario"
+          value={form.searchValue}
+          onChange={handleInputChange}
+        />
+        <button className="form-btn-admin-pedido" type="submit">Buscar</button>
       </form>
 
-      <br/><br/><hr/><br/><br/>
 
-      <h2 className='title-admin-pedido'>Lista de pedidos</h2>
+      <br/><br/><hr/><br/><br/> 
+
+
+      <h2 className="title-admin-pedido">Lista de pedidos</h2>
       {pedidos.length === 0 ? (
-        <p>Nenhum pedido feito.</p>
+        <p>Nenhum pedido encontrado.</p>
       ) : (
-        <ul className='ul-admin-pedido'>
-          {pedido.length !== 0  ? (
-            <li className='li-admin-pedido'>
-              <div className='dados-pedidos'>
-                <p>{pedido.id}<br/>{pedido.usuario_id}<br/>{pedido.total}<br/>{pedido.status}<br/>{pedido.criado_em}</p>
-                <p>{pedido.itens[0].id}<br/>{pedido.itens[0].pedido_id}<br/>{pedido.itens[0].quantidade}</p>
-                <p>{pedido.pagamento.id}<br/>{pedido.pagamento.pedido_id}<br/>{pedido.pagamento.metodo_pagamento}<br/>{pedido.pagamento.valor_pago}<br/>{pedido.pagamento.pago_em}</p>
-              </div>
-            </li> ) : pedidos.map((pedido) => (
-            <li className='li-admin-pedido' key={pedido.id}>
-              <div className='dados-pedidos'>
-                <p>{pedido.id}<br/>{pedido.usuario_id}<br/>{pedido.total}<br/>{pedido.status}<br/>{pedido.criado_em}</p>
-                <p>{pedido.itens[0].id}<br/>{pedido.itens[0].pedido_id}<br/>{pedido.itens[0].quantidade}</p>
-                <p>{pedido.pagamento.id}<br/>{pedido.pagamento.pedido_id}<br/>{pedido.pagamento.metodo_pagamento}<br/>{pedido.pagamento.valor_pago}<br/>{pedido.pagamento.pago_em}</p>
-              </div>
-            </li>
+        <div className="pedido-grid">
+          <div className="pedido-header">
+            <span>ID</span>
+            <span>Cliente</span>
+            <span>Total</span>
+            <span>Status</span>
+            <span>Criado em</span>
+          </div>
+
+          {pedidos.map((pedido) => (
+            <div className="pedido-row" key={pedido.pedido_id} onClick={() => setPedidoSelecionado(pedido)}>
+              <span>{pedido.pedido_id}</span>
+              <span>{pedido.usuario.nome}</span>
+              <span>R$ {pedido.total}</span>
+              <span>{pedido.status}</span>
+              <span>{new Date(pedido.criado_em).toLocaleDateString()}</span>
+            </div>
           ))}
-        </ul>
+        </div>
+      )}
+
+      {pedidoSelecionado && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Detalhes do Pedido #{pedidoSelecionado.pedido_id}</h2>
+
+            <div className="modal-grid">
+              <div>
+                <section>
+                  <h3 className="subtitles-sections">Informações Gerais</h3>
+                  <p>Status: {pedidoSelecionado.status}</p>
+                  <p>Data do Pedido:{new Date(pedidoSelecionado.criado_em).toLocaleString()}</p>
+                  <p>Total: R$ {pedidoSelecionado.total}</p>
+                </section>
+
+                <section>
+                  <h3 className="subtitles-sections">Endereço a ser entregue</h3>
+                  <p>Rua: {pedidoSelecionado.endereco.rua}</p>
+                  <p>Número: {pedidoSelecionado.endereco.numero}</p>
+                  <p>Bairro: {pedidoSelecionado.endereco.bairro}</p>
+                  <p>Cidade: {pedidoSelecionado.endereco.cidade}</p>
+                  <p>Estado: {pedidoSelecionado.endereco.estado}</p>
+                  <p>CEP: {pedidoSelecionado.endereco.cep}</p>
+                  <p>Complemento: {pedidoSelecionado.endereco.complemento}</p>
+                </section>
+              </div>
+
+              <div>
+                <section>
+                  <h3 className="subtitles-sections">Pagamento</h3>
+                  {pedidoSelecionado.pagamento ? (
+                    <>
+                      <p>Forma de Pagamento: {pedidoSelecionado.pagamento.metodo}</p>
+                      <p>Status: {pedidoSelecionado.pagamento.status}</p>
+                      <p>Pago em: {new Date(pedidoSelecionado.pagamento.pago_em).toLocaleString()}</p>
+                    </>
+                  ) : (
+                    <p>Sem pagamento registrado</p>
+                  )}
+                </section>
+
+                <section>
+                  <h3 className="subtitles-sections">Frete</h3>
+                  <p>Serviço: {pedidoSelecionado.frete.nome}</p>
+                  <p>Entrega: {pedidoSelecionado.frete.prazo} dias úteis</p>
+                  <p>Valor: R$ {pedidoSelecionado.frete.valor}</p>
+                </section>
+              </div>
+            </div>
+
+            <section>
+              <h3 className="subtitles-sections">Itens do Pedido</h3>
+              <div className="itens-grid">
+                {pedidoSelecionado.itens.map((item, i) => (
+                  <div className="item-card" key={i}>
+                    <img src={item.produto_imagem_url} alt='Imagem do produto' className='img-item'/>
+                    <div className="item-pd-info">
+                      <div className='boxes-info-pd'>
+                        <h3>{item.nome} <span className='span-id'>ID: #{item.produto_id}</span></h3>
+                        <p className='compatibilidade'>{item.aparelho_nome}</p>
+                    </div>
+                    <div className='boxes-valor-pd'>
+                        <p>Qtd: {item.quantidade}</p>
+                        <p>R$ {item.preco_unitario}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <button onClick={() => setPedidoSelecionado(null)}>Fechar</button>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import Header from '../../Componentes/Header/index';
-import Footer from '../../Componentes/Footer/index';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 
 import api from '../../../hooks/useApi';
 import './solicitarRedefinicao.css';

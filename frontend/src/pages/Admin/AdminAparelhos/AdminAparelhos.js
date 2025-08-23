@@ -73,19 +73,20 @@ const AdminAparelhos = () => {
       {aparelhos.length === 0 ? (
         <p>Nenhum aparelho cadastrado.</p>
       ) : (
-        <ul className='ul-admin-aparelho'>
+        <div className="aparelho-grid">
+          <div className="aparelho-header">
+            <span>ID</span>
+            <span>Nome</span>
+            <span>Ações</span>
+          </div>
           {aparelhos.map((aparelho) => (
-            <li className='li-admin-aparelho' key={aparelho.id}>
-              <div className='dados-aparelhos'>
-                <p>{aparelho.id}</p>
-                <div className='nome-aparelho'>
-                  <p>{aparelho.nome}</p>
-                </div>
-              </div>
-              <button className='li-btn-admin-aparelho' onClick={() => handleDeletar(aparelho.id)}>Deletar</button>
-            </li>
+            <div className="aparelho-row" key={aparelho.id}>
+              <span>{aparelho.id}</span>
+              <span>{aparelho.nome}</span>
+              <button className='btn-dell-aparelho' onClick={() => handleDeletar(aparelho.id)}>Deletar</button>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

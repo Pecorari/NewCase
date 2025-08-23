@@ -10,6 +10,8 @@ const pedidosController = require('./controllers/pedidosController');
 const usuariosController = require('./controllers/usuariosController');
 const senhaController = require('./controllers/senhasController');
 
+const adminController = require('./controllers/adminController');
+
 const { validarProduto } = require('./middlewares/produtosMiddleware');
 const { validarAparelho } = require('./middlewares/aparelhosMiddleware');
 const { validarCategoria } = require('./middlewares/categoriasMiddleware');
@@ -50,7 +52,7 @@ router.post('/avaliacoes/add', autenticarToken, verificarPermissao(['admin', 'cl
 router.get('/avaliacoes/:produtoId', avaliacoesController.getProductAvaliacoes);
 router.delete('/avaliacoes/del/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), avaliacoesController.deleteAvaliacao);
 
-router.post('/aparelhos/add', autenticarToken, verificarPermissao(['admin']), validarAparelho, validarRequisicao,);
+router.post('/aparelhos/add', autenticarToken, verificarPermissao(['admin']), validarAparelho, validarRequisicao, aparelhosController.createAparelho);
 router.get('/aparelhos', aparelhosController.getAllAparelhos);
 router.get('/aparelhos/search', aparelhosController.getSearchAparelhos);
 router.delete('/aparelhos/del/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, aparelhosController.deleteAparelho);
@@ -92,14 +94,13 @@ router.post('/redefinir-senha', validarSenha, validarRequisicao, senhaController
 // Rotas para mexer com dados de GERAL. ex.: Listar Pedidos de geral
 
 router.get('/pedidosAdmin', autenticarToken, verificarPermissao(['admin']), pedidosController.getAdminPedidos);
-router.get('/pedidosAdmin/id/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, pedidosController.getAdminPedidoById);
-router.get('/pedidosAdmin/user/:id', autenticarToken, verificarPermissao(['admin']), pedidosController.getAdminPedidoByUser);
+router.get('/pedidosAdmin/search/:value', autenticarToken, verificarPermissao(['admin']), validarRequisicao, pedidosController.getAdminPedidoBySearch);
 router.put('/pedidosAdmin/edit/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarPedido, validarRequisicao, pedidosController.updateAdminPedido);
 router.delete('/pedidosAdmin/del/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, pedidosController.deletePedido);
 
 router.get('/usuarios', autenticarToken, verificarPermissao(['admin']), usuariosController.getAllUsuarios);
-router.get('/usuarios/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, usuariosController.getUsuarioById);
+router.get('/usuarios/:value', autenticarToken, verificarPermissao(['admin']), validarRequisicao, usuariosController.getUsuarioBySearch);
 
-
+router.get('/statsAdmin', adminController.getStats);
 
 module.exports = router;

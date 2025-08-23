@@ -1,6 +1,6 @@
 .verificar-email {
   height: 100vh;
-  background-color: #050821;
+  background-color: var(--color-dark);
   display: flex;
 }
 
@@ -16,24 +16,23 @@ strong {
 }
 
 .verificar-email-page h1 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-}
-
-.verificar-email-page p {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
+.verificar-email-page p {
+  font-size: 0.9rem;
+}
+
 .verificar-email-page button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background-color: #ff0066;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  background-color: var(--color-strong);
   color: #fff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
   transition: background-color 0.3s ease;
 }
 .verificar-email-page button:hover {
@@ -47,17 +46,18 @@ strong {
 
 .verificar-email-page .reenviado {
   color: green;
-  margin-top: 25px;
-  margin-bottom: 50px;
+  font-size: 0.9rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .faq-email {
   text-align: left;
-  margin-top: 4rem;
+  margin-top: 2rem;
 }
 
 .faq-email h2 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 0.5rem;
 }
 
@@ -67,18 +67,18 @@ strong {
 
 .faq-email li {
   margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
 .voltar-link {
   display: block;
-  margin-top: 4rem;
+  margin-top: 5rem;
   text-decoration: none;
   font-weight: 500;
-  font-size: 1.1rem;
-  color: #ff4da6;
+  font-size: 1rem;
+  color: var(--color-strong);
   transition: color 0.3s ease;
 }
 .voltar-link:hover {
-  color: #ff85c1;
+  color: var(--color-primary);
 }

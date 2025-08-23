@@ -160,11 +160,11 @@ const getAllUsuarios = async (req, res) => {
   }
 };
 
-const getUsuarioById = async (req, res) => {
+const getUsuarioBySearch = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { value } = req.params;
     
-    const usuario = await usuarioModel.getUsuarioById(id);
+    const usuario = await usuarioModel.getUsuarioBySearch(value);
     
     if (!usuario) {
       return res.status(404).json({ mensagem: 'Usuário não encontrado.' });
@@ -174,16 +174,16 @@ const getUsuarioById = async (req, res) => {
 
     return res.status(200).json(usuario);
   } catch (error) {
-    console.error('Erro em getUsuarioById:', error);
+    console.error('Erro em getUsuarioBySearch:', error);
     return res.status(500).json({ mensagem: 'Erro interno no servidor.' });
   }
 };
 
 const profile = async (req, res) => {
   try {
-    const user = await usuarioModel.getUsuarioById(req.usuario.id);
+    const user = await usuarioModel.getUsuarioBySearch(req.usuario.id);
     if (!user) return res.status(404).json({ message: 'Usúario não encontrado' });
-    const { senha, tipo, ...usuario } = user;
+    const { senha, ...usuario } = user;
     res.json(usuario);
   } catch (error) {
     console.error('Erro em profile:', error);
@@ -246,7 +246,7 @@ module.exports = {
   loginUsuario,
   logout,
   getAllUsuarios,
-  getUsuarioById,
+  getUsuarioBySearch,
   profile,
   updateUsuario,
   alterarSenha,

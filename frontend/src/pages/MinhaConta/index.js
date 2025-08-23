@@ -4,12 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../hooks/useApi';
 import { useAuth } from "../../context/AuthContext";
 
-import Header from '../Componentes/Header';
-import Footer from '../Componentes/Footer';
-import ModalNovoEndereco from '../Componentes/ModalNovoEndereco'
-
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import ModalNovoEndereco from '../../components/ModalNovoEndereco';
+import CustomModal from '../../components/Modal/CustomModal';
 
 import './minhaConta.css';
 
@@ -29,7 +27,9 @@ const MinhaConta = () => {
   const [enderecos, setEnderecos] = useState([]);
   const [enderecoSelecionado, setEnderecoSelecionado] = useState(null);
   const [pedidos, setPedidos] = useState([]);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [modalSaveEndOpen, setModalSaveEndOpen] = useState(false);
+  const [modalDeleteEndOpen, setModalDeleteEndOpen] = useState(false);
+  const [modalDadosUpdtOpen, setModalDadosUpdtOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -50,7 +50,6 @@ const MinhaConta = () => {
   async function listarPedidos() {
     try {
       const result = await api.get('/pedidos');
-console.log(result.data)
       setPedidos(result.data);
     } catch (error) {
       console.log('erro ao listar pedidos:', error)
@@ -73,10 +72,10 @@ console.log(result.data)
     try {
       await api.put('/usuarios/edit/', payload);
 
-      showSuccessModal();
     } catch (error) {
       console.log('erro ao editar user:', error);
     }
+    setModalDadosUpdtOpen(true);
   };
 
   const handleSenhaSubmit = async(e) => {
@@ -98,38 +97,24 @@ console.log(result.data)
     await api.put(`/enderecos/edit/${enderecoSelecionado.id}`, endereco);
 
     listarEnderecos();
-    setMostrarModal(false);
+    setModalSaveEndOpen(false);
   };
 
   const handleRemoverEndereco = async (id) => {
-    confirmAlert({
-      title: 'Confirmar exclusão',
-      message: 'Você tem certeza que deseja excluir esse endereço?',
-      buttons: [
-        {label: 'Sim',
-          onClick: async () => {
-            try {
-              await api.delete(`/enderecos/del/${id}`);
-
-              listarEnderecos();
-            } catch (error) {
-              console.log('erro ao remover o endereço:', error);
-            }
-          }
-        },
-        {
-          label: 'Não',
-          onClick: () => {}
-        }
-      ]
-    });
+    try {
+      await api.delete(`/enderecos/del/${id}`);
+      listarEnderecos();
+      setModalDeleteEndOpen(false);
+    } catch (error) {
+      console.log('erro ao remover o endereço:', error);
+    }
   };
 
   const salvarEndereco = async (endereco) => {
     await api.post('/enderecos/add', endereco);
 
     listarEnderecos();
-    setMostrarModal(false);
+    setModalSaveEndOpen(false);
   };
 
   function formatDateGet(dateTime) {
@@ -153,20 +138,6 @@ console.log(result.data)
     return `${dia}/${mes}/${ano} - ${horas}:${minutos}`;
   }
 
-  const showSuccessModal = () => {
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div className='custom-ui'>
-            <h1 style={{ color: '#4BB543' }}>Sucesso!</h1>
-            <p>Os dados foram atualizados com sucesso.</p>
-            <button className='modal-btn' onClick={onClose}>OK</button>
-          </div>
-        );
-      }
-    });
-  }
-
   return (
     <div className='minha-conta'>
       <Header />
@@ -174,64 +145,93 @@ console.log(result.data)
         <h1 className='h1-account'>Minha Conta</h1>
         <div className='boxes'>
           <div className='meus-dados'>
-            <h3 className='h3-account'>Meus Dados</h3>
-            <form onSubmit={handleDadosSubmit} className="form-usuario">
-              <label className='label-account'>Nome: </label>
-                <input className='input-account' type="text" name="nome" value={form.nome} onChange={handleChange} />
-              <label className='label-account'>CPF: </label>
-                <input className='input-account' type="text" name="cpf" value={form.cpf} onChange={handleChange} />
-              <label className='label-account'>Telefone: </label>
-                <input className='input-account' type="text" name="telefone" value={form.telefone} onChange={handleChange} />
-              <label className='label-account'>Data de Nascimento: </label>
-                <input className='input-account' type="date" name="data_nasc" value={form.data_nasc} onChange={handleChange} />
-              <label className='label-account'>Email: </label>
-                <input className='disabled' type="email" value={form.email} disabled />
-              <br />
-              <button type="submit" className='submit'>Salvar Alterações</button>
-            </form>
+            <div className='perfil-section'>
+              <h3 className='h3-account'>Meus Dados</h3>
+              <form onSubmit={handleDadosSubmit} className="form-usuario">
+                <label className='label-account'>Nome: </label>
+                  <input className='input-account' type="text" name="nome" value={form.nome} onChange={handleChange} />
+                <label className='label-account'>CPF: </label>
+                  <input className='input-account' type="text" name="cpf" value={form.cpf} onChange={handleChange} />
+                <label className='label-account'>Telefone: </label>
+                  <input className='input-account' type="text" name="telefone" value={form.telefone} onChange={handleChange} />
+                <label className='label-account'>Data de Nascimento: </label>
+                  <input className='input-account' type="date" name="data_nasc" value={form.data_nasc} onChange={handleChange} />
+                <label className='label-account'>Email: </label>
+                  <input className='input-account disabled' type="email" value={form.email} disabled />
+                <br />
+                <button type="submit" className='submit'>Salvar Alterações</button>
 
-            <hr />
-
-            <h3 className='h3-account'>Alterar Senha</h3>
-            <form onSubmit={handleSenhaSubmit} className="form-senha">
-              <label className='label-account'>Senha Atual: <input className='input-account' type="password" value={senhaAtual} onChange={(e) => setSenhaAtual(e.target.value)} required/></label>
-              <label className='label-account'>Nova Senha: <input className='input-account' type="password" value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} required/></label>
-                {mensagem ? <p style={{ color: 'green' }}>{mensagem}</p> : <></>}
-                {erro ? <p style={{ color: 'red' }}>{erro}</p> : <></>}
-              <button type="submit" className='submit'>Alterar Senha</button>
-            </form>
-
-            <hr />
-
-            <h3 className='h3-account'>Meus Endereços</h3>
-            <div className="enderecos">
-              {enderecos.length === 0 ?
-                <p style={{ marginBottom: '10px' }}>Você ainda não tem um endereço cadastrado.</p>
-              : enderecos.map((end) => (
-                <div key={end.id} className="endereco-card">
-                  <p>{end.rua}, {end.numero} - {end.bairro}, {end.cidade} / {end.estado}</p>
-                  <p>CEP: {end.cep}</p>
-                  {end.complemento ? <p>Complemento: {end.complemento}</p> : <></>}
-                  <button onClick={() => {setEnderecoSelecionado(end); setMostrarModal(true)}} className='submit-endereco'>Editar</button>
-                  <button onClick={() => handleRemoverEndereco(end.id)} className='submit-endereco'>Remover</button>
-                </div>
-              ))}
-              <button onClick={() => {setEnderecoSelecionado(null); setMostrarModal(true)}} className="btn-add-endereco">+ Adicionar Endereço</button>
-              {mostrarModal && (
-                <ModalNovoEndereco enderecoInicial={enderecoSelecionado} onSave={(enderecoSelecionado ? editarEndereco : salvarEndereco)} onCancel={() => { setMostrarModal(false); setEnderecoSelecionado(null); }}/>
-              )}
+                <CustomModal
+                  isOpen={modalDadosUpdtOpen}
+                  onClose={() => setModalDadosUpdtOpen(false)}
+                  title="Dados cadastrais atualizado!"
+                />
+              </form>
             </div>
-            
+
             <hr />
 
-            <button onClick={logout} className="btn-logout">Sair da Conta</button>
+            <div className='alterarSenha-section'>
+              <h3 className='h3-account'>Alterar Senha</h3>
+              <form onSubmit={handleSenhaSubmit} className="form-senha">
+                <div className='password'>
+                  <label className='label-account lb-password'>Senha Atual:</label>
+                  <input className='input-account' type="password" value={senhaAtual} onChange={(e) => setSenhaAtual(e.target.value)} required/>
+                </div>
+                <div className='password'>
+                  <label className='label-account lb-password'>Nova Senha:</label>
+                  <input className='input-account' type="password" value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} required/>
+                </div>
+                  
+                  {mensagem ? <p style={{ color: 'green' }}>{mensagem}</p> : <></>}
+                  {erro ? <p style={{ color: 'red' }}>{erro}</p> : <></>}
+                <button type="submit" className='submit'>Alterar Senha</button>
+              </form>
+            </div>
+
+            <hr />
+
+            <div className='endereco-section'>
+              <h3 className='h3-account'>Meus Endereços</h3>
+              <div className="enderecos">
+                {enderecos.length === 0 ?
+                  <p style={{ marginBottom: '10px', marginLeft: '10px' }}>Você ainda não tem um endereço cadastrado.</p>
+                : enderecos.map((end) => (
+                  <>
+                  <div key={end.id} className="endereco-card">
+                    <p>{end.rua}, {end.numero} - {end.bairro}</p>
+                    <p>{end.cidade} / {end.estado}</p>
+                    <p>CEP: {end.cep}</p>
+                    {end.complemento ? <p>Complemento: {end.complemento}</p> : <></>}
+                    <button onClick={() => {setEnderecoSelecionado(end); setModalSaveEndOpen(true)}} className='submit-endereco'>Editar</button>
+                    <button onClick={(e) => {e.preventDefault(); setModalDeleteEndOpen(true);}} className='submit-endereco'>Remover</button>
+                  </div>
+
+                  <CustomModal
+                    isOpen={modalDeleteEndOpen}
+                    onClose={() => setModalDeleteEndOpen(false)}
+                    title="Confirmar exclusão"
+                    confirmText="Confirmar"
+                    onConfirm={() => handleRemoverEndereco(end.id)}
+                  >
+                    <p>Você tem certeza que deseja excluir esse endereço?</p>
+                  </CustomModal>
+                  </>
+                ))}
+                <button onClick={() => {setEnderecoSelecionado(null); setModalSaveEndOpen(true)}} className="btn-add-endereco">+ Adicionar Endereço</button>
+                {modalSaveEndOpen && (
+                  <ModalNovoEndereco enderecoInicial={enderecoSelecionado} onSave={(enderecoSelecionado ? editarEndereco : salvarEndereco)} onCancel={() => { setModalSaveEndOpen(false); setEnderecoSelecionado(null); }}/>
+                )}
+              </div>
+            </div>
+            <hr />
           </div>
 
           <div className='meus-pedidos'>
             <h3 className='h3-account'>Pedidos</h3>
             <div className="pedidos">
-              {enderecos.length === 0 ?
-                <p style={{ marginBottom: '10px' }}>Você ainda não fez um pedido.</p>
+              {pedidos.length === 0 ?
+                <p style={{ marginBottom: '10px', marginLeft: '10px' }}>Você ainda não fez um pedido.</p>
               : pedidos.map((pedido) => (
                 <div key={pedido.id} className={'pedido-card'} onClick={() => {navigate(`/pedido/${pedido.id}`)}}>
                   <div className='pedido-box'>
@@ -246,6 +246,8 @@ console.log(result.data)
               ))}
             </div>
           </div>
+
+          <button onClick={logout} className="btn-logout">Sair da Conta</button>
         </div>
       </div>
       <Footer />

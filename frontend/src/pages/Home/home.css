@@ -1,314 +1,233 @@
-* {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 400;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  scroll-behavior: smooth
-}
-
-.home {
-  color: white;
-}
-
 .body{
-  margin-top: 140px;
-  padding-bottom: 35px;
-  background-color: #050821;
+  background-color: var(--color-dark);
+  padding-bottom: 25px;
+}
+.body-content {
+  padding: 50px 20px 0px;
 }
 
-.social-icons {
-  position: fixed;
-  top: 50%;
-  right: 40px;
-  transform: translateY(-50%);
+.hero {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; 
+}
+.hero-content {
+  z-index: 100;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  z-index: 1000;
-}
-.social-icons a {
-  color: white;
-  font-size: 19px;
-  text-decoration: none;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-.social-icons a:hover {
-  transform: scale(1.2);
-  color: #FF6EC7;
 }
 
-
-.hero {
-  color: #FF6EC7;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden; 
-  margin-top: -140px;
-  margin-bottom: 50px;
+.hero-image {
+  margin: auto;
+  max-width: 60%;
 }
-.backgroundImg {
-  position: absolute;
-  top: 0;
-  right: 0;
+.produto-banner {
+  width: 100%;
+}
+
+.hero-text {
   width: 80%;
-  height: 100%;
-  z-index: 1;
-  background-color: #00000000;
-}
-.hero-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 1100px;
-  background-color: #00000000;
-  z-index: 2;
+  margin: auto;
 }
 .hero-text .title-hero {
   font-family: 'Bebas Neue', sans-serif;
-  font-weight: bolder;
+  color: var(--color-primary);
   letter-spacing: 1.5px;
-  line-height: 90px;
+  font-weight: bolder;
+  font-size: 2.5rem;
+  line-height: 40px;
   text-align: left;
-  font-size: 5.2rem;
-  color: #FF6EC7;
-  margin-bottom: 1rem;
-  background-color: #00000000;
-  z-index: 3;
 }
 .hero-text .subtitle-hero {
-  color: #ffffff;
-  margin-bottom: 4rem;
-  font-size: 1.1rem;
   font-weight: 200;
   line-height: 25px;
-  background-color: #00000000;
-  z-index: 3;
-}
-.hero-button {
-  border: 2px solid #FF6EC7;
-  padding: 1.25rem 3rem;
-  color: #FF6EC7;
-  text-decoration: none;
-  border-radius: 50px;
-  transition: background 0.3s;
-  background-color: #00000000;
-  z-index: 3;
-}
-.hero-button:hover {
-  background-color: #FF6EC7;
-  color: #0a1128;
-  z-index: 3;
-}
-.produto-banner {
-  width: 720px;
-  border: none;
-  background-color: #00000000;
-  z-index: 3;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
 }
 
-.produtos-destaque {
-  width: 100vw;
-  height: 100vh;
+.hero-btn {
+  border: 2px solid var(--color-primary);
+  background-color: transparent;
+  color: var(--color-primary);
+  border-radius: 50px;
+  padding: 1rem 2rem;
+  font-size: 0.8rem;
+  transition: background-color 0.3s;
+}
+.hero-btn:hover {
+  background-color: var(--color-primary);
+  color: black;
+}
+
+.backgroundImg {
+  position: absolute;
+  top: 0;
+  height: 80%;
+  width: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+
+.produtos-destaques {
+  text-align: center;
 }
 .titulo {
-  color: #FF6EC7;
-  text-align: center;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 3.8rem;
-  margin-bottom: 80px;
-  position: relative;
+  color: var(--color-primary);
+  font-size: 2.5rem;
+  margin-bottom: 30px;
 }
-.ver-mais {
-  text-align: center;
-  width: max-content;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  margin-top: 70px;
-  margin-bottom: 80px;
-  background-color: red;
+
+.ver-mais-btn {
+  background-color: var(--color-primary);
+  margin: 25px auto 70px;
+  padding: 15px 40px;
+  font-size: 1rem;
+  border: none;
   transition: transform 0.2s ease;
 }
-.ver-mais-a {
-  text-decoration: none;
-  background-color: #FF6EC7;
-  color: #000000;
-  padding: 20px 70px;
-  transition: transform 0.2s ease;
-}
-.ver-mais-a:hover, .ver-mais:hover {
-  transform: translateX(-50%) scale(1.03);
+.ver-mais-btn:hover {
+  transform: scale(1.03);
   filter: brightness(1.05);
   cursor: pointer;
 }
 
-/* @media (max-height: 1120px) {
-  .hero-content {
-    width: 80%;
-  }
-  .hero-text .title-hero {
-    font-size: 3.5rem;
-    line-height: 60px;
-  }
-
-  .produto-banner {
-    width: 100%;
-    height: 100%;
-  }
-  .backgroundImg {
-    width: 100%;
-    left: 200px;
-  }
-} */
-@media (max-width: 1120px) {
-  .hero-content {
-    width: 80%;
-  }
-  .hero-text .title-hero {
-    font-size: 3.5rem;
-    line-height: 60px;
-  }
-
-  .produto-banner {
-    width: 100%;
-    height: 100%;
-  }
-  .backgroundImg {
-    width: 100%;
-    left: 200px;
+@media (min-width: 450px) {
+  .hero-image {
+    max-width: 55%;
   }
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 1024px) {
+  .body-content {
+    padding: 0px 0px 0px;
+  }
+  .hero {
+    position: relative;
+  }
+
   .hero-content {
-    width: 80%;
+    flex-direction: row-reverse;
+    align-items: center;
+    max-width: 700px;
+    gap: 50px;
+  }
+
+  .hero-image {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    max-width: 45%;
+  }
+
+  .hero-text {
+    flex: 1;
   }
   .hero-text .title-hero {
-    font-size: 3.5rem;
-    line-height: 60px;
+    letter-spacing: 2px;
+    font-size: 3rem;
+    line-height: 42px;
   }
   .hero-text .subtitle-hero {
+    line-height: 25px;
     font-size: 1rem;
-    margin-bottom: 2rem;
   }
-  .hero-image {
-    height: 100%;
-    width: 100%;
-  }
-  .produto-banner {
-    width: 100%;
-    height: 100%;
-  }
+
   .backgroundImg {
-    width: 100%;
-    left: 170px;
+    left: 15%;
+    height: 99%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .hero-content {
+    flex-direction: row-reverse;
+    align-items: center;
+    max-width: 700px;
+    gap: 80px;
   }
 
-  .social-icons {
-    top: auto;
-    bottom: 20px;
-    margin-right: 20px;
-    flex-direction: row;
-    gap: 15px;
-    position: sticky;
-    justify-content: end;
-    transform: translateY(50%);
-    z-index: 999;
+  .hero-text {
+    margin-left: -50px;
+  }
+  .hero-text .title-hero {
+    letter-spacing: 2.5px;
+    font-size: 3.2rem;
+    line-height: 44px;
+  }
+  .hero-text .subtitle-hero {
+    line-height: 25px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 1800px) {
+  .hero-content {
+    margin-left: 10rem;
+    gap: 200px;
+  }
+  
+  .hero-image {
+    max-width: 50%;
   }
 
-  .produtos-destaque {
-    height: auto;
-    padding: 50px 0;
+  .hero-text {
+    margin-left: -10rem;
+  }
+  .hero-text .title-hero {
+    letter-spacing: 3.5px;
+    font-size: 3.5rem;
+    line-height: 48px;
+  }
+  .hero-text .subtitle-hero {
+    font-size: 1.2rem;
   }
 
   .titulo {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 40px;
   }
-
-  .ver-mais-a {
-    padding: 15px 40px;
-    font-size: 1rem;
+  .ver-mais-btn {
+    margin: 50px auto 70px;
+    font-size: 1.1rem;
+  }
+  .ver-mais-btn:hover {
+    transform: scale(1.04);
   }
 }
 
-@media (max-width: 768px) {
-  .produto-banner {
-    width: 300px;
-    height: 200px;
-  }
-  .backgroundImg {
-    width: 130%;
-    left: 30px;
-  }
-
-  .hero-text .title-hero {
-    font-size: 2.5rem;
-    line-height: 45px;
-  }
-  .hero-text .subtitle-hero {
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-  }
-  .hero-button {
-    padding: 1rem 2rem;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .produto-banner {
-    width: 180%;
-    margin-left: -5rem;
-    height: 250px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero {
-    display: flex;
-    margin-bottom: 0px;
-  }
-  .backgroundImg {
-    position: absolute;
-    left: -210px;
-    width: 200%;
-    height: 70%;
-  }
+@media (min-width: 2200px) {
   .hero-content {
-    display: flex;
-    flex-direction: column-reverse;
-    width: 350px;
-    margin-top: 40px;
+    margin-left: 20rem;
+    gap: 320px;
   }
-  .hero-text .title-hero {
-    font-size: 2.5rem;
-    line-height: 40px;
-    margin-bottom: 0rem;
-  }
-  .hero-text .subtitle-hero {
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
-  }
-  .hero-button {
-    padding: 1rem 2rem;
-    font-size: 0.8rem;
-  }
+  
   .hero-image {
-    width: 100vw;
-   }
-  .produto-banner {
-    width: 100%;
-    height: 100%;
-    margin-left: -25px;
-    margin-bottom: 20px;
+    max-width: 60%;
   }
 
-  .ver-mais {
-    margin-top: 50px;
-    margin-bottom: 70px;
+  .hero-text {
+    margin-left: -30rem;
+  }
+  .hero-text .title-hero {
+    letter-spacing: 5.5px;
+    font-size: 4rem;
+    line-height: 55px;
+  }
+  .hero-text .subtitle-hero {
+    font-size: 1.25rem;
+  }
+
+  .titulo {
+    font-size: 3.5rem;
+    margin-bottom: 50px;
+  }
+  .ver-mais-btn {
+    margin: 60px auto 70px;
+    font-size: 1.2rem;
   }
 }

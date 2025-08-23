@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdLogin } from "react-icons/md";
+import { FiUser } from "react-icons/fi";
 import { BsBag, BsSearch } from "react-icons/bs";
-import { useAuth } from "../../../context/AuthContext";
-import { useCarrinho } from '../../../context/CarrinhoContext';
-import logoMyCellStore from '../../../utils/logo_semFundo.png'
-import api from '../../../hooks/useApi';
+import { IoIosArrowForward } from "react-icons/io";
+import { useAuth } from "../../context/AuthContext";
+import { useCarrinho } from '../../context/CarrinhoContext';
+// import logoMyCellStore from '../../assets/utils/logo_semFundo.png'
+import logoMyCellStore from '../../assets/utils/LogoYourCase/semFundo/litle-white-192.png'
+import api from '../../hooks/useApi';
 
 import "./header.css";
 
-function Header() {
+function Header({ inLoja }) {
   const { usuario } = useAuth();
   const { qtdCarrinho } = useCarrinho();
   const location = useLocation();
@@ -20,7 +23,10 @@ function Header() {
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
 
   const logoRef = useRef(null);
+  const dashBtnRef = useRef(null);
   const searchRef = useRef(null);
+  const iconUserRef = useRef(null);
+  const nameUserRef = useRef(null);
   const headerRef = useRef(null);
   const subHeaderRef = useRef(null);
 
@@ -50,6 +56,18 @@ function Header() {
         searchRef.current?.classList.add('scrolled');
         headerRef.current?.classList.add('scrolled');
 
+        if (currentScrollY > 10 && inLoja) {
+          searchRef.current?.classList.add('in-loja');
+          dashBtnRef.current?.classList.add('in-loja');
+          iconUserRef.current?.classList.add('iconUser-logged-inLoja');
+          nameUserRef.current?.classList.add('nameUser-logged-inLoja');
+        } else {
+          searchRef.current?.classList.remove('in-loja');
+          dashBtnRef.current?.classList.remove('in-loja');
+          iconUserRef.current?.classList.remove('iconUser-logged-inLoja');
+          nameUserRef.current?.classList.remove('nameUser-logged-inLoja');
+        }
+
         if (currentScrollY > 150  && currentScrollY > lastScrollY) {
           // Scrolling down
           subHeaderRef.current?.classList.add('merge');
@@ -62,6 +80,8 @@ function Header() {
       } else {
         logoRef.current?.classList.remove('scrolled');
         searchRef.current?.classList.remove('scrolled');
+        iconUserRef.current?.classList.remove('iconUser-logged-inLoja');
+        nameUserRef.current?.classList.remove('nameUser-logged-inLoja');
         headerRef.current?.classList.remove('scrolled');
         subHeaderRef.current?.classList.remove('scrolled', 'merge');
       }
@@ -71,7 +91,7 @@ function Header() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [inLoja]);
 
   const handleSelectSugestao = (id) => {
     setBusca("");
@@ -89,6 +109,8 @@ function Header() {
             <img src={logoMyCellStore} className="logo" alt="logo" />
           </Link>
         </div>
+
+        {usuario?.tipo === 'admin' && <button className='btn-entrar-dashboard' onClick={() => navigate('/admin')} ref={dashBtnRef}>Dashboard</button>}
 
         <div className="top-bar">
           <div className="actions">
@@ -109,18 +131,20 @@ function Header() {
                   ))}
                 </ul>
               )}
-
             </div>
+
             {usuario ? (
-              <Link to="/perfil" className="loginIcon">
-                <p className="account-user">Olá, {usuario.nome.split(" ")[0]}</p>
+              <Link to="/perfil" className="loginLogged">
+                <FiUser className="iconUser" ref={iconUserRef} />
+                <p className="account-user" ref={nameUserRef}>Olá, {usuario.nome.split(" ")[0]} {usuario.tipo === 'admin' && '(admin)'}<IoIosArrowForward style={{ fontSize: '1rem' }}/></p>
               </Link>
             ) : (
               <Link to="/login" className="loginIcon">
+                <p className="login-span">Entrar</p>
                 <MdLogin className="iconLogin"/>
-                <span className="login-span">Login</span>
               </Link>
             )}
+
             <Link to="/carrinho" className="cart">
               <BsBag className="iconCart"/>
               <p className="cart-count">{qtdCarrinho}</p>

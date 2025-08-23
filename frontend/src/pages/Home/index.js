@@ -1,15 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaWhatsapp   } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 
-import capaDestaque1 from '../../utils/capaDestaque1.png';
-import colorExplosion from '../../utils/color-explosion2.jpg'
+import capaDestaque1 from '../../assets/utils/capaDestaque1 - teste.png';
+import colorExplosion from '../../assets/utils/color-explosion2.jpg'
+
+import ProdutosDestaque from "../../components/ProdutosDestaque";
+import RedesSociais from "../../components/RedesSociais";
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+
 import "./home.css";
-
-import ProdutosDestaque from "../Componentes/ProdutosDestaque/index";
-import Footer from "../Componentes/Footer/index";
-import Header from "../Componentes/Header/index";
 
 function Home() {
   return (
@@ -17,33 +17,29 @@ function Home() {
       <Header />
 
       <div className="body">
-        <section className="hero">
-          <div className="hero-content">
-            <div className="hero-text">
-              <h1 className="title-hero">PROTEJA SEU CELULAR COM ESTILO</h1>
-              <p className="subtitle-hero">Capinhas, resistentes e exclusivas <br/> com entrega rápida.</p>
-              <Link to="/loja" className="hero-button">ACESSAR A LOJA</Link>
+        <div className="body-content">
+          <section className="hero">
+            <div className="hero-content">
+              <div className="hero-image">
+                <img src={capaDestaque1} alt="capa em destaque" className="produto-banner" />
+              </div>
+              <div className="hero-text">
+                <h1 className="title-hero">PROTEJA SEU CELULAR COM ESTILO</h1>
+                <p className="subtitle-hero">Capinhas, resistentes e exclusivas <br/> com entrega rápida.</p>
+                <Link to="/loja"><button className="hero-btn">ACESSAR A LOJA</button></Link>
+              </div>
             </div>
-            <div className="hero-image">
-              <img src={capaDestaque1} alt="capa em destaque" className="produto-banner" />
-            </div>
-          </div>
-          <img src={colorExplosion} alt="explosão de cores" className="backgroundImg"/>
-        </section>
+            <img src={colorExplosion} alt="explosão de cores" className="backgroundImg"/>
+          </section>
 
-        <section className="produtos-destaques">
-          <h2 className="titulo">PRODUTOS EM DESTAQUE</h2>
-          <ProdutosDestaque />
+          <section className="produtos-destaques">
+            <h2 className="titulo">PRODUTOS EM DESTAQUE</h2>
+            <ProdutosDestaque />
 
-          <h2 className="ver-mais"><Link to="/loja" className="ver-mais-a">VEJA MAIS</Link></h2>
-        </section>
-
-        <div className="social-icons">
-          <a href="/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
-          <a href="/" target="_blank" rel="noopener noreferrer"><FaXTwitter /></a>
-          <a href="/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-          <a href="/" target="_blank" rel="noopener noreferrer"><FaWhatsapp /></a>
+            <Link to="/loja"><button className="ver-mais-btn">VEJA MAIS</button></Link>
+          </section>
         </div>
+        <RedesSociais />
       </div>
 
       <Footer />

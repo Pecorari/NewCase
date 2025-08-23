@@ -66,28 +66,15 @@ const getAdminPedidos = async (req, res) => {
     }
 };
 
-const getAdminPedidoById = async (req, res) => {
+const getAdminPedidoBySearch = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { value } = req.params;
 
-        const pedidos = await pedidosModel.getAdminPedidoById(id);
+        const pedidos = await pedidosModel.getAdminPedidoBySearch(value);
 
         return res.status(200).json(pedidos);
     } catch (error) {
-        console.error('Erro em getAdminPedidoById:', error);
-        return res.status(500).json({ error: 'Erro interno no servidor' });
-    }
-};
-
-const getAdminPedidoByUser = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const pedidos = await pedidosModel.getAdminPedidoByUser(id);
-
-        return res.status(200).json(pedidos);
-    } catch (error) {
-        console.error('Erro em getAdminPedidoByUser:', error);
+        console.error('Erro em getAdminPedidoBySearch:', error);
         return res.status(500).json({ error: 'Erro interno no servidor' });
     }
 };
@@ -125,8 +112,7 @@ module.exports = {
     getUniquePedido,
     cancelarPedido,
     getAdminPedidos,
-    getAdminPedidoById,
-    getAdminPedidoByUser,
+    getAdminPedidoBySearch,
     updateAdminPedido,
     deletePedido
 };

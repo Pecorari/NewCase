@@ -1,5 +1,5 @@
 .trocas {
-  background-color: #050821;
+  background-color: var(--color-dark);
   color: white;
   min-height: 100vh;
 }
@@ -7,26 +7,27 @@
 .trocas-container {
   max-width: 900px;
   margin: 0px auto 25px;
-  padding: 40px 20px;
+  padding: 40px;
 }
 
 .trocas-container h1 {
-  font-size: 2.2rem;
-  margin-top: 150px;
-  margin-bottom: 20px;
-  color: #FF6EC7;
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin-top: 7rem;
+  border-bottom: 1px solid var(--color-primary);
+  padding-bottom: 10px;
 }
 
 .trocas-container h2 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin-top: 30px;
-  color: #FF6EC7;
+  color: var(--color-primary);
 }
 
 .trocas-container p, .trocas-container ul {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-top: 10px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin-top: 5px;
 }
 
 .trocas-container ul {
@@ -34,21 +35,31 @@
   list-style-type: disc;
 }
 
-@media (max-width: 480px) {
-  .trocas-container h1 {
-    font-size: 1.5rem;
-    margin-top: 110px;
-        border-bottom: 1px solid #FF6EC7;
-    padding-bottom: 10px;
+@media (min-width: 768px) {
+  .trocas-container {
+    padding: 40px 60px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .trocas-container {
+    max-width: 1000px;
   }
 
-  .trocas-container h2 {
-    font-size: 1.2rem;
+  .trocas-container h1 {
+    font-size: 1.7rem;
+    margin-top: 8.5rem;
   }
 
   .trocas-container p, .trocas-container ul {
-    font-size: 0.8rem;
-    line-height: 1.5;
-    margin-top: 5px;
+    font-size: 0.85rem;
+    margin-top: 10px;
   }
 }
+
+@media (min-width: 1600px) {
+  .trocas-container h1 {
+    margin-top: 11rem;
+  }
+}
+

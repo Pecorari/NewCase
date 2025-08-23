@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from '../../../hooks/useApi';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import api from '../../hooks/useApi';
 
 import "./productCard.css";
 
@@ -11,17 +12,17 @@ function ProductCard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getProdutosDestaque();
-  }, []);
-  
-  async function getProdutosDestaque() {
-    try {
-      const produtos = await api.get('/produtos/destaques');
-      setProdutos(produtos.data);
-    } catch (err) {
-      console.error('Erro ao buscar produtos em destaque:', err);
+    async function fetchProdutosDestaques() {
+      try {
+        const produtos = await api.get('/produtos/destaques');
+        setProdutos(produtos.data);
+      } catch (err) {
+        console.error('Erro ao buscar produtos em destaque:', err);
+      }
     }
-  }
+
+    fetchProdutosDestaques();
+  }, []);
 
   const proximaImagem = (id, total) => {
     setIndiceImagem(prev => ({
@@ -52,17 +53,17 @@ function ProductCard() {
                     <img src={imagens[indice]} alt={produto.nome} className="imagem-produto-dstq" />
                     {imagens.length > 1 && (
                       <>
-                        <button className="seta-dtq seta-esquerda-dtq" onClick={(e) =>  {e.stopPropagation(); imagemAnterior(produto.id, imagens.length)}}>&lt;</button>
-                        <button className="seta-dtq seta-direita-dtq" onClick={(e) => {e.stopPropagation(); proximaImagem(produto.id, imagens.length)}}>&gt;</button>
+                        <button className="seta-dtq seta-esquerda-dtq" onClick={(e) =>  {e.stopPropagation(); imagemAnterior(produto.id, imagens.length)}}><IoIosArrowBack /></button>
+                        <button className="seta-dtq seta-direita-dtq" onClick={(e) => {e.stopPropagation(); proximaImagem(produto.id, imagens.length)}}><IoIosArrowForward /></button>
                       </>
                     )}
                   </>
                 )}
               </div>
-              <h3>{produto.nome}</h3>
-              <p>{produto.descricao}</p>
+              <h3 className="title-dstq">{produto.nome}</h3>
+              <p className="desc-dstq">{produto.descricao}</p>
               <div className="botao-dstq">
-                <span className="texto-adicionar-dstq">ADICIONAR</span>
+                <p className="texto-adicionar-dstq">ADICIONAR</p>
               </div>
             </div>
           </div>

@@ -6,16 +6,14 @@ import { useCarrinho } from '../../context/CarrinhoContext';
 import api from '../../hooks/useApi';
 import { calcularFrete } from '../../services/freteService';
 
-import Header from '../Componentes/Header';
-import AvaliacaoForm from '../Componentes/AvaliaçãoForm';
-import Footer from '../Componentes/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import AvaliacaoForm from '../../components/AvaliaçãoForm';
+import CustomModal from '../../components/Modal/CustomModal';
 
 import { IoIosStar, IoIosStarOutline } from "react-icons/io";
 import { BsTrash3 } from "react-icons/bs";
-import whatsapp from '../../utils/redes/whatsapp-logo-white.png';
-
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import whatsapp from '../../assets/utils/redes/whatsapp-logo-white.png';
 
 import './ProdutoDetails.css';
 
@@ -27,6 +25,7 @@ const ProdutoDetails = () => {
   const [cep, setCep] = useState('');
   const [fretes, setFretes] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [modalInfo, setModalInfo] = useState({ open: false, avaliacaoId: null });
 
   const { id } = useParams();
   const { usuario } = useAuth();
@@ -38,7 +37,6 @@ const ProdutoDetails = () => {
       try {
         const response = await api.get(`/produtos/${id}`);
         setProduto(response.data);
-        console.log(response.data)
       } catch (error) {
         console.error("Erro ao buscar produto:", error);
       }
@@ -72,6 +70,7 @@ const ProdutoDetails = () => {
     setLoading(true);
     try {
       const resultado = await calcularFrete(cep, produto);
+      console.log(resultado);
       setFretes(resultado);
     } catch (e) {
       console.log('Erro ao calcular o frete', e);
@@ -86,8 +85,8 @@ const ProdutoDetails = () => {
     for (let i = 1; i <= 5; i++) {
       estrelas.push(
         i <= Math.floor(media)
-          ? <IoIosStar key={i} color="#ffc107" style={{ marginRight: '5' }} />
-          : <IoIosStarOutline key={i} color="#555" style={{ marginRight: '5'}} />
+          ? <IoIosStar key={i} color="#ffc107" className='stars-title'/>
+          : <IoIosStarOutline key={i} color="#555" className='stars-title'/>
       );
     }
   
@@ -104,28 +103,14 @@ const ProdutoDetails = () => {
   };
 
   const delAvaliacao = async (avaliacaoId) => {
-    confirmAlert({
-      title: 'Confirmar exclusão',
-      message: 'Você tem certeza que deseja excluir sua avaliação?',
-      buttons: [
-        {
-          label: 'Sim',
-          onClick: async () => {
-            try {
-              await api.delete(`/avaliacoes/del/${avaliacaoId}`);
-              getAvaliacoes();
-              console.log('apagado id:', avaliacaoId)
-            } catch (error) {
-              console.log("Erro ao apagar a avaliação:", error);
-            }
-          }
-        },
-        {
-          label: 'Não',
-          onClick: () => {}
-        }
-      ]
-    });
+    try {
+      await api.delete(`/avaliacoes/del/${avaliacaoId}`);
+      getAvaliacoes();
+      setModalInfo({ open: false, avaliacaoId: null });
+      console.log('apagado id:', avaliacaoId)
+    } catch (error) {
+      console.log("Erro ao apagar a avaliação:", error);
+    }
   };
 
   const adicionarAvaliacao = () => {
@@ -177,69 +162,82 @@ const ProdutoDetails = () => {
           </div>
 
           <div className="info-section-detail">
-            <h2 className="titulo-detail">{produto.nome}</h2>
-            <br className='entre-title-star' />{renderEstrelas(produto.avaliacao_media)}
-            <p className="descricao-detail">{produto.descricao}</p>
-            <p className="preco-detail">R$ {produto.preco}</p>
-
-            <div className="quantidade-detail">
-              <div className='quantidade-selector'>
-                <button className='btn-detail' onClick={diminuir}>-</button>
-                <input className='input-detail' type="text" value={quantidade} readOnly />
-                <button className='btn-detail' onClick={aumentar}>+</button>
+            <div className="col-esquerda">
+              <h2 className="titulo-detail">{produto.nome}</h2>
+              <div className='title-star'>
+                <br className='entre-title-star' />{renderEstrelas(produto.avaliacao_media)}
               </div>
-              <p>Disponível: {produto.estoque}</p>
+              <p className="descricao-detail">{produto.descricao}</p>
+              <p className="preco-detail">R$ {produto.preco}</p>
+
+              <div className="quantidade-detail">
+                <div className='quantidade-selector'>
+                  <button className='btn-detail' onClick={diminuir}>-</button>
+                  <input className='input-detail' type="text" value={quantidade} readOnly />
+                  <button className='btn-detail' onClick={aumentar}>+</button>
+                </div>
+                <p className='qnt-disponivel'>Disponível: {produto.estoque}</p>
+              </div>
             </div>
 
-            <div className="formas-pagamento">
-              <h4>Formas de Pagamento</h4>
-              <ul>
-                <li>💳 Cartão de Crédito (até 3x sem juros)</li>
-                <li>💵 Pix (5% de desconto)</li>
-                <li>🏦 Boleto Bancário</li>
-              </ul>
+            <div className="acoes-detail-container">
+              <div className="acoes-detail">
+                <div className="formas-pagamento">
+                  <h4>Formas de Pagamento</h4>
+                  <ul>
+                    <li>💳 Cartão de Crédito (até 3x sem juros)</li>
+                    <li>💵 Pix (5% de desconto)</li>
+                    <li>🏦 Boleto Bancário</li>
+                  </ul>
+                </div>
+
+                <div className='btn-acoes-detail'>
+                  <button className="botao-carrinho-detail" onClick={adicionarAoCarrinho}>
+                    Adicionar ao Carrinho
+                  </button>
+
+                  <button className="botao-whatsapp" onClick={compartilharNoWhatsApp}>
+                    Compartilhar 
+                    <img src={whatsapp} alt='whatsapp' />
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <button className="botao-carrinho-detail" onClick={adicionarAoCarrinho}>
-              Adicionar ao Carrinho
-            </button>
 
-            <button className="botao-whatsapp" onClick={compartilharNoWhatsApp}>
-              Compartilhar 
-              <img src={whatsapp} alt='whatsapp' />
-            </button>
-
-
-            <div className="frete-container">
+          <div className="frete-container">
+            <div className='frete-box'>
               <input type="text" placeholder="Digite seu CEP" value={cep} onChange={handleInputChange} maxLength={10} />
               <button onClick={handleFrete} disabled={loading}>{loading ? 'Calculando...' : 'Calcular Frete'}</button>
             </div>
-              {fretes.length > 0 && (
-                <div className="resultado-frete">
-                  <h4>Opções de envio:</h4>
-                  <ul className="frete-lista">
-                    {fretes.map((opcao, index) => (
-                      <li className="frete-item" key={index}>
-                        <img
-                          src={opcao.company.picture}
-                          alt={opcao.name}
-                          className="frete-logo"
-                        />
-                        <div className="frete-detalhes">
-                          <h4>{opcao.name}</h4>
-                          {opcao.error ? (
-                            <p>{opcao.error}</p>
-                          ) : (
-                            <p>
-                              R$ {opcao.price} - {opcao.delivery_time} dias úteis
-                            </p>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+          
+            {fretes.length > 0 && (
+              <div className="resultado-frete">
+                <h4>Opções de envio:</h4>
+                <ul className="frete-lista">
+                  {fretes.map((opcao, index) => (
+                    <li className="frete-item" key={index}>
+                      <img
+                        src={opcao.company.picture}
+                        alt={opcao.name}
+                        className="frete-logo"
+                      />
+                      <div className="frete-detalhes">
+                        <h4>{opcao.name}</h4>
+                        {opcao.error ? (
+                          <p>{opcao.error}</p>
+                        ) : (
+                          <p>
+                            R$ {opcao.price} - {opcao.delivery_time} dias úteis
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
 
           </div>
 
@@ -249,7 +247,7 @@ const ProdutoDetails = () => {
         <section className="secao-caracteristicas">
           <h2 className='section-title-ct'>Características</h2>
 
-          <div>
+          <div className='caracteristicas-dados'>
             <p className='caracteristicas'>Altura: {produto.altura}</p>
             <p className='caracteristicas'>Largura: {produto.largura}</p>
             <p className='caracteristicas'>comprimento: {produto.comprimento}</p>
@@ -258,7 +256,7 @@ const ProdutoDetails = () => {
             <p className='caracteristicas'>Peso: {produto.peso}</p>
             <p className='caracteristicas'>Cor: {produto.cor}</p>
             <br/>
-            <p className='caracteristicas'>Compatibilidade: {produto.aparelho_id}</p>
+            <p className='caracteristicas'>Compatibilidade: {produto.aparelho_nome}</p>
           </div>
         </section>
 
@@ -274,20 +272,29 @@ const ProdutoDetails = () => {
                     <div className='avaliacao'>
                       <div className='header-av'>
                         <strong>{avaliacao.usuario_nome}</strong>
-                        <div className="estrelas">
+                        <div className="estrelas-avaliacao">
                           {[...Array(avaliacao.avaliacao)].map((_, i) => (
-                            <span key={i} style={{ color: '#ffc107', fontSize: '1.2em', marginRight: '2px' }}>★</span>
+                            <span key={i} className='stars-avaliacao-item'>★</span>
                           ))}
                         </div>
                       </div>
                       <p className='coments'>{avaliacao.comentario}</p>
                     </div>
                     {usuario && avaliacao.usuario_id === usuario.id ?
-                      <BsTrash3 className='lixeira' onClick={() => {delAvaliacao(avaliacao.id)}} /> : <></>
+                      <BsTrash3 className='lixeira' onClick={() => {setModalInfo({ open: true, avaliacaoId: avaliacao.id })}} /> : <></>
                     }
                   </li>
-                  );
+                );
               })}
+              <CustomModal
+                isOpen={modalInfo.open}
+                onClose={() => setModalInfo({ open: false, avaliacaoId: null })}
+                title="Confirmar exclusão"
+                confirmText="Confirmar"
+                onConfirm={() => delAvaliacao(modalInfo.avaliacaoId)}
+              >
+                <p>Você tem certeza que deseja excluir sua avaliação?</p>
+              </CustomModal>
             </ul>
           )}
 

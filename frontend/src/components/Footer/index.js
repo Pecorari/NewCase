@@ -1,12 +1,11 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import visa from "../../../utils/pagamentos/visa.png"
-import mastercard from "../../../utils/pagamentos/mastercard.png"
-import pix from "../../../utils/pagamentos/pix.png"
-import boleto from "../../../utils/pagamentos/boleto.png"
-import facebook from "../../../utils/redes/facebook.png"
-import instagram from "../../../utils/redes/instagram.png"
-import whatsapp from "../../../utils/redes/whatsapp.png"
+import visa from "../../assets/utils/pagamentos/visa.png"
+import mastercard from "../../assets/utils/pagamentos/mastercard.png"
+import pix from "../../assets/utils/pagamentos/pix.png"
+import boleto from "../../assets/utils/pagamentos/boleto.png"
+import facebook from "../../assets/utils/redes/facebook.png"
+import instagram from "../../assets/utils/redes/instagram.png"
+import whatsapp from "../../assets/utils/redes/whatsapp.png"
 
 import "./footer.css";
 

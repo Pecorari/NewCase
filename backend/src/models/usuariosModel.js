@@ -43,8 +43,8 @@ const getAllUsuarios = async () => {
   return usuarios;
 };
 
-const getUsuarioById = async (id) => {
-  const [usuario] = await connection.execute('SELECT * FROM usuarios WHERE id = ?', [id]);
+const getUsuarioBySearch = async (value) => {
+  const [usuario] = await connection.execute(`SELECT * FROM usuarios WHERE id = ? OR LOWER(nome) LIKE CONCAT('%', LOWER(?), '%')`, [value, value]);
 
   return usuario[0];
 };
@@ -78,7 +78,7 @@ module.exports = {
   confirmarEmail,
   loginUsuario,
   getAllUsuarios,
-  getUsuarioById,
+  getUsuarioBySearch,
   updateUsuario,
   alterarSenha,
   deleteUsuario

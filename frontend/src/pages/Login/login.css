@@ -1,53 +1,61 @@
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .login-section {
-  background-color: #050821;
-  padding: 80px;
+  flex: 1;
+  background-color: var(--color-dark);
+  padding: 35px;
   text-align: center;
 }
 
 .login-container {
   background-color: rgb(196, 196, 196);
-  max-width: 600px;
+  max-width: 500px;
   margin: auto;
-  padding: 40px;
   border-radius: 12px;
-  margin-top: 150px;
+  padding: 25px;
+  margin-top: 7rem;
 }
 
 .login-section h2 {
   color: rgba(0, 0, 0, 0.85);
-  font-size: 2rem;
-  margin-bottom: 35px;
+  font-size: 1.5rem;
+  margin-bottom: 28px;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .login-form input {
-  padding: 12px 15px;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
   background-color: #f1f1f1;
   color: #333;
+  padding: 10px 13px;
+  font-size: 0.8rem;
+  border-radius: 6px;
 }
 
 .login-form button {
-  background-color: #FF6EC7;
+  background-color: var(--color-primary);
   color: white;
-  border: 3px solid #FF6EC7;
-  padding: 14px;
-  font-size: 1rem;
+  border: 3px solid var(--color-primary);
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.4s;
+  transition: background-color 0.4s ease, border 0.4s ease;
   margin-top: 15px;
+  padding: 6px;
+  font-size: 1rem;
 }
 
 .login-form button:hover {
-  background-color: #c23a8e;
+  background-color: var(--color-strong);
+  border: 3px solid var(--color-strong);
 }
 
 .login-footer {
@@ -57,8 +65,8 @@
 .login-footer a {
   color: #9c3675;
   text-decoration: none;
-  margin: 0px 10px;
-  font-size: 1rem;
+  margin: 0px 5px;
+  font-size: 0.7rem;
 }
 
 .login-footer a:hover {
@@ -69,34 +77,40 @@
   color: red;
 }
 
-@media (max-width: 480px) {
-  .login-section {
-    padding: 35px;
+
+@media (min-width: 600px) {
+  .login-footer a {
+    margin: 0px 20px;
+    font-size: 0.75rem;
   }
+}
+
+@media (min-width: 1280px) {
   .login-container {
-    padding: 25px;
-    margin-top: 110px;
+    margin-top: 9rem;
   }
-  .login-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 28px;
+}
+
+@media (min-width: 1600px) {
+  .login-container {
+    margin-top: 11rem;
   }
 
-  .login-form {
-    gap: 10px;
+  .login-section h2 {
+    font-size: 1.7rem;
   }
   .login-form input {
-    padding: 10px 13px;
-    font-size: 0.8rem;
-    border-radius: 6px;
-  }
-  .login-form button {
-    padding: 6px;
-    font-size: 1rem;
+    padding: 12px 15px;
+    font-size: 0.85rem;
   }
 
   .login-footer a {
-    font-size: 0.73rem;
+    font-size: 0.8rem;
   }
+}
 
+@media (min-width: 2000px) {
+  .login-container {
+    margin-top: 15rem;
+  }
 }

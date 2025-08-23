@@ -75,8 +75,8 @@ const ModalNovoEndereco = ({ enderecoInicial = null, onSave, onCancel }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container">
+    <div className="modal-overlay" onClick={onCancel}>
+      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         <h2>{enderecoInicial ? 'Editar Endereço' : 'Novo Endereço'}</h2>
         <form onSubmit={handleSubmit}>
           <input name="cep" placeholder="CEP" value={endereco.cep} className={erroCep ? 'erro' : ''} onChange={handleChange} maxLength={9} required />

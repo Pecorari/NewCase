@@ -1,42 +1,53 @@
+.contatoPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .contato {
-  background-color: #050821;
-  color: white;
-  padding: 75px;
+  background-color: var(--color-dark);
+  padding: 50px;
   text-align: center;
+  flex: 1;
 }
 
 .contato-container {
-  max-width: 600px;
   margin: auto;
-  margin-top: 140px;
+  margin-top: 7.5rem;
 }
 
 .contato h1 {
-  color: #FF6EC7;
-  font-size: 2rem;
-  margin-bottom: 10px;
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin-bottom: 5px;
 }
 
 .contato p {
-  font-size: 1rem;
-  margin-bottom: 40px;
   color: #ccc;
+  font-size: 0.8rem;
+  margin-bottom: 25px;
 }
 
 .contato-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .contato-form input,
 .contato-form textarea {
-  padding: 12px 15px;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
   background-color: #f1f1f1;
   color: #333;
+  border: 2px solid var(--color-primary);
+  outline: none;
+  padding: 10px 13px;
+  font-size: 0.8rem;
+}
+.contato-form input:focus,
+.contato-form textarea:focus {
+  border: 2px solid var(--color-strong);
 }
 
 .contato-form textarea {
@@ -47,13 +58,12 @@
   background-color: #ff0055;
   color: white;
   border: none;
-  padding: 14px;
-  font-size: 1rem;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
+  padding: 12px;
+  font-size: 0.9rem;
 }
-
 .contato-form button:hover {
   background-color: #e6004a;
 }
@@ -63,20 +73,19 @@
 }
 
 .contato-redes p {
-  font-size: 1rem;
-  margin-bottom: 15px;
   color: #ccc;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
 }
 
 .redes-links {
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 20px;
 }
 
 .redes-links img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
   transition: transform 0.3s;
 }
 
@@ -84,31 +93,26 @@
   transform: scale(1.15);
 }
 
-.custom-ui {
-  background: #4d4d4d;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+
+@media (min-width: 600px) {
+  .contato-container {
+    max-width: 500px;
+  }
 }
 
-@media (max-width: 480px) {
-  .contato {
-    padding: 50px;
-  }
+@media (min-width: 1600px) {
   .contato-container {
-    max-width: 350px;
-    margin-top: 110px;
+    max-width: 650px;
+    margin-top: 9.5rem;
   }
-
-
   .contato h1 {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
   }
+
   .contato p {
-    font-size: 0.8rem;
-    margin-bottom: 25px;
+    font-size: 1.1rem;
+    margin-bottom: 35px;
   }
 
   .contato-form {
@@ -116,36 +120,29 @@
   }
   .contato-form input,
   .contato-form textarea {
-    padding: 10px 13px;
-    font-size: 0.8rem;
+    padding: 12px 15px;
+    font-size: 1rem;
   }
-
   .contato-form button {
-    padding: 12px;
-    font-size: 0.9rem;
+    padding: 13px;
+    font-size: 1rem;
   }
-
 
   .contato-redes p {
-    font-size: 0.8rem;
-    margin-bottom: 10px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+
+  .redes-links {
+    gap: 25px;
   }
   .redes-links img {
-    width: 35px;
-    height: 35px;
+    width: 40px;
   }
-  
-  .custom-ui {
-    width: 80%;
-    height: min-content;
-    margin: auto;
-  }
-  .custom-ui h1{
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
-  .custom-ui p{
-    font-size: 0.9rem;
+}
+
+@media (min-width: 2100px) {
+  .contato-container {
+    margin-top: 11.5rem;
   }
 }

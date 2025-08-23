@@ -12,16 +12,24 @@ const createProduto = async (dataProduto) => {
     return produtoCriado[0];
 };
 
-const getAllProdutos = async () => {
-    const [produtos] = await connection.execute(
-        `SELECT p.*,
-        GROUP_CONCAT(pi.url) AS imagens
-        FROM produtos p
-        LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
-        GROUP BY p.id;`
-    );
+const getAllProdutos = async (page, limit) => {
+    const offset = (page - 1) * limit;
+    
+    const limitInt = parseInt(limit, 10);
+    const offsetInt = parseInt(offset, 10);
 
-    return produtos;
+     const [produtos] = await connection.execute(`
+        SELECT p.*,
+            GROUP_CONCAT(pi.url) AS imagens
+            FROM produtos p
+            LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
+            GROUP BY p.id
+            LIMIT ${limitInt} OFFSET ${offsetInt}
+    `);
+    
+    const [[{ total }]] = await connection.execute(`SELECT COUNT(*) AS total FROM produtos`);
+
+    return { produtos, total };
 };
 
 const getProdutosDestaque = async () => {
@@ -38,77 +46,73 @@ const getProdutosDestaque = async () => {
 
 const getSearchHeader = async (busca) => {
     const [produtos] = await connection.execute(`
-    SELECT 
-        produtos.*,
-        categorias.nome AS categoria,
-        aparelhos.nome AS aparelho
-      FROM produtos
-      JOIN categorias ON produtos.categoria_id = categorias.id
-      JOIN aparelhos ON produtos.aparelho_id = aparelhos.id
-      WHERE 
-        produtos.nome LIKE CONCAT(?) OR
-        produtos.cor LIKE CONCAT(?) OR
-        categorias.nome LIKE CONCAT(?) OR
-        aparelhos.nome LIKE CONCAT(?)`,
-    [busca, busca, busca, busca]);
+        SELECT 
+            produtos.*,
+            categorias.nome AS categoria,
+            aparelhos.nome AS aparelho
+        FROM produtos
+        JOIN categorias ON produtos.categoria_id = categorias.id
+        JOIN aparelhos ON produtos.aparelho_id = aparelhos.id
+        WHERE 
+            produtos.nome LIKE CONCAT(?) OR
+            produtos.cor LIKE CONCAT(?) OR
+            categorias.nome LIKE CONCAT(?) OR
+            aparelhos.nome LIKE CONCAT(?)`, [busca, busca, busca, busca]
+    );
     return produtos;
 };
 
-const getFilteredProdutos = async (filtros) => {
+const getFilteredProdutos = async (filtros, page = 1, limit = 16) => {
     const { categoria, aparelho, preco_min, preco_max, cor, avaliacao } = filtros;
 
-    let sql = `SELECT p.*, GROUP_CONCAT(pi.url) AS imagens FROM produtos p LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
-        JOIN categorias c ON p.categoria_id = c.id
-        JOIN aparelhos a ON p.aparelho_id = a.id WHERE 1=1`;
+    let whereSql = 'WHERE 1=1';
     let params = [];
-  
-    if (categoria) {
-      sql += ` AND c.nome = ?`;
-      params.push(categoria);
-    }
 
-    if (aparelho) {
-        sql += ` AND a.nome = ?`;
-        params.push(aparelho)
-    }
-  
-    if (preco_min) {
-      sql += ` AND p.preco >= ?`;
-      params.push(preco_min);
-    }
-  
-    if (preco_max) {
-      sql += ` AND p.preco <= ?`;
-      params.push(preco_max);
-    }
-  
-    if (cor) {
-      sql += ` AND p.cor = ?`;
-      params.push(cor);
-    }
-  
-    if (avaliacao) {
-      sql += ` AND p.avaliacao_media = ?`;
-      params.push(avaliacao);
-    }
+    if (categoria) { whereSql += ' AND c.nome = ?'; params.push(categoria); }
+    if (aparelho) { whereSql += ' AND a.nome = ?'; params.push(aparelho); }
+    if (preco_min != null) { whereSql += ' AND p.preco >= ?'; params.push(preco_min); }
+    if (preco_max != null) { whereSql += ' AND p.preco <= ?'; params.push(preco_max); }
+    if (cor) { whereSql += ' AND p.cor = ?'; params.push(cor); }
+    if (avaliacao != null) { whereSql += ' AND p.avaliacao_media = ?'; params.push(avaliacao); }
 
-    sql += ` GROUP BY p.id`;
-  
-    const [produtos] = await connection.execute(sql, params);
+    const offset = (page - 1) * limit;
 
-    return produtos;
+    const [produtos] = await connection.execute(`
+        SELECT p.*, GROUP_CONCAT(pi.url) AS imagens
+        FROM produtos p
+        LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
+        JOIN categorias c ON p.categoria_id = c.id
+        JOIN aparelhos a ON p.aparelho_id = a.id
+        ${whereSql}
+        GROUP BY p.id
+        LIMIT ${parseInt(limit, 10)} OFFSET ${parseInt(offset, 10)}
+    `, params);
+
+    const [countResult] = await connection.execute(`
+        SELECT COUNT(*) AS total
+        FROM produtos p
+        JOIN categorias c ON p.categoria_id = c.id
+        JOIN aparelhos a ON p.aparelho_id = a.id
+        ${whereSql}`, params);
+
+    const total = countResult[0].total;
+
+    return { produtos, total };
 };
 
 const getUniqueProduto = async (id) => {
     const [produto] = await connection.execute(`
         SELECT p.*,
+        a.nome AS aparelho_nome,
         GROUP_CONCAT(pi.url) AS imagens,
-        AVG(a.avaliacao) AS avaliacao_media
+        AVG(av.avaliacao) AS avaliacao_media
         FROM produtos p
+        JOIN aparelhos a ON p.aparelho_id = a.id
         LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
-        LEFT JOIN avaliacoes a ON p.id = a.produto_id
+        LEFT JOIN avaliacoes av ON p.id = av.produto_id
         WHERE p.id = ?
-        GROUP BY p.id;`, [id]);
+        GROUP BY p.id, a.nome;
+        `, [id]);
 
     return produto[0];
 };

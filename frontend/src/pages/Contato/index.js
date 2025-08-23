@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
+import CustomModal from '../../components/Modal/CustomModal';
 
-import whatsapp from '../../utils/redes/whatsapp.png';
-import instagram from '../../utils/redes/instagram.png';
-import facebook from '../../utils/redes/facebook.png';
+import whatsapp from '../../assets/utils/redes/whatsapp.png';
+import instagram from '../../assets/utils/redes/instagram.png';
+import facebook from '../../assets/utils/redes/facebook.png';
 
-import Header from '../Componentes/Header/index';
-import Footer from '../Componentes/Footer/index';
-
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 import api from '../../hooks/useApi';
 
@@ -19,6 +17,7 @@ function Contato() {
   const [email, setEmail] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [erro, setErro] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,27 +28,12 @@ function Contato() {
       setNome('');
       setEmail('');
       setMensagem('');
-      showSuccessModal();
+      setModalOpen(true);
     } catch (error) {
       console.error('Erro:', error);
       setErro('Erro de conexão com o servidor.');
     }
   };
-
-  function showSuccessModal() {
-    console.log('aqwui')
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div className='custom-ui'>
-            <h1 style={{ color: '#4BB543' }}>Mensagem enviada!</h1>
-            <p>Responderemos o mais breve possivel.</p>
-            <button className='modal-btn' onClick={onClose}>OK</button>
-          </div>
-        );
-      }
-    });
-  }
 
   return (
     <div className='contatoPage'>
@@ -64,6 +48,15 @@ function Contato() {
               <textarea placeholder="Sua mensagem" rows="6" value={mensagem} onChange={(e) => setMensagem(e.target.value)} required />
                 {erro ? <p style={{ color: 'red', marginBottom: '0px' }}>{erro}</p> : <></>}
               <button type="submit">Enviar mensagem</button>
+
+              <CustomModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                title="Mensagem enviada!"
+                confirmText="Confirmar"
+              >
+                <p>Responderemos o mais breve possivel.</p>
+              </CustomModal>
             </form>
           </div>
           <div className="contato-redes">

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Header from '../Componentes/Header';
-import Footer from '../Componentes/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 import './trocas.css';
 

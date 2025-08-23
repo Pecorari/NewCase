@@ -1,0 +1,11 @@
+:root {
+  --color-primary: #FF6EC7;
+  --color-strong: #ff007f;
+  --color-dark: #050821;
+
+  --font-main: 'Montserrat', sans-serif;
+
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+}

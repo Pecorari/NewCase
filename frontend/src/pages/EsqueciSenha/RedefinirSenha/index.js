@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { useSearchParams, useNavigate  } from 'react-router-dom';
+import { useSearchParams  } from 'react-router-dom';
 
-import Header from '../../Componentes/Header/index';
-import Footer from '../../Componentes/Footer/index';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
+import CustomModal from '../../../components/Modal/CustomModal';
 
 import api from '../../../hooks/useApi';
 import './redefinirSenha.css';
 
 function RedefinirSenha() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const [erro, setErro] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmSenha, setConfirmSenha] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const mudarSenha = async(e) => {
     e.preventDefault();
@@ -38,7 +38,7 @@ function RedefinirSenha() {
       setSenha('');
       setConfirmSenha('');
       setErro('');
-      setShowModal(true);
+      setModalOpen(true);
     } catch (error) {
       console.log('Erro ao se comunicar com servidor', error);
       setErro(error?.response?.data?.erros?.[0]?.msg || error.response.data.mensagem);
@@ -64,14 +64,13 @@ function RedefinirSenha() {
       <Footer />
 
 
-      {showModal && (
-        <div className="modal-overlay-rs">
-          <div className="modal-content-rs">
-            <h3>Senha alterada com sucesso!</h3>
-            <button onClick={() => navigate('/login')}>Ir para o Login</button>
-          </div>
-        </div>
-      )}
+      <CustomModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Senha alterada com sucesso!"
+      >
+        <p>Ir para o Login!</p>
+      </CustomModal>
     </div>
   );
 }

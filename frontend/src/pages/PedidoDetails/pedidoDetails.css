@@ -1,72 +1,79 @@
 .myPedido {
-  background-color: #050821;
+  background-color: var(--color-dark);
   color: #f1f1f1;
   display: flex;
+  min-height: 100vh;
   flex-direction: column;
 }
 
 .pedido-detalhes {
-  width: 80%;
-  margin: 10px auto;
-  padding: 20px;
+  flex: 1;
+  width: 95%;
+  margin: auto;
+  padding: 15px;
 }
 
-.pedido-detalhes h1 {
-  color: #ff4da6;
-  margin-bottom: 30px;
-  text-align: center;
-}
 
 .btn-voltar {
   background-color: transparent;
   border: none;
-  color: #ff4da6;
-  font-size: 18px;
+  color: var(--color-primary);
+  font-size: 0.8rem;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-top: 8rem;
+  margin-bottom: 1.5rem;
   transition: color 0.3s ease;
 }
 .btn-voltar:hover {
-  color: #ff85c1;
+  color: var(--color-strong);
+}
+
+.pedido-detalhes h1 {
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.3rem;
 }
 
 .column-container {
   display: flex;
-  gap: 200px;
-  margin-top: 80px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 30px;
 }
 
 .left-column,
 .right-column {
-  flex: 1 1 40%;
+  flex: 1 1 100%;
 }
 
 .secao-info,
 .secao-endereco,
 .secao-itens,
-.secao-pagamento {
-  margin-bottom: 30px;
+.secao-pagamento,
+.secao-frete {
+  margin-bottom: 20px;
 }
 
 .secao-info h2,
 .secao-endereco h2,
 .secao-itens h2,
-.secao-pagamento h2 {
-  color: #ff85c1;
-  font-size: 20px;
+.secao-pagamento h2,
+.secao-frete h2 {
+  color: var(--color-primary);
+  font-size: 1rem;
   border-bottom: 1px solid #333;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   padding-bottom: 5px;
 }
 
 .secao-info p,
-.secao-pagamento p {
-  margin: 6px 0;
-  line-height: 1.6;
-}
-.secao-endereco p {
-  line-height: 1.6;
+.secao-pagamento p,
+.secao-endereco p,
+.secao-frete p {
+  margin: 5px 0;
+  line-height: 1.5;
+  font-size: 0.8rem;
 }
 
 ul {
@@ -75,54 +82,281 @@ ul {
 }
 
 .item-pd {
+  max-width: 500px;
   display: flex;
-  margin-bottom: 12px;
-  padding: 10px;
+  flex-direction: row;
+  align-items: center;
+  gap: 5%;
   background-color: #2a2a2a;
-  border-radius: 8px;
-
+  padding: 0px 10px 0px 0px;
+  border-radius: 7px;
+  border: 1px solid #6666665d;
+  margin-bottom: 12px;
   transition: transform 0.2s;
-  cursor: pointer;
 }
 .item-pd:hover {
-  transform: scale(1.005);
-  border: 1px solid #ff40a042;
+  transform: scale(1.01);
 }
 
-
 .img-item {
-  width: 100px;
-  border-radius: 8px;
+  width: 80px;
+  border-radius: 7px;
 }
 
 .item-pd-info {
-  /* background-color: red; */
   display: flex;
+  width: 70%;
   justify-content: space-between;
-  width: 100%;
-  margin: 10px 25px;
-  font-size: 15px;
+  font-size: 0.8rem;
 }
+
 .boxes-info-pd {
   display: flex;
   flex-direction: column;
-  gap: 20%;
+  gap: 5px;
 }
+.item-pd-info h3 {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.span-id {
+  margin-left: 5px;
+  font-size: 0.75rem;
+  color: #ffffff80;
+}
+.compatibilidade {
+  font-weight: 200;
+}
+
 .boxes-valor-pd {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  text-align: right;
+  gap: 5px;
 }
-.item-pd-info h3 {
-  font-weight: 600;
+
+.secao-frete img {
+  height: 20px;
 }
 
 .rodape {
-  margin-top: 40px;
+  margin-top: 4rem;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.75rem;
   color: #ccc;
   border-top: 1px solid #333;
-  padding-top: 15px;
+  padding-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .pedido-detalhes {
+    width: 90%;
+    padding: 20px;
+  }
+  .pedido-detalhes h1 {
+    font-size: 1.4rem;
+  }
+  .img-item {
+    width: 90px;
+  }
+  .item-pd-info {
+    display: flex;
+    width: 68%;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 1024px) {
+  .column-container {
+    flex-direction: row;
+    gap: 50px;
+  }
+  .left-column,
+  .right-column {
+    flex: 1 1 45%;
+  }
+  .pedido-detalhes h1 {
+    font-size: 26px;
+  }
+  .secao-frete img {
+    height: 30px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .btn-voltar {
+    font-size: 0.95rem;
+    margin-top: 9rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .pedido-detalhes {
+    width: 85%;
+  }
+  .pedido-detalhes h1 {
+    font-size: 1.7rem;
+  }
+
+  .secao-info h2,
+  .secao-endereco h2,
+  .secao-itens h2,
+  .secao-pagamento h2,
+  .secao-frete h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+
+  .secao-info p,
+  .secao-pagamento p,
+  .secao-endereco p,
+  .secao-frete p {
+    font-size: 0.9rem;
+  }
+
+  .item-pd {
+    cursor: pointer;
+  }
+  .item-pd-info {
+    font-size: 0.9rem;
+  }
+
+  .boxes-info-pd {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .item-pd-info h3 {
+    font-size: 0.95rem;
+  }
+  .span-id {
+    font-size: 0.75rem;
+  }
+  .compatibilidade {
+    font-size: 0.85rem;
+  }
+
+  .boxes-valor-pd {
+    gap: 10px;
+  }
+
+  .rodape {
+    margin-top: 6rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .btn-voltar {
+    margin-bottom: 1.5rem;
+  }
+  
+  .pedido-detalhes {
+    width: 80%;
+  }
+  .column-container {
+    gap: 100px;
+  }
+  .secao-info, .secao-endereco, .secao-itens, .secao-pagamento, .secao-frete {
+    margin-bottom: 30px;
+  }
+  .pedido-detalhes h1 {
+    font-size: 1.9rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .btn-voltar {
+    font-size: 1rem;
+    margin-top: 10rem;
+  }
+  .column-container {
+    gap: 140px;
+  }
+  .pedido-detalhes h1 {
+    margin-bottom: 40px;
+  }
+
+  .secao-info p,
+  .secao-pagamento p,
+  .secao-endereco p,
+  .secao-frete p {
+    font-size: 1rem;
+  }
+
+}
+
+@media (min-width: 1900px) {
+  .column-container {
+    gap: 180px;
+  }
+  .pedido-detalhes h1 {
+    margin-bottom: 50px;
+    font-size: 2rem;
+  }
+  
+  .item-pd {
+      padding: 0px;
+  }
+  .item-pd-info {
+    font-size: 0.95rem;
+  }
+  .boxes-info-pd {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .item-pd-info h3 {
+    font-size: 1.1rem;
+  }
+  .span-id {
+    margin-left: 0px;
+    font-size: 0.85rem;
+  }
+  .compatibilidade {
+    font-weight: 300;
+    font-size: 1rem;
+  }
+
+  .boxes-valor-pd {
+    gap: 13px;
+  }
+  
+  .rodape {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 2200px) {
+  .btn-voltar {
+    margin-top: 12rem;
+  }
+  .pedido-detalhes {
+    max-width: 1800px;
+  }
+  .column-container {
+    gap: 200px;
+    margin-top: 80px;
+  }
+
+  .item-pd {
+    gap: 4%;
+    margin-bottom: 15px;
+  }
+  .img-item {
+    width: 100px;
+  }
+  .item-pd-info {
+    font-size: 0.95rem;
+  }
+  .boxes-info-pd {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .boxes-valor-pd {
+    gap: 17px;
+  }
+
+  .rodape {
+    padding-top: 15px;
+  }
 }

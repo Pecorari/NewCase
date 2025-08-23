@@ -1,146 +1,142 @@
-.custom-ui {
-  background: #4d4d4d;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-}
-.modal-btn {
-  padding: 8px 20px;
-  background-color: #4BB543;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 25px;
+.minha-conta-container {
+  color: white;
+  padding: 2rem;
+  margin-bottom: 20px;
 }
 
-.minha-conta {
-  background-color: #050821;
+.h1-account {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-top: 7rem;
 }
 
 .boxes {
   display: flex;
-  max-width: 80%;
-  margin: auto;
-  gap: 150px;
+  flex-direction: column;
+}
+
+.boxes .h3-account {
+  font-size: 1rem;
+  margin-bottom: 20px;
 }
 
 .meus-dados {
-  width: 50%;
-}
-.meus-pedidos {
-  width: 40%;
-}
-
-.h1-account {
-  margin-bottom: 35px;
-  padding-top: 200px;
-}
-
-.h3-account {
-  margin-top: 35px;
-  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+  margin-top: 25px;
 }
 
 form .label-account {
   display: block;
+  margin-bottom: 8px;
+  margin-top: 18px;
+  font-size: 0.85rem;
+  margin-left: 5px;
+}
+
+.input-account {
+  background-color: transparent;
+  width: 100%;
+  padding: 8px 15px;
+  font-size: 0.8rem;
+  border: 1px solid #FF6EC7;
+  border-radius: 8px;
+  outline: none;
+  color: white;
+  flex: 1;
+  cursor: text;
+}
+.input-account::placeholder {
+  color: white;
+}
+.input-account[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1)!important;
+  cursor: pointer;
+}
+.disabled {
+  color: #6b6b6b;
+}
+.password {
+  display: flex;
   margin-bottom: 10px;
-  margin-top: 15px;
-  font-weight: 500;
+  align-items: center;
+  gap: 15px;
+}
+form .lb-password {
+  margin: 0px;
 }
 
 .submit {
-  padding: 10px 16px;
-  margin-top: 35px;
-  margin-right: 15px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
   background-color: #007bff;
+  border-radius: 6px;
+  border: none;
+  padding: 10px 15px;
+  font-size: 0.8rem;
   color: white;
+  cursor: pointer;
+  margin-top: 35px;
   transition: 0.3s;
-  margin-bottom: 35px;
 }
 .submit:hover {
   background-color: #00438a;
 }
 
-.input-account {
-  width: 70%;
-  padding: 8px 15px;
-  margin-left: 10px;
-  font-size: 18px;
-  border: 2px solid #FF6EC7;
-  border-radius: 10px;
-  outline: none;
-  background-color: #00000000;
-  color: white;
-}
-.input-account::placeholder {
-  color: white;
-}
 
-.input-account[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1)!important;
-}
-.disabled {
-  width: 70%;
-  padding: 8px 15px;
-  margin-left: 10px;
-  font-size: 18px;
-  border: 2px solid #FF6EC7;
-  border-radius: 10px;
-  outline: none;
-  background-color: #00000000;
-  color: white;
-  color: #6b6b6b;
-}
-.endereco-card p {
+.enderecos .endereco-card {
+  background: white;
+  color: black;
+  border-radius: 6px;
+  padding: 15px;
   margin-bottom: 10px;
 }
-
+.enderecos .endereco-card p {
+  font-size: 0.8rem;
+}
 .submit-endereco {
-  padding: 10px 16px;
-  margin-top: 5px;
-  margin-right: 15px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
   background-color: #007bff;
   color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 15px;
+  margin-top: 10px;
+  margin-right: 15px;
+  font-size: 0.75rem;
   transition: 0.3s;
 }
-
 .submit-endereco:hover {
-  background-color: #0056b3;
+  background-color: #00438a;
 }
-
-.enderecos, .pedidos {
-  margin-top: 20px;
-}
-
-.endereco-card {
-  padding: 20px;
-  margin-bottom: 12px;
-  border: 1px solid #ddd;
+.btn-add-endereco {
+  background-color: #28a745;
+  color: white;
+  border: none;
   border-radius: 6px;
-  background: #f9f9f9;
-  color: black;
+  padding: 10px 15px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  transition: 0.3s;
+}
+.btn-add-endereco:hover {
+  background-color: #2b693a;
 }
 
+.meus-pedidos {
+  margin-top: 30px;
+}
+.pedidos p {
+  font-size: 0.8rem;
+}
 .pedido-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: white;
   color: black;
-  padding: 20px;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 .pedido-card:hover {
   transform: scale(1.02);
@@ -148,52 +144,208 @@ form .label-account {
 .pedido-box {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 }
 
-.btn-add-endereco {
-  padding: 10px 16px;
-  margin-right: 15px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
-  transition: 0.3s;
-  background-color: #28a745;
-  margin-top: 10px;
-  margin-bottom: 35px;
-}
-.btn-add-endereco:hover {
-  background-color: #2b693a;
-}
 
-.btn-logout {
-  padding: 10px 16px;
-  margin-right: 15px;
+.boxes .btn-logout {
+  background-color:transparent;
+  color: rgb(225, 0, 0);
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  color: white;
-  transition: 0.3s;
-  background-color: #dc3545;
+  width: max-content;
   margin-top: 50px;
-  margin-bottom: 50px;
+  text-align: left;
+  padding: 5px 0px;
 }
-.btn-logout:hover {
-  background-color: #8d222c;
-}
-
-
-/* .card-produto {
-  background-color: #fff;
-  padding: 16px;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-  cursor: pointer;
+.boxes .btn-logout:hover {
+  color: rgb(175, 0, 0);
 }
 
-.card-produto:hover {
-  transform: scale(1.03);
-} */
+@media (min-width: 768px) {
+  .boxes {
+    max-width: 600px;
+    margin: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .h1-account {
+    font-size: 1.4rem;
+    margin-top: 8rem;
+  }
+  .boxes {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .h1-account {
+    margin-top: 9rem;
+    margin-bottom: 3.5rem;
+  }
+  .boxes {
+    max-width: 1500px;
+    width: 90%;
+    display: grid;
+    flex-direction: row;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+    align-items: start;
+    gap: 10%;
+    margin-bottom: 7rem;
+  }
+  .boxes .h3-account {
+    font-size: 1.15rem;
+    margin-bottom: 25px;
+  }
+
+
+  .meus-dados   { 
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: 0px;
+  }
+
+  .input-account {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+
+  .submit {
+    font-size: 0.85rem;
+  }
+
+  .enderecos .endereco-card p {
+    font-size: 0.9rem;
+  }
+  .submit-endereco {
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .btn-add-endereco {
+    cursor: pointer;
+  }
+
+  .meus-pedidos {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 0px;
+  }
+  
+  .pedidos p {
+    font-size: 0.9rem;
+  }
+  .pedido-card {
+    margin-bottom: 12px;
+    max-width: 550px;
+  }
+  .pedido-box {
+    gap: 8px;
+  }
+
+
+  .boxes .btn-logout {
+    margin-top: 0;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 1600px) {
+  .h1-account {
+    margin-top: 11rem;
+    margin-bottom: 4rem;
+    font-size: 1.5rem;
+  }
+
+  .boxes .h3-account {
+    font-size: 1.2rem;
+  }
+
+  .input-account {
+    font-size: 0.95rem;
+  }
+
+  .submit {
+    font-size: 0.9rem;
+  }
+
+  .enderecos .endereco-card p {
+    font-size: 0.95rem;
+  }
+  .submit-endereco {
+    padding: 7px 17px;
+    font-size: 0.85rem;
+  }
+
+  
+  .pedidos p {
+    font-size: 0.95rem;
+  }
+
+  .boxes .btn-logout {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1900px) {
+  .h1-account {
+    font-size: 1.8rem;
+  }
+
+  .boxes .h3-account {
+    font-size: 1.45rem;
+  }
+
+
+  
+  form .label-account {
+    font-size: 0.95rem;
+  }
+  .input-account {
+    padding: 11px 18px;
+    font-size: 1.1rem;
+  }
+
+  .submit {
+    font-size: 1rem;
+  }
+
+  .enderecos .endereco-card p {
+    font-size: 1rem;
+  }
+  .submit-endereco {
+    margin-top: 15px;
+    padding: 7px 18px;
+    font-size: 0.95rem;
+  }
+  .btn-add-endereco {
+    padding: 11px 15px;
+    font-size: 1rem;
+  }
+
+  .pedidos {
+    margin-top: 40px;
+  }
+  .pedidos p {
+    font-size: 1.1rem;
+  }
+  .pedido-card {
+    margin-bottom: 15px;
+  }
+  .pedido-box {
+    gap: 10px;
+  }
+
+
+  .boxes .btn-logout {
+    font-size: 1.1rem;
+    margin-left: 5px;
+  }
+}
+
+@media (min-width: 2000px) {
+  .enderecos .endereco-card p {
+    margin-bottom: 3px;
+  }
+}

@@ -20,6 +20,10 @@ const AdminProdutos = () => {
     categoria_id: '',
     estoque: '',
     destaque: '',
+    peso: '',
+    altura: '',
+    largura: '',
+    comprimento: '',
     imagens: [],
   });
   const [editandoId, setEditandoId] = useState(null);
@@ -94,6 +98,10 @@ const AdminProdutos = () => {
         categoria_id: form.categoria_id,
         estoque: form.estoque,
         destaque: form.destaque,
+        peso: form.peso,
+        altura: form.altura,
+        largura: form.largura,
+        comprimento: form.comprimento,
         imagens,
       };
 
@@ -111,7 +119,7 @@ const AdminProdutos = () => {
   };
 
   const reset = () => {
-    setForm({nome: '', aparelho_id: '', cor: '', descricao: '', preco: '', categoria_id: '', estoque: '', destaque: '', imagens: []});
+    setForm({nome: '', aparelho_id: '', cor: '', descricao: '', preco: '', categoria_id: '', estoque: '', destaque: '', peso: '', altura: '', largura: '', comprimento: '', imagens: []});
     setEditandoId(null);
     setPreviews([]);
     buscarProdutos();
@@ -127,11 +135,17 @@ const AdminProdutos = () => {
       categoria_id: produto.categoria_id,
       estoque: produto.estoque,
       destaque: produto.destaque,
+      peso: produto.peso,
+      altura: produto.altura,
+      largura: produto.largura,
+      comprimento: produto.comprimento,
       imagens: [],
     });
 
     setPreviews(produto.imagens || []);
     setEditandoId(produto.id);
+    setFormAberto(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDeletar = async (id) => {
@@ -152,19 +166,32 @@ const AdminProdutos = () => {
         <h2 className='title-admin-produto'>{editandoId ? 'Editar Produto' : 'Novo Produto'}</h2>
       </div>
       <div className={`form-wrapper ${formAberto ? 'aberto' : 'fechado'}`}>
+
         <form className='form-admin-produto' onSubmit={handleSubmit}>
-          <input className='input-admin-produto' type="text" name="nome" placeholder="Nome" value={form.nome} onChange={handleInputChange} required />
-          <input className='input-admin-produto' type="number" name="aparelho_id" placeholder="Aparelho" value={form.aparelho_id} onChange={handleInputChange} required />
-          <input className='input-admin-produto' type="text" name="cor" placeholder="Cor" value={form.cor} onChange={handleInputChange} required />
-          <input className='input-admin-produto' type="text" name="descricao" placeholder="descrição" value={form.descricao} onChange={handleInputChange} required />
-          <input className='input-admin-produto' type="number" name="preco" placeholder="Preço" value={form.preco} onChange={handleInputChange} required />
-          <input className='input-admin-produto' type="number" name="categoria_id" placeholder="Categoria" value={form.categoria_id} onChange={handleInputChange} required />
-          <input className='input-admin-produto' type="number" name="estoque" placeholder="Estoque" value={form.estoque} onChange={handleInputChange} required />
-          <select name="destaque" value={form.destaque} onChange={handleInputChange} className='input-admin-produto'>
-            <option value="">Destaque</option>
-            <option value='sim'>Sim</option>
-            <option value='nao'>Não</option>
-          </select>
+          <div className="form-grid">
+            <div className="form-col">
+              <input className='input-admin-produto' type="text" name="nome" placeholder="Nome" value={form.nome} onChange={handleInputChange} required />
+              <input className='input-admin-produto' type="number" name="aparelho_id" placeholder="Aparelho" value={form.aparelho_id} onChange={handleInputChange} required />
+              <input className='input-admin-produto' type="text" name="cor" placeholder="Cor" value={form.cor} onChange={handleInputChange} required />
+              <textarea className='input-admin-produto' name="descricao" placeholder="Descrição" value={form.descricao} onChange={handleInputChange} required />
+              <input className='input-admin-produto' type="number" name="preco" placeholder="Preço" value={form.preco} onChange={handleInputChange} required />
+            </div>
+
+            <div className="form-col">
+              <input className='input-admin-produto' type="number" name="categoria_id" placeholder="Categoria" value={form.categoria_id} onChange={handleInputChange} required />
+              <input className='input-admin-produto' type="number" name="estoque" placeholder="Estoque" value={form.estoque} onChange={handleInputChange} required />
+              <select name="destaque" value={form.destaque} onChange={handleInputChange} className='input-admin-produto'>
+                <option value="">Destaque</option>
+                <option value='sim'>Sim</option>
+                <option value='nao'>Não</option>
+              </select>
+              <input className='input-admin-produto' type="number" name="peso" placeholder="Peso (g)" value={form.peso} onChange={handleInputChange} required />
+              <input className='input-admin-produto' type="number" name="altura" placeholder="Altura (cm)" value={form.altura} onChange={handleInputChange} required />
+              <input className='input-admin-produto' type="number" name="largura" placeholder="Largura (cm)" value={form.largura} onChange={handleInputChange} required />
+              <input className='input-admin-produto' type="number" name="comprimento" placeholder="Comprimento (cm)" value={form.comprimento} onChange={handleInputChange} required />
+            </div>
+          </div>
+
           {previews.length > 0 && (
             <div className="preview-container">
               {previews.map((preview, index) => (
@@ -176,8 +203,9 @@ const AdminProdutos = () => {
             </div>
           )}
           <input className='input-admin-produto' type="file" name="imagens" accept="image/*" multiple onChange={handleInputChange} />
+
           <button className='form-btn-admin-produto' type="submit">{editandoId ? 'Atualizar' : 'Criar'}</button>
-          {editandoId ? <button className='form-btn-admin-produto-cancel' onClick={() => {reset()}} type="reset">Cancelar</button> : <></>}
+          {editandoId ? <button className='form-btn-admin-produto-cancel' onClick={() => {reset()}} type="reset">Cancelar</button> : null}
         </form>
       </div>
 
@@ -187,28 +215,52 @@ const AdminProdutos = () => {
       {produtos.length === 0 ? (
         <p>Nenhum produto cadastrado.</p>
       ) : (
-        <ul className='ul-admin-produto'>
+        <div className="produto-grid">
+          <div className="produto-header">
+            <span>Imagens</span>
+            <span>ID</span>
+            <span>Nome</span>
+            <span>Aparelho</span>
+            <span>Cor</span>
+            <span>Descrição</span>
+            <span>Preço</span>
+            <span>Categoria</span>
+            <span>Estoque</span>
+            <span>Destaque</span>
+            <span>Peso</span>
+            <span>Altura</span>
+            <span>Largura</span>
+            <span>Comprimento</span>
+            <span>Ações</span>
+          </div>
+
           {produtos.map((produto) => (
-            <li className='li-admin-produto' key={produto.id}>
-              {produto.imagens && produto.imagens.length > 0 && (
-                <img className='img-admin-produto' src={produto.imagens[0]} alt={produto.nome} />
-              )}
-              <p className='dados-produtos'>ID:<br/>{produto.id}</p>|
-              <p className='dados-produtos'>Nome:<br/>{produto.nome}</p>|
-              <p className='dados-produtos'>Aparelho:<br/>{produto.aparelho_id}</p>|
-              <p className='dados-produtos'>Cor:<br/>{produto.cor}</p>|
-              <p className='dados-produtos'>Descricao:<br/>{produto.descricao}</p>|
-              <p className='dados-produtos'>Preço:<br/>R$ {produto.preco}</p>|
-              <p className='dados-produtos'>Categoria_id:<br/>{produto.categoria_id}</p>|
-              <p className='dados-produtos'>Estoque:<br/>{produto.estoque}</p>|
-              <p className='dados-produtos'>Destaque:<br/>{produto.destaque}</p>
-              <div className='containerBtn-produtos-admin'>
-                <button className='li-btn-admin-produto' onClick={() => handleEditar(produto)}>Editar</button>
-                <button className='li-btn-admin-produto' onClick={() => handleDeletar(produto.id)}>Deletar</button>
+            <div className="produto-row" key={produto.id}>
+              <div className="produto-imagens">
+                {produto.imagens?.map((img, i) => (
+                  <img key={i} src={img} alt={produto.nome} />
+                ))}
               </div>
-            </li>
+              <span>{produto.id}</span>
+              <span>{produto.nome}</span>
+              <span>{produto.aparelho_id}</span>
+              <span>{produto.cor}</span>
+              <span>{produto.descricao}</span>
+              <span>R$ {produto.preco}</span>
+              <span>{produto.categoria_id}</span>
+              <span>{produto.estoque}</span>
+              <span>{produto.destaque}</span>
+              <span>{produto.peso} g</span>
+              <span>{produto.altura} cm</span>
+              <span>{produto.largura} cm</span>
+              <span>{produto.comprimento} cm</span>
+              <div className="produto-acoes">
+                <button onClick={() => handleEditar(produto)}>Editar</button>
+                <button onClick={() => handleDeletar(produto.id)}>Deletar</button>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

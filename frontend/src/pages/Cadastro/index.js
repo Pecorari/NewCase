@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import Footer from '../Componentes/Footer/index';
-import Header from '../Componentes/Header/index';
+import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 import { FaRegCalendar } from "react-icons/fa";
 
 import './cadastro.css';
@@ -31,11 +31,8 @@ function Cadastro() {
       return;
     }
 
-    const [ano, mes, dia] = form.data_nasc.split("-");
-    const dataFormatada = `${dia}/${mes}/${ano}`;
-
     try {
-      const result = await api.post('usuarios/add', { nome: form.nome, cpf: form.cpf, telefone: form.telefone, data_nasc: dataFormatada, email: form.email, senha: form.senha });
+      const result = await api.post('usuarios/add', { nome: form.nome, cpf: form.cpf, telefone: form.telefone, data_nasc: form.data_nasc, email: form.email, senha: form.senha });
 
       setForm({nome: '', cpf: '', telefone: '', data_nasc: '', email: '', senha: '', senha_confirm: ''});
       navigate('/cadastro/verificar-email', {state: { id: result.data.id, email: result.data.email }});
@@ -90,13 +87,13 @@ function Cadastro() {
             <input type="text" placeholder="Nome completo" name='nome' value={form.nome} onChange={handleInputChange} required />
             <input type="email" placeholder="E-mail" name='email' value={form.email} onChange={handleInputChange} autoComplete='email' required />
             <input type="text" placeholder="CPF" name='cpf' value={form.cpf} onChange={handleInputChange} required />
-            <input type="password" placeholder="Crie sua senha" name='senha' value={form.senha} onChange={handleInputChange} autoComplete='new-password' required />
             <input type="text" placeholder="Telefone celular" name='telefone' value={form.telefone} onChange={handleInputChange} />
-            <input type="password" placeholder="Confirme sua senha" name='senha_confirm' value={form.senha_confirm} onChange={handleInputChange} required />
             <div className='data-container'>
-              <input type="text" placeholder="Data de Nascimento" name='data_nasc' className='data_nasc' value={form.data_nasc}   onInput={(e) => {if (e.target.value.length > 10) e.target.value = e.target.value.slice(0, 10)}} max="2025-12-31" onChange={handleInputChange} />
+              <input type="text" placeholder="Data de Nascimento" name='data_nasc' className='data_nasc' value={form.data_nasc} onInput={(e) => {if (e.target.value.length > 10) e.target.value = e.target.value.slice(0, 10)}} max="2025-12-31" onChange={handleInputChange} />
               <FaRegCalendar className='calendar' />
             </div>
+            <input type="password" placeholder="Crie sua senha" name='senha' value={form.senha} onChange={handleInputChange} autoComplete='new-password' required />
+            <input type="password" placeholder="Confirme sua senha" name='senha_confirm' value={form.senha_confirm} onChange={handleInputChange} required />
 
             {erro ? <span className='erro'>{erro}</span> : <></>}
             

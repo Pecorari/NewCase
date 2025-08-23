@@ -71,21 +71,22 @@ const AdminCategorias = () => {
 
       <h2 className='title-admin-categoria'>Lista de Categorias</h2>
       {categorias.length === 0 ? (
-        <p>Nenhuma categoria cadastrado.</p>
+        <p>Nenhuma categoria cadastrada.</p>
       ) : (
-        <ul className='ul-admin-categoria'>
+        <div className="categoria-grid">
+          <div className="categoria-header">
+            <span>ID</span>
+            <span>Nome</span>
+            <span>Ações</span>
+          </div>
           {categorias.map((categoria) => (
-            <li className='li-admin-categoria' key={categoria.id}>
-              <div className='dados-categorias'>
-                <p>{categoria.id}</p>
-                <div className='nome-categoria'>
-                  <p>{categoria.nome}</p>
-                </div>
-              </div>
-              <button className='li-btn-admin-categoria' onClick={() => handleDeletar(categoria.id)}>Deletar</button>
-            </li>
+            <div className="categoria-row" key={categoria.id}>
+              <span>{categoria.id}</span>
+              <span>{categoria.nome}</span>
+              <button className='btn-dell-categoria' onClick={() => handleDeletar(categoria.id)}>Deletar</button>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

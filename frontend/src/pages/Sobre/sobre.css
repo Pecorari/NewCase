@@ -3,78 +3,88 @@
 }
 
 .sobre-container {
-  padding: 40px 20px;
-  background: linear-gradient(0deg, #050821, #1b0529 80%, #050821 100%);
+  background: linear-gradient(0deg, var(--color-dark), #1b0529 80%, var(--color-dark) 100%);
+  padding-bottom: 25px;
+}
+
+.sobre-content {
+  padding: 50px 20px 0px;
+  margin: 0px auto 40px;
 }
 
 .sobre-hero {
   text-align: center;
-  margin-bottom: 150px;
-  margin-top: 140px;
+  height: 100vh;
+  margin-top: 7rem;
 }
 .sobre-hero h1 {
-  color: #FF6EC7;
-  font-size: 2.5rem;
-  margin-bottom: 55px;
+  color: var(--color-primary);
+  font-size: 1.5rem;
 }
 .sobre-hero p {
-  font-size: 1.25rem;
-  margin: 0 auto;
+  margin: 30px auto;
+  font-size: 0.9rem;
+  line-height: 1.25rem;
 }
-.sobre-hero .motion {
-  display: none;
+.sobre-hero .nextSection{
+  color: white;
+  width: 110px;
+  height: 60px;
+  margin-top: 6rem;
+  z-index: 10;
 }
 
 .diferenciais {
-  background-color: #05082100;
-  color: white;
   text-align: center;
+  padding-top: 80px;
+  height: 100vh;
 }
 .diferenciais h2 {
-  font-size: 2em;
+  font-size: 1.3rem;
   margin-bottom: 40px;
 }
 .diferenciais-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 40px;
   color: black;
-  max-width: 900px;
   margin: 0 auto;
+  gap: 20px;
 }
 .diferenciais .diferencial {
-  flex: 1 1 250px;
-  max-width: 250px;
-  padding: 20px;
   background-color: rgb(243, 226, 241);
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  flex: 1 1 150px;
+  max-width: 200px;
+  padding: 10px;
   transition: transform 0.3s ease;
 }
 .diferencial:hover {
   transform: translateY(-5px);
 }
 .diferenciais h3 {
-  margin-bottom: 8px;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+.diferenciais p {
+  font-size: 0.75rem;
 }
 .diferenciais .icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 10px;
 }
 
 .parcerias {
-  padding: 60px 20px;
+  padding: 30px 0px;
   text-align: center;
 }
 .parcerias h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
 }
 .parcerias p {
-  max-width: 600px;
-  margin: 0 auto 40px;
-  font-size: 1.1em;
+  margin: 0 auto 20px;
+  font-size: 0.8rem;
 }
 .parcerias .logos {
   display: flex;
@@ -84,7 +94,6 @@
 }
 .parcerias .logos img {
   max-width: 150px;
-  height: auto;
   opacity: 0.7;
   transition: opacity 0.3s ease;
 }
@@ -97,150 +106,313 @@
   margin-bottom: 60px;
 }
 .sobre-valores h2 {
-  font-size: 2rem;
-  margin-bottom: 30px;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
 }
 .valores-cards {
   display: flex;
-  gap: 20px;
   justify-content: center;
   flex-wrap: wrap;
+  gap: 15px;
 }
 .card {
   border: 1px solid #888;
-  padding: 20px;
   border-radius: 10px;
-  max-width: 300px;
-  min-height: 180px;
   background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(5px);
   transition: transform 0.3s;
+  padding: 15px;
+  width: 150px;
 }
 .card:hover {
   transform: scale(1.03);
 }
 .card h3 {
+  font-size: 1rem;
   margin-bottom: 10px;
-  font-size: 1.2rem;
 }
 .card p {
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.75rem;
 }
 
-.sobre-extra h2 {
-  margin-bottom: 10px;
-}
 .sobre-extra {
   text-align: center;
-  margin-top: 120px;
   color: #ccc;
 }
 .sobre-extra p {
-  font-size: 1.05rem;
+  font-size: 0.8rem;
 }
 
-@media (max-width: 480px) {
-  .sobre-container {
-    padding: 50px 15px 25px 15px;
+@media (min-width: 870px) {
+  .diferenciais {
+    height: 60vh;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sobre-content {
+    padding: 50px 50px 0px;
+    margin: 0px auto;
   }
 
   .sobre-hero {
-    margin-bottom: 0px;
-    height: 100vh;
-    margin-top: 0px;
-    padding-top: 110px;
+    height: auto;
+    margin-top: 7.5rem;
   }
   .sobre-hero h1 {
     font-size: 1.5rem;
   }
   .sobre-hero p {
-    font-size: 0.9rem;
-    line-height: 1.25rem;
-  }
-  .sobre-hero .motion {
-    display: flex;
+    margin: 50px auto;
   }
   .sobre-hero .nextSection{
-    position: absolute;
-    color: white;
-    width: 100px;
-    height: 50px;
-    top: 7rem;
-    left: 50%;
-    transform: translate(-50%);
-    z-index: 10;
+    display: none;
   }
 
+
   .diferenciais {
-    padding-top: 80px;
-  }
-  .diferenciais h2 {
-    font-size: 1.35rem;
-    margin-bottom: 40px;
+    height: auto;
+    padding-top: 50px;
   }
   .diferenciais-container {
-    gap: 20px;
-    max-width: 350px;
+    gap: 15px;
   }
   .diferenciais .diferencial {
-    flex: 1 1 150px;
-    max-width: 180px;
-    padding: 10px;
+    flex: 1 1 200px;
+    max-width: 220px;
   }
   .diferenciais h3 {
-    font-size: 1rem;
-    margin-bottom: 10px;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
   }
   .diferenciais p {
     font-size: 0.8rem;
   }
-  .diferenciais .icon {
-    font-size: 1.8rem;
-  }
+
 
   .parcerias {
-    padding: 60px 15px;
-  }
-  .parcerias h2 {
-    font-size: 1.35rem;
+    margin-top: 5rem;
   }
   .parcerias p {
-    font-size: 0.8rem;
+    margin: 15px auto 30px;
+    font-size: 0.85rem;
   }
-  .parcerias .logos {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 40px;
+  .parcerias .logos img {
+    max-width: 180px;
   }
 
+
+  .sobre-valores {
+    margin-top: 4rem;
+    margin-bottom: 120px;
+  }
   .sobre-valores h2 {
-    font-size: 1.35rem;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
   .valores-cards {
-    gap: 15px;
+    gap: 20px;
   }
   .card {
-    padding: 15px;
-    max-width: 250px;
-    min-height: min-content;
-  }
-  .card h3 {
-    font-size: 1.1rem;
+    width: 200px;
   }
   .card p {
     font-size: 0.8rem;
-    line-height: 1.4;
   }
+
   .sobre-extra {
-    margin-top: 0px;
-    margin-bottom: 40px;
+    margin-bottom: -150px;
   }
   .sobre-extra p {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .sobre-content {
+    padding: 50px 60px 0px;
+  }
+
+  .sobre-hero h1 {
+    font-size: 1.6rem;
   }
 
 
+  .diferenciais p {
+    font-size: 0.85rem;
+  }
+
+
+  .parcerias {
+    margin-top: 6rem;
+  }
+  .parcerias p {
+    font-size: 0.9rem;
+  }
+
+
+  .sobre-valores {
+    margin-top: 5rem;
+    margin-bottom: 140px;
+  }
+  .sobre-valores h2 {
+    margin-bottom: 40px;
+  }
+  .valores-cards {
+    gap: 25px;
+  }
+  .card {
+    width: 230px;
+  }
+  .card p {
+    font-size: 0.85rem;
+  }
+}
+/* 
+@media (min-width: 1024px) {
+  .sobre-hero {
+    margin-top: 10rem;
+  }
+  .sobre-hero h1 {
+    font-size: 1.7rem;
+  }
+  .sobre-hero p {
+    margin: 65px auto;
+  }
+
+
+  .diferenciais-container {
+    gap: 20px;
+  }
+  .diferenciais .diferencial {
+    flex: 1 1 220px;
+    max-width: 240px;
+  }
+  .diferenciais h3 {
+    font-size: 1.15rem;
+    margin-bottom: 7px;
+  }
+  .diferenciais p {
+    font-size: 0.85rem;
+  }
+
+
+  .parcerias p {
+    font-size: 0.95rem;
+  }
+  .parcerias .logos img {
+    max-width: 190px;
+  }
+
+
+  .sobre-valores {
+    margin-bottom: 150px;
+  }
+  .valores-cards {
+    gap: 30px;
+  }
+  .card {
+    width: 240px;
+  }
+  .card p {
+    font-size: 0.85rem;
+  }
+
+
+  .sobre-extra p {
+    font-size: 0.9rem;
+  }
+} */
+
+@media (min-width: 1900px) {
+  .sobre-hero {
+    margin-top: 11rem;
+  }
+  .sobre-hero h1 {
+    font-size: 2rem;
+  }
+  .sobre-hero p {
+    font-size: 1.2rem;
+  }
+
+
+  .diferenciais {
+    padding-top: 70px;
+  }
+  .diferenciais h2 {
+    font-size: 1.5rem;
+  }
+  .diferenciais-container {
+    gap: 20px;
+  }
+  .diferenciais .diferencial {
+    max-width: 250px;
+  }
+  .diferenciais h3 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+  }
+  .diferenciais p {
+    font-size: 1rem;
+  }
+
+
+  .parcerias {
+    margin-top: 7rem;
+  }
+  .parcerias h2 {
+    font-size: 1.5rem;
+  }
+  .parcerias p {
+    margin: 25px auto 40px;
+    font-size: 1.05rem;
+  }
+  .parcerias .logos img {
+    max-width: 200px;
+  }
+
+
+  .sobre-valores {
+    margin-top: 6rem;
+  }
+  .sobre-valores h2 {
+    font-size: 1.5rem;
+  }
+  .valores-cards {
+    gap: 30px;
+  }
+  .card {
+    width: 280px;
+  }
+  .card p {
+    font-size: 1rem;
+  }
+
+
+  .sobre-extra p {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 2200px) {
+  .sobre-hero {
+    margin-top: 14rem;
+  }
+
+
+  .diferenciais-container {
+    gap: 25px;
+  }
+  .diferenciais .diferencial {
+    max-width: 270px;
+  }
+
+  .sobre-valores {
+    margin-bottom: 180px;
+  }
+
+  .valores-cards {
+    gap: 40px;
+  }
+  .card {
+    width: 300px;
+  }
 }

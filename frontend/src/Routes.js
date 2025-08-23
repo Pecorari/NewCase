@@ -32,16 +32,24 @@ function Routas() {
         <Route path="/perguntas" Component={Faq} />
         <Route path="/login" Component={Login} />
         <Route path="/esqueci-senha" Component={SolicitarRedefinicao} />
-        <Route path="/redefinir-senha" Component={RedefinirSenha} />
         <Route path="/cadastro" Component={Cadastro} />
         <Route path="/cadastro/verificar-email" Component={VerificarEmail} />
         <Route path="/confirmar-email" Component={ConfirmarEmail} />
         <Route path="/loja" Component={Loja} />
-        <Route path="/pedido/:id" Component={PedidoDetails} />
         <Route path="/produto/:id" Component={ProdutoDetails} />
         <Route path="/politica-privacidade" Component={PoliticaPrivacidade} />
         <Route path="/trocas-e-devolucoes" Component={TrocasEDevolucoes} />
 
+        <Route path="/pedido/:id" element={
+          <ProtectedRoute>
+            <PedidoDetails />
+          </ProtectedRoute>
+        } />
+        <Route path="/redefinir-senha" element={
+          <ProtectedRoute>
+            <RedefinirSenha />
+          </ProtectedRoute>
+        } />
         <Route path="/carrinho" element={
           <ProtectedRoute>
             <Carrinho /> 
@@ -53,8 +61,8 @@ function Routas() {
           </ProtectedRoute>
         } />
         <Route path="/admin" element={
-          <ProtectedRoute>
-            <AdminDashboard /> 
+          <ProtectedRoute requiredRole={'admin'}>
+            <AdminDashboard />
           </ProtectedRoute>
         } />
       </Routes>
