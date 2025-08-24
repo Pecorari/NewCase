@@ -61,7 +61,7 @@ function PedidoDetail() {
                 <h2>Informações Gerais</h2>
                 <p>Status: {pedido.status}</p>
                 <p>Data do Pedido: {formatarDataHora(pedido.criado_em)}</p>
-                <p>Total: R$ {pedido.total}</p>
+                <p>Total + Frete: R$ {pedido.total}</p>
               </section>
 
               <section className="secao-endereco">

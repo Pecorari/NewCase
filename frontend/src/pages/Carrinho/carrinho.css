@@ -186,8 +186,8 @@ button.finalizar:hover:disabled {
   z-index: 1000;
 }
 
-.modal-entrega .modal-content {
-  background: #1a1a1a; /* fundo escuro */
+.modal-entrega .modal-content-entrega {
+  background: #1a1a1a;
   padding: 2rem;
   border-radius: 15px;
   width: 90%;
@@ -196,25 +196,25 @@ button.finalizar:hover:disabled {
   color: #fff;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .modal-entrega h2 {
-  color: #ff4da6; /* rosa chamativo */
+  color: var(--color-primary);
   margin-bottom: 1rem;
   text-align: center;
 }
 
 .modal-entrega h3 {
-  color: #ff4da6;
+  color: var(--color-primary);
   margin-top: 1rem;
 }
 
 .modal-entrega input[type="text"],
 .modal-entrega input[type="number"] {
-  padding: 0.8rem;
+  padding: 0.7rem;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #6161617e;
   background: #333;
   color: #fff;
   outline: none;
@@ -238,11 +238,13 @@ button.finalizar:hover:disabled {
   gap: 0.5rem;
 }
 
-.modal-entrega li input[type="radio"] {
-  accent-color: #ff4da6;
+.btn-modal-pedido {
+  display: flex;
+  flex-direction: row;
+  gap: 5rem;
+  margin: auto;
 }
-
-.modal-entrega button {
+.modal-entrega .btn-modal-continuar, .btn-modal-cancel {
   padding: 0.8rem;
   border-radius: 10px;
   border: none;
@@ -250,52 +252,27 @@ button.finalizar:hover:disabled {
   font-weight: bold;
   transition: all 0.2s ease;
 }
-
-.modal-entrega button:first-of-type {
-  background: #ff4da6;
+.modal-entrega .btn-modal-continuar {
+  background: var(--color-primary);
   color: #fff;
-  margin-top: 1rem;
 }
-
-.modal-entrega button:first-of-type:hover {
-  background: #e63d92;
+.modal-entrega .btn-modal-continuar:hover {
+  background: #972f63;
 }
-
-.modal-entrega button:last-of-type {
+.modal-entrega .btn-modal-cancel {
   background: #333;
   color: #fff;
-  margin-top: 0.5rem;
 }
-
-.modal-entrega button:last-of-type:hover {
-  background: #444;
+.modal-entrega .btn-modal-cancel:hover {
+  background: #272727;
 }
-
-/* Responsivo */
-@media (max-width: 480px) {
-  .modal-entrega .modal-content {
-    padding: 1rem;
-  }
-
-  .modal-entrega input[type="text"],
-  .modal-entrega input[type="number"] {
-    font-size: 0.9rem;
-  }
-
-  .modal-entrega button {
-    font-size: 0.9rem;
-  }
-}
-
-
-
 
 .frete-item {
   display: flex;
   align-items: center;
   gap: 1rem;
   width: 90%;
-  margin-left: 5px;
+  margin: auto;
   padding: 0.5rem;
   border: 1px solid #444;
   border-radius: 8px;
@@ -306,11 +283,15 @@ button.finalizar:hover:disabled {
   cursor: pointer;
 }
 .frete-item:hover {
-  transform: scale(1.01);
+  transform: scale(1.02);
+}
+.frete-item.selecionado {
+  border: 1px solid var(--color-strong);
 }
 .frete-logo {
   width: 25%;
   object-fit: contain;
+  margin-right: 15px;
 }
 .frete-detalhes h4 {
   font-size: 0.8rem;
@@ -323,15 +304,20 @@ button.finalizar:hover:disabled {
 }
 
 
+@media (max-width: 480px) {
+  .modal-entrega .modal-content-entrega {
+    padding: 1rem;
+  }
 
+  .modal-entrega input[type="text"],
+  .modal-entrega input[type="number"] {
+    font-size: 0.9rem;
+  }
 
-
-
-
-
-
-
-
+  .modal-entrega button {
+    font-size: 0.9rem;
+  }
+}
 
 @media (min-width: 768px) {
   .btn-voltar-carrinho {

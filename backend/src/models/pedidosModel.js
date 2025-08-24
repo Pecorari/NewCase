@@ -1,9 +1,9 @@
 const connection = require('../database/connection');
 
 const createPedido = async (dataPedido, itens, idLogado) => {
-  const connection = await pool.getConnection();
+  const conn = await connection.getConnection();
   try {
-    await connection.beginTransaction();
+    await conn.beginTransaction();
     
     const { total, endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo} = dataPedido;
     const [result] = await connection.execute(`
@@ -21,17 +21,17 @@ const createPedido = async (dataPedido, itens, idLogado) => {
     const [pedidoCriado] = await connection.execute('SELECT * FROM pedidos WHERE id = ?', [pedidoId]);
     const [pedidoItensCriado] = await connection.execute('SELECT * FROM pedido_itens WHERE pedido_id = ?', [pedidoId]);
 
-    await connection.commit();
+    await conn.commit();
 
     return {
       pedido: pedidoCriado[0],
       itens: pedidoItensCriado,
     };
   } catch (err) {
-    await connection.rollback();
+    await conn.rollback();
     throw err;
   } finally {
-    connection.release();
+    conn.release();
   }
 };
 

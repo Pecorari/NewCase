@@ -43,15 +43,22 @@ const getQtdCarrinhoUser = async (idLogado) => {
 };
 
 
-const deleteCarrinho = async (id) => {
+const deleteCarrinhoById = async (id) => {
     const [result] = await connection.execute('DELETE FROM carrinho WHERE id = ?', [id]);
     
     return result;
+};
+
+const limpaCarrinhoUser = async (usuarioId) => {
+  const [result] = await connection.execute('DELETE FROM carrinho WHERE usuario_id = ?', [usuarioId]);
+
+  return result;
 };
 
 module.exports = {
     createCarrinho,
     getCarrinhoByUser,
     getQtdCarrinhoUser,
-    deleteCarrinho
+    deleteCarrinhoById,
+    limpaCarrinhoUser
 };

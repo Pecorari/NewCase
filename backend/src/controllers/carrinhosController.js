@@ -39,10 +39,10 @@ const getQtdCarrinhoUser = async (req, res) => {
     }
 };
 
-const deleteCarrinho = async (req, res) => {
+const deleteCarrinhoById = async (req, res) => {
     try {
         const { id } = req.params;
-        await carrinhosModel.deleteCarrinho(id);
+        await carrinhosModel.deleteCarrinhoById(id);
 
         return res.status(200).json({ message: 'Carrinho deletado com sucesso' });
     } catch (error) {
@@ -51,10 +51,23 @@ const deleteCarrinho = async (req, res) => {
     }
 };
 
+const limparCarrinhoUser = async (req, res) => {
+    try {
+        const usuarioId = req.usuario.id;
+        await carrinhosModel.limpaCarrinhoUser(usuarioId);
+
+        res.status(200).json({ message: 'Carrinho limpo com sucesso' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Erro ao limpar o carrinho' });
+    }
+};
+
 
 module.exports = {
     createCarrinho,
     getCarrinhoByUser,
     getQtdCarrinhoUser,
-    deleteCarrinho
+    deleteCarrinhoById,
+    limparCarrinhoUser
 };
