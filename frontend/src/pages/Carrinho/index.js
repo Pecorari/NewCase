@@ -150,7 +150,7 @@ const Carrinho = () => {
       return;
     }
 
-    const totalComFrete = valorTotal + Number(freteSelecionado?.price?.toString().replace(',', '.')) || 0;
+    const totalComFrete = Number(valorTotal + Number(freteSelecionado?.price?.toString().replace(',', '.') || 0).toFixed(2));
     const cepFormatado = Number(endereco.cep.replace(/\D/g, ""));
 
     try {
