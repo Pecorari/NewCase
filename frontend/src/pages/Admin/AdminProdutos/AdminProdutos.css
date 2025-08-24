@@ -235,3 +235,38 @@ textarea {
 .produto-acoes button:last-child:hover {
   background-color: #a00000;
 }
+
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.paginacao button {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease-in-out;
+}
+
+.paginacao button:hover:not(:disabled) {
+  background-color: #aa4377;
+}
+
+.paginacao button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.paginacao span {
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 500;
+}

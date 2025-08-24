@@ -93,7 +93,7 @@
 .card-produto {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  padding: 10px;
+  padding: 8px;
   border-radius: 8px;
   text-align: center;
   transition: transform 0.2s;
@@ -247,6 +247,10 @@
     margin-left: 0px;
     width: 55%;
     left: 27.5%;
+  }
+  
+  .card-produto {
+    padding: 10px;
   }
 
   .paginacao {

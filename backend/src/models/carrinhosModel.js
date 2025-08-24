@@ -21,19 +21,17 @@ const getCarrinhoByUser = async (idLogado) => {
         p.nome AS produto_nome,
         a.nome AS aparelho_nome,
         p.preco,
+        p.peso,
+        p.comprimento,
+        p.largura,
+        p.altura,
         GROUP_CONCAT(i.url) AS imagens
-        FROM 
-        carrinho c
-        JOIN 
-        produtos p ON c.produto_id = p.id
-        JOIN 
-        aparelhos a ON p.aparelho_id = a.id
-        LEFT JOIN 
-        produto_imagens i ON p.id = i.produto_id
-        WHERE 
-        c.usuario_id = ?
-        GROUP BY 
-        c.id, c.usuario_id, c.produto_id, c.quantidade, p.nome, p.preco`,
+        FROM carrinho c
+        JOIN produtos p ON c.produto_id = p.id
+        JOIN aparelhos a ON p.aparelho_id = a.id
+        LEFT JOIN produto_imagens i ON p.id = i.produto_id
+        WHERE c.usuario_id = ?
+        GROUP BY c.id, c.usuario_id, c.produto_id, c.quantidade, p.nome, p.preco`,
         [idLogado]);
     return produtos;
 };

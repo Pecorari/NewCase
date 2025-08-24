@@ -67,7 +67,7 @@ async function getValidToken() {
 
 const calcularFrete = async (req, res) => {
   const {cep_destino, peso, comprimento, altura, largura, valor} = req.body;
-
+  
   if (!cep_destino || !peso || !comprimento || !altura || !largura || !valor) return res.status(400).json({ erro: 'Dados incompletos para o cálculo de frete' });
 
   try {

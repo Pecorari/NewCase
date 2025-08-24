@@ -7,6 +7,7 @@ import Footer from "../../components/Footer";
 
 import { useNavigate } from 'react-router-dom';
 import { useCarrinho } from '../../context/CarrinhoContext';
+import { calcularFrete } from '../../services/freteService';
 import api from '../../hooks/useApi';
 
 import "./carrinho.css";
@@ -16,12 +17,32 @@ const Carrinho = () => {
   const [produtos, setProdutos] = useState([]);
   const [indiceImagem, setIndiceImagem] = useState({});
   const [valorTotal, setValorTotal] = useState(0);
-  
+  const [modalEntregaAberto, setModalEntregaAberto] = useState(false);
+  const [endereco, setEndereco] = useState({
+    nome: "",
+    cpf: "",
+    rua: "",
+    numero: "",
+    bairro: "",
+    cidade: "",
+    estado: "",
+    cep: "",
+    complemento: ""
+  });
+  const [fretes, setFretes] = useState([]); // eslint-disable-next-line
+  const [freteSelecionado, setFreteSelecionado] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     getProdutos();
   }, []);
+
+useEffect(() => {
+  if (endereco.cep.replace(/\D/g, '').length === 8) {
+    buscarFretes(endereco.cep);
+  } // eslint-disable-next-line 
+}, [produtos, endereco.cep]);
 
   const getProdutos = async () => {
     try {
@@ -48,7 +69,36 @@ const Carrinho = () => {
       console.log('Não foi possivel remover o produto:', error);
     }
   };
-  
+
+const buscarFretes = async (cep) => {
+  if (!cep) return;
+  if (!produtos || produtos.length === 0) return; 
+  try {
+    const pacote = produtos.reduce((acc, p) => ({
+      peso: acc.peso + Number(p.peso) * Number(p.quantidade),
+      comprimento: Math.max(acc.comprimento, Number(p.comprimento)),
+      altura: Math.max(acc.altura, Number(p.altura)),
+      largura: acc.largura + (parseFloat(p.largura.toString().replace(',', '.')) || 0)
+    }), { peso: 0, comprimento: 0, altura: 0, largura: 0 });
+
+    const valorTotalProdutos = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
+
+    const fretesCalculados = await calcularFrete({
+      cep_destino: cep.replace(/\D/g, ''),
+      peso: pacote.peso,
+      comprimento: pacote.comprimento,
+      altura: pacote.altura,
+      largura: pacote.largura,
+      valor: valorTotalProdutos
+    });
+
+    setFretes(fretesCalculados);
+
+  } catch (err) {
+    console.error("Erro ao buscar fretes:", err);
+  }
+};
+    
   const proximaImagem = (id, total) => {
     setIndiceImagem(prev => ({
       ...prev,
@@ -67,7 +117,7 @@ const Carrinho = () => {
     <div className="carrinho">
       <Header />
       <div className="carrinho-container">
-      <button className="btn-voltar-carrinho" onClick={() => navigate(-1)}>&larr; Voltar</button>
+        <button className="btn-voltar-carrinho" onClick={() => navigate(-1)}>&larr; Voltar</button>
         <h2 className='title-cart'>Seu Carrinho</h2>
 
         <ul className="carrinho-itens">
@@ -110,9 +160,71 @@ const Carrinho = () => {
           <p className='total'>Total: {valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
           <div className='btn-total'>
             <button className="continuar-comprando" onClick={() => navigate('/loja')}>&larr; Voltar as compras</button>
-            <button className="finalizar" onClick={() => console.log('Finalizar compra!')} disabled={produtos.length === 0}>Finalizar Compra</button>
+            <button className="finalizar" onClick={() => {if (produtos.length === 0) return; setModalEntregaAberto(true)}} disabled={produtos.length === 0}>Continuar</button>
           </div>
         </div>
+
+        {modalEntregaAberto && (
+          <div className="modal-entrega">
+            <div className="modal-content">
+              <h2>Informe o endereço de entrega</h2>
+              
+              <input type="text" placeholder="Nome" value={endereco.nome} onChange={e => setEndereco({...endereco, nome: e.target.value})} />
+              <input type="text" placeholder="CPF" value={endereco.cpf} onChange={e => setEndereco({...endereco, cpf: e.target.value})} />
+              <input type="text" placeholder="CEP" value={endereco.cep}
+                onChange={e => {
+                  const novoCep = e.target.value;
+                  setEndereco({...endereco, cep: novoCep});
+
+                  // chama apenas se o CEP tiver 8 dígitos
+                  if (novoCep.replace(/\D/g, '').length === 8) {
+                    buscarFretes(novoCep);
+                  }
+                }}
+              />
+              <input type="text" placeholder="Rua" value={endereco.rua} onChange={e => setEndereco({...endereco, rua: e.target.value})} />
+              <input type="text" placeholder="Número" value={endereco.numero} onChange={e => setEndereco({...endereco, numero: e.target.value})} />
+              <input type="text" placeholder="Bairro" value={endereco.bairro} onChange={e => setEndereco({...endereco, bairro: e.target.value})} />
+              <input type="text" placeholder="Cidade" value={endereco.cidade} onChange={e => setEndereco({...endereco, cidade: e.target.value})} />
+              <input type="text" placeholder="Estado" value={endereco.estado} onChange={e => setEndereco({...endereco, estado: e.target.value})} />
+              <input type="text" placeholder="Complemento" value={endereco.complemento} onChange={e => setEndereco({...endereco, complemento: e.target.value})} />
+
+              <h3>Escolha o frete</h3>
+              <ul>
+                {fretes.map((opcao, index) => (
+                  <li className="frete-item" key={index}>
+                    <input type="radio" name="frete" value={opcao.nome} onChange={() => setFreteSelecionado(opcao)} />
+                    <img
+                      src={opcao.company.picture}
+                      alt={opcao.name}
+                      className="frete-logo"
+                    />
+                    <div className="frete-detalhes">
+                      <h4>{opcao.name}</h4>
+                      {opcao.error ? (
+                        <p>{opcao.error}</p>
+                      ) : (
+                        <p>
+                          R$ {opcao.price} - {opcao.delivery_time} dias úteis
+                        </p>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <button onClick={() => {
+                if (!freteSelecionado) return alert("Selecione um frete!");
+                console.log('gerar pedido')
+                // gerarPedido();
+              }}>
+                Continuar
+              </button>
+
+              <button onClick={() => setModalEntregaAberto(false)}>Cancelar</button>
+            </div>
+          </div>
+        )}
       </div>
       <Footer />
     </div>

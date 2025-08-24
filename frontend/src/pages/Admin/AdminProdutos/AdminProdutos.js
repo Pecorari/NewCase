@@ -9,6 +9,8 @@ import './AdminProdutos.css';
 
 const AdminProdutos = () => {
   const [produtos, setProdutos] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
   const [formAberto, setFormAberto] = useState(false);
   const [erro, setErro] = useState('');
   const [form, setForm] = useState({
@@ -30,13 +32,17 @@ const AdminProdutos = () => {
   const [previews, setPreviews] = useState([]);
 
   useEffect(() => {
-    buscarProdutos();
+    buscarProdutos(1);
   }, []);
 
-  const buscarProdutos = async () => {
+  const buscarProdutos = async (valuePage = 1) => {
     try {
-      const response = await api.get('/produtos');
-      setProdutos(response.data);
+      const response = await api.get(`/produtos?page=${valuePage}`);
+      console.log("Resposta da API:", response.data);
+
+      setProdutos(response.data.produtos);
+      setPage(response.data.page);
+      setTotalPaginas(response.data.totalPaginas);
     } catch (err) {
       setErro(err.response.data.mensagem);
       console.error('Erro ao buscar produtos:', err);
@@ -260,8 +266,21 @@ const AdminProdutos = () => {
               </div>
             </div>
           ))}
+
         </div>
       )}
+
+          <div className="paginacao">
+            <button disabled={page === 1} onClick={() => buscarProdutos(page - 1)}>
+              Anterior
+            </button>
+
+            <span>Página {page} de {totalPaginas}</span>
+
+            <button disabled={page === totalPaginas} onClick={() => buscarProdutos(page + 1)}>
+              Próxima
+            </button>
+          </div>
     </div>
   );
 };

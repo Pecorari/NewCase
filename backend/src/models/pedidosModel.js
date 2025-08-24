@@ -1,29 +1,38 @@
 const connection = require('../database/connection');
 
-const createPedido = async (dataPedido, itens, dataPagamento, idLogado) => {
-  const { total } = dataPedido;
-  const [result] = await connection.execute('INSERT INTO pedidos(usuario_id, total) VALUES (?, ?)', [idLogado, total]);
+const createPedido = async (dataPedido, itens, idLogado) => {
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    
+    const { total, endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo} = dataPedido;
+    const [result] = await connection.execute(`
+      INSERT INTO pedidos(usuario_id, total, status, endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [idLogado, total, 'Aguardando Pagamento', endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo]);
 
-  const pedidoId = result.insertId;
+    const pedidoId = result.insertId;
 
-  for (const item of itens) {
-    await connection.execute('INSERT INTO pedido_itens (pedido_id, produto_id, preco_unitario, quantidade) VALUES (?, ?, ?, ?)',
-      [pedidoId, item.produto_id, item.preco_unitario, item.quantidade]);
+    for (const item of itens) {
+      await connection.execute('INSERT INTO pedido_itens (pedido_id, produto_id, preco_unitario, quantidade) VALUES (?, ?, ?, ?)',
+        [pedidoId, item.produto_id, item.preco_unitario, item.quantidade]);
+    }
+
+    const [pedidoCriado] = await connection.execute('SELECT * FROM pedidos WHERE id = ?', [pedidoId]);
+    const [pedidoItensCriado] = await connection.execute('SELECT * FROM pedido_itens WHERE pedido_id = ?', [pedidoId]);
+
+    await connection.commit();
+
+    return {
+      pedido: pedidoCriado[0],
+      itens: pedidoItensCriado,
+    };
+  } catch (err) {
+    await connection.rollback();
+    throw err;
+  } finally {
+    connection.release();
   }
-
-  const { metodo_pagamento, valor_pago } = dataPagamento;
-  await connection.execute('INSERT INTO pagamentos (pedido_id, metodo_pagamento, valor_pago) VALUES (?, ?, ?)', [pedidoId, metodo_pagamento, valor_pago]);
-
-
-  const [pedidoCriado] = await connection.execute('SELECT * FROM pedidos WHERE id = ?', [pedidoId]);
-  const [pedidoItensCriado] = await connection.execute('SELECT * FROM pedido_itens WHERE pedido_id = ?', [pedidoId]);
-  const [pagamentoCriado] = await connection.execute('SELECT * FROM pagamentos WHERE pedido_id = ?', [pedidoId]);
-
-  return {
-    pedido: pedidoCriado[0],
-    itens: pedidoItensCriado,
-    pagamento: pagamentoCriado[0]
-  };
 };
 
 const getAllMyPedidos = async (idLogado) => {

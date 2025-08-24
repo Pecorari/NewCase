@@ -1,14 +1,20 @@
 import api from '../hooks/useApi';
 
-export async function calcularFrete(cepDestino, produto) {
+export async function calcularFrete(pacote = {}) {
+  const { cep_destino, peso, comprimento, altura, largura, valor } = pacote || {};
+
+  if ([cep_destino, peso, comprimento, altura, largura, valor].some(v => v == null)) {
+    throw new Error('Dados incompletos para calcular frete');
+  }
+
   const response =await api.post('/calcular-frete',
     { 
-      cep_destino: cepDestino,
-      peso: produto.peso,
-      comprimento: produto.comprimento,
-      altura: produto.altura,
-      largura: produto.largura,
-      valor: produto.preco
+      cep_destino,
+      peso,
+      comprimento,
+      altura,
+      largura,
+      valor
     }
   );
   

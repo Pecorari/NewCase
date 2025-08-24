@@ -23,20 +23,7 @@
 }
 
 .btn-entrar-dashboard {
-  position: fixed;
-  left: 16rem;
-  border: 1px solid var(--color-primary);
-  border-radius: 8px;
-  background-color: transparent;
-  color: white;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-.btn-entrar-dashboard:hover {
-  border: 1px solid var(--color-strong);
-}
-.btn-entrar-dashboard.in-loja {
-  left: 113rem;
+  display: none;
 }
 
 .box-nav-actions {
@@ -275,6 +262,24 @@
 }
 
 @media (min-width: 768px) {
+  .btn-entrar-dashboard {
+    display: flex;
+    position: fixed;
+    margin-left: 15%;
+    border: 1px solid var(--color-primary);
+    border-radius: 8px;
+    background-color: transparent;
+    color: white;
+    padding: 8px 15px;
+    cursor: pointer;
+  }
+  .btn-entrar-dashboard:hover {
+    border: 1px solid var(--color-strong);
+  }
+  .btn-entrar-dashboard.in-loja {
+    display: none;
+  }
+
   .actions {
     gap: 1.7rem;
   }
@@ -398,6 +403,9 @@
 }
 
 @media (min-width: 1920px) {
+  .btn-entrar-dashboard {
+    padding: 10px 20px;
+  }
   .search .search-header {
     font-size: 0.9rem;
   }
@@ -452,6 +460,10 @@
 }
 
 @media (min-width: 2560px) {
+  .btn-entrar-dashboard {
+    margin-left: 10%;
+  }
+
   .logo-area {
     height: 4.7rem;
     margin-left: 5rem;
