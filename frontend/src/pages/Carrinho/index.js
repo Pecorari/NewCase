@@ -174,7 +174,7 @@ const Carrinho = () => {
         preco_unitario: Number(p.preco),
         quantidade: Number(p.quantidade),
       }));
-
+console.log({ dataPedido, itens });
       const response = await api.post("/pedidos/add", { dataPedido, itens });
 
       if (response.data?.pedido) {
