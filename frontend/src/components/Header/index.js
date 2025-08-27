@@ -6,8 +6,7 @@ import { BsBag, BsSearch } from "react-icons/bs";
 import { IoIosArrowForward } from "react-icons/io";
 import { useAuth } from "../../context/AuthContext";
 import { useCarrinho } from '../../context/CarrinhoContext';
-// import logoMyCellStore from '../../assets/utils/logo_semFundo.png'
-import logoMyCellStore from '../../assets/utils/LogoYourCase/semFundo/litle-white-192.png'
+import logoMyCellStore from '../../assets/utils/logo_semFundo.png';
 import api from '../../hooks/useApi';
 
 import "./header.css";
