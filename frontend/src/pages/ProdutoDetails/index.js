@@ -69,8 +69,15 @@ const ProdutoDetails = () => {
   async function handleFrete() {
     setLoading(true);
     try {
-      const resultado = await calcularFrete(cep, produto);
-      console.log(resultado);
+      const resultado = await calcularFrete({
+        cep_destino: cep,
+        peso: produto.peso,
+        comprimento: produto.comprimento,
+        altura: produto.altura,
+        largura: produto.largura,
+        valor: produto.preco
+      });
+      
       setFretes(resultado);
     } catch (e) {
       console.log('Erro ao calcular o frete', e);

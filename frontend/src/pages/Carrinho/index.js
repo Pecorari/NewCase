@@ -113,6 +113,7 @@ const Carrinho = () => {
   const buscarFretes = async (cep) => {
     if (!cep) return;
     if (!produtos || produtos.length === 0) return; 
+    
     try {
       const pacote = produtos.reduce((acc, p) => ({
         peso: acc.peso + Number(p.peso) * Number(p.quantidade),
@@ -176,7 +177,9 @@ const Carrinho = () => {
         preco_unitario: Number(p.preco),
         quantidade: Number(p.quantidade),
       }));
-console.log({ dataPedido, itens });
+
+      console.log({ dataPedido, itens });
+
       const response = await api.post("/pedidos/add", { dataPedido, itens });
 
       if (response.data?.pedido) {
