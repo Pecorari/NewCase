@@ -135,7 +135,7 @@ function Header({ inLoja }) {
             {usuario ? (
               <Link to="/perfil" className="loginLogged">
                 <FiUser className="iconUser" ref={iconUserRef} />
-                <p className="account-user" ref={nameUserRef}>Olá, {usuario.nome.split(" ")[0]} {usuario.tipo === 'admin' && '(admin)'}<IoIosArrowForward style={{ fontSize: '1rem' }}/></p>
+                <p className="account-user" ref={nameUserRef}>Olá,  {usuario.tipo === 'admin' ? 'Admin' : usuario.nome.split(" ")[0]}<IoIosArrowForward style={{ fontSize: '1rem' }}/></p>
               </Link>
             ) : (
               <Link to="/login" className="loginIcon">

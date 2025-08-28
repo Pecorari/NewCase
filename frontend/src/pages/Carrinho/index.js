@@ -85,6 +85,7 @@ const Carrinho = () => {
     });
     setFreteSelecionado(null);
     setModalEntregaAberto(false);
+    setFretes([]);
   }
 
   const buscarCep = async (cep) => {
@@ -271,43 +272,48 @@ const Carrinho = () => {
             <div className="modal-content-entrega">
               <h2>Informe o endereço de entrega</h2>
               
-              <input type="text" placeholder="Nome" value={endereco.nome} onChange={e => setEndereco({...endereco, nome: e.target.value})} required />
-              <IMaskInput mask={"000.000.000-00"} type="text" placeholder="CPF" value={endereco.cpf} onAccept={value => setEndereco({...endereco, cpf: value})} required />
-              <IMaskInput mask={"00000-000"} type="text" placeholder="CEP" value={endereco.cep} required 
-                onAccept={value => {
-                  const novoCep = value;
-                  setEndereco({...endereco, cep: novoCep});
+              <div className='content-entrega-left'>
+                <input type="text" placeholder="Nome" value={endereco.nome} onChange={e => setEndereco({...endereco, nome: e.target.value})} required />
+                <IMaskInput mask={"000.000.000-00"} type="text" placeholder="CPF" value={endereco.cpf} onAccept={value => setEndereco({...endereco, cpf: value})} required />
+                <IMaskInput mask={"00000-000"} type="text" placeholder="CEP" value={endereco.cep} style={{ marginTop: '0.8rem' }} required 
+                  onAccept={value => {
+                    const novoCep = value;
+                    setEndereco({...endereco, cep: novoCep});
 
-                  if (novoCep.replace(/\D/g, '').length === 8) {
-                    buscarCep(novoCep.replace(/\D/g, ''));
-                    buscarFretes(novoCep);
-                  }
-                }}
-              />
-              <input type="text" placeholder="Rua" value={endereco.rua} onChange={e => setEndereco({...endereco, rua: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
-              <input type="number" placeholder="Número" value={endereco.numero} onChange={e => setEndereco({...endereco, numero: e.target.value})} required />
-              <input type="text" placeholder="Bairro" value={endereco.bairro} onChange={e => setEndereco({...endereco, bairro: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
-              <input type="text" placeholder="Cidade" value={endereco.cidade} onChange={e => setEndereco({...endereco, cidade: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
-              <input type="text" placeholder="Estado" value={endereco.estado} onChange={e => setEndereco({...endereco, estado: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
-              <input type="text" placeholder="Complemento" value={endereco.complemento} onChange={e => setEndereco({...endereco, complemento: e.target.value})} />
+                    if (novoCep.replace(/\D/g, '').length === 8) {
+                      buscarCep(novoCep.replace(/\D/g, ''));
+                      buscarFretes(novoCep);
+                    }
+                  }}
+                />
+                <input type="text" placeholder="Rua" value={endereco.rua} onChange={e => setEndereco({...endereco, rua: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
+                <input type="number" placeholder="Número" value={endereco.numero} onChange={e => setEndereco({...endereco, numero: e.target.value})} required />
+                <input type="text" placeholder="Bairro" value={endereco.bairro} onChange={e => setEndereco({...endereco, bairro: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
+                <input type="text" placeholder="Cidade" value={endereco.cidade} onChange={e => setEndereco({...endereco, cidade: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
+                <input type="text" placeholder="Estado" value={endereco.estado} onChange={e => setEndereco({...endereco, estado: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
+                <input type="text" placeholder="Complemento" value={endereco.complemento} onChange={e => setEndereco({...endereco, complemento: e.target.value})} />
+              </div>
 
-              <h3>Escolha o frete</h3>
-              <ul>
-                {fretes.map((opcao, index) => (
-                  <li className={`frete-item ${freteSelecionado?.id === opcao.id ? "selecionado" : ""}`} key={index} onClick={() => setFreteSelecionado(opcao)}>
-                    <img src={opcao.company.picture} alt={opcao.name} className="frete-logo" />
-                    <div className="frete-detalhes">
-                      <h4>{opcao.name}</h4>
-                      {opcao.error ? (
-                        <p>{opcao.error}</p>
-                      ) : (
-                        <p>R$ {opcao.price} - {opcao.delivery_time} dias úteis</p>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              
+              <div className='content-entrega-right'>
+                <h3>Escolha o frete</h3>
+                <ul>
+                  {fretes.length === 0 ? (<p style={{ fontSize: '0.9rem', color: '#b8b8b8ff', marginLeft: '20px' }}>Digite o CEP para calcular o frete</p>) : (
+                    fretes.map((opcao, index) => (
+                      <li className={`frete-item ${freteSelecionado?.id === opcao.id ? "selecionado" : ""}`} key={index} onClick={() => setFreteSelecionado(opcao)}>
+                        <img src={opcao.company.picture} alt={opcao.name} className="frete-logo" />
+                        <div className="frete-detalhes">
+                          <h4>{opcao.name}</h4>
+                          {opcao.error ? (
+                            <p>{opcao.error}</p>
+                          ) : (
+                            <p>R$ {opcao.price} - {opcao.delivery_time} dias úteis</p>
+                          )}
+                        </div>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              </div>
 
               <div className='btn-modal-pedido'>
                 <button className='btn-modal-cancel'onClick={() => fechaModal()}>Cancelar</button>

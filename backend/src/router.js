@@ -9,6 +9,7 @@ const enderecosController = require('./controllers/enderecosController');
 const pedidosController = require('./controllers/pedidosController');
 const usuariosController = require('./controllers/usuariosController');
 const senhaController = require('./controllers/senhasController');
+const checkoutController = require('./controllers/checkoutController');
 
 const adminController = require('./controllers/adminController');
 
@@ -62,6 +63,12 @@ router.get('/categorias', categoriasController.getAllCategorias);
 router.delete('/categorias/del/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, categoriasController.deleteCategoria);
 
 router.get('/profile', autenticarToken, usuariosController.profile);
+
+// INTEGRAÇAO CHECKOUT PAGBANK
+router.post('/checkout/sessao', checkoutController.createSession);
+router.post('/checkout/pagar', checkoutController.pagamento);
+router.post('/checkout/notificacao', checkoutController.notificacao);
+
 
 // Rotas para manipular apenas os próprios dados. ex.: Editar apenas o próprio pedido
 

@@ -184,19 +184,20 @@ button.finalizar:hover:disabled {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .modal-entrega .modal-content-entrega {
   background: #1a1a1a;
-  padding: 2rem;
-  border-radius: 15px;
-  width: 90%;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 100%;
   max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
 }
 
 .modal-entrega h2 {
@@ -205,13 +206,15 @@ button.finalizar:hover:disabled {
   text-align: center;
 }
 
-.modal-entrega h3 {
-  color: var(--color-primary);
-  margin-top: 1rem;
+.content-entrega-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  color: white;
 }
 
-.modal-entrega input[type="text"],
-.modal-entrega input[type="number"] {
+.modal-entrega .content-entrega-left input[type="text"],
+.modal-entrega .content-entrega-left input[type="number"] {
   padding: 0.7rem;
   border-radius: 8px;
   border: 1px solid #6161617e;
@@ -220,9 +223,17 @@ button.finalizar:hover:disabled {
   outline: none;
 }
 
-.modal-entrega input[type="text"]::placeholder,
-.modal-entrega input[type="number"]::placeholder {
+.modal-entrega .content-entrega-left input[type="text"]::placeholder,
+.modal-entrega .content-entrega-left input[type="number"]::placeholder {
   color: #aaa;
+}
+
+.content-entrega-right {
+  margin-top: 1.5rem;
+}
+.modal-entrega h3 {
+  color: var(--color-primary);
+  margin-top: 1rem;
 }
 
 .modal-entrega ul {
@@ -243,6 +254,8 @@ button.finalizar:hover:disabled {
   flex-direction: row;
   gap: 5rem;
   margin: auto;
+  justify-content: center;
+  margin-top: 1rem;
 }
 .modal-entrega .btn-modal-continuar, .btn-modal-cancel {
   padding: 0.8rem;
@@ -304,9 +317,10 @@ button.finalizar:hover:disabled {
 }
 
 
-@media (max-width: 480px) {
+@media (min-width: 768px) {
   .modal-entrega .modal-content-entrega {
-    padding: 1rem;
+    padding: 2rem;
+    border-radius: 16px;
   }
 
   .modal-entrega input[type="text"],
@@ -314,8 +328,48 @@ button.finalizar:hover:disabled {
     font-size: 0.9rem;
   }
 
+  
+  .content-entrega-right {
+    margin-top: 1.8rem;
+  }
+
   .modal-entrega button {
     font-size: 0.9rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .modal-entrega .modal-content-entrega {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 1.5rem;
+    max-width: 800px;
+  }
+
+  .modal-content-entrega h2 {
+    grid-column: 1 / 3;
+  }
+
+  .content-entrega-left {
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* gap: 0.8rem; */
+  }
+
+  .content-entrega-right {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0rem;
+  }
+  .modal-entrega h3 {
+    margin-top: 0rem;
+  }
+
+  .btn-modal-pedido {
+    grid-column: 1 / 3;
+    margin-top: 0rem;
   }
 }
 
