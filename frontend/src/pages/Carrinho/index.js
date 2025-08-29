@@ -263,7 +263,11 @@ const Carrinho = () => {
           <p className='total'>Total: {valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
           <div className='btn-total'>
             <button className="continuar-comprando" onClick={() => navigate('/loja')}>&larr; Voltar as compras</button>
-            <button className="finalizar" onClick={() => {if (produtos.length === 0) return; setModalEntregaAberto(true)}} disabled={produtos.length === 0}>Finalizar Compra</button>
+            <button className="finalizar" onClick={() => {
+              if (produtos.length === 0) return;
+              // setModalEntregaAberto(true);
+              navigate('/checkout');
+            }} disabled={produtos.length === 0}>Finalizar Pedido</button>
           </div>
         </div>
 

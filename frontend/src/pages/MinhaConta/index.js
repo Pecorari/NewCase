@@ -199,7 +199,7 @@ const MinhaConta = () => {
                 : enderecos.map((end) => (
                   <>
                   <div key={end.id} className="endereco-card">
-                    <p>{end.rua}, {end.numero} - {end.bairro}</p>
+                    <strong>{end.rua}, {end.numero} - {end.bairro}</strong>
                     <p>{end.cidade} / {end.estado}</p>
                     <p>CEP: {end.cep}</p>
                     {end.complemento ? <p>Complemento: {end.complemento}</p> : <></>}

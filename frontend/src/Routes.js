@@ -9,18 +9,20 @@ import Loja from './pages/Loja';
 import ProdutoDetails from './pages/ProdutoDetails';
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
-import Carrinho from './pages/Carrinho';
-import MinhaConta from './pages/MinhaConta';
-import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard';
 import PoliticaPrivacidade from './pages/PoliticaPrivacidade';
 import TrocasEDevolucoes from './pages/TrocasEDevolucoes';
-
-import { ProtectedRoute } from './components/ProtectedRoute';
-import PedidoDetails from './pages/PedidoDetails';
 import VerificarEmail from './pages/VerificarEmail';
 import ConfirmarEmail from './pages/ConfirmarEmail';
 import SolicitarRedefinicao from './pages/EsqueciSenha/SolicitarRedefinicao';
+
+import Checkout from './pages/Checkout';
+
+import { ProtectedRoute } from './components/ProtectedRoute';
+import PedidoDetails from './pages/PedidoDetails';
 import RedefinirSenha from './pages/EsqueciSenha/RedefinirSenha';
+import Carrinho from './pages/Carrinho';
+import MinhaConta from './pages/MinhaConta';
+import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard';
 
 function Routas() {
   return (
@@ -39,6 +41,8 @@ function Routas() {
         <Route path="/produto/:id" Component={ProdutoDetails} />
         <Route path="/politica-privacidade" Component={PoliticaPrivacidade} />
         <Route path="/trocas-e-devolucoes" Component={TrocasEDevolucoes} />
+
+        <Route path="/checkout" Component={Checkout} />
 
         <Route path="/pedido/:id" element={
           <ProtectedRoute>

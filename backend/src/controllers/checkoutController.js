@@ -27,10 +27,15 @@ const pagamento = async (req, res) => {
 };
 
 const notificacao = async (req, res) => {
-  
   console.log("Notificação recebida:", req.body);
 
-  // aqui você já pode atualizar o status do pedido no seu MySQL
+  const response = await axios.get(`${process.env.PAGBANK_API}/v3/transactions/notifications/${req.body.notificationCode}?email=${process.env.PAGBANK_EMAIL}&token=${process.env.PAGBANK_TOKEN}`);
+
+  const transacao = response.data;
+
+  console.log("Transação:", transacao);
+
+  // Atualizar do MySQL
 
   res.sendStatus(200);
 };
