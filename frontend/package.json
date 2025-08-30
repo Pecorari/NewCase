@@ -13,6 +13,7 @@
     "react": "^19.1.0",
     "react-confirm-alert": "^3.0.6",
     "react-dom": "^19.1.0",
+    "react-form-stepper": "^2.0.3",
     "react-icons": "^5.5.0",
     "react-imask": "^7.6.1",
     "react-input-mask": "^3.0.0-alpha.2",

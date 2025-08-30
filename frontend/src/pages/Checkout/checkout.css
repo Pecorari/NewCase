@@ -22,18 +22,9 @@
 }
 
 .checkout-box {
-  width: 90%;
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #1e1e2e;
-  border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.4);
-}
-
-.title-checkout {
-  text-align: center;
-  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: -3rem auto;
 }
 
 .steps {
@@ -49,15 +40,18 @@
   color: #aaa;
 }
 .step.active {
-  color: #ff4db8;
-  border-color: #ff4db8;
+  color: var(--color-primary);
+  border-color: var(--color-strong);
 }
 
 .checkout-step {
   padding: 1.5rem;
+  max-width: 800px;
+  margin: 2rem auto;
 }
 .checkout-step h3 {
-  margin-bottom: 10px;
+  margin-bottom: 40px;
+  margin-left: -3rem;
 }
 
 .form-checkout {
@@ -93,7 +87,7 @@
 }
 .endereco-card {
   padding: 0.8rem;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   border-radius: 10px;
   background: #222;
   cursor: pointer;
@@ -101,22 +95,166 @@
 }
 .endereco-card:hover {
   border-color: #666;
+  transform: scale(1.01);
 }
 .endereco-card.selecionado {
-  border-color: #ff4db8;
+  border-color: var(--color-strong);
 }
 .endereco-card.add-novo {
   text-align: center;
   font-weight: bold;
-  color: #ff4db8;
+  color: var(--color-primary);
 }
 
-.frete-opcoes,
-.pagamento-opcoes {
+.frete-item-checkout {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 90%;
+  margin: auto;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: #53535370;
+  color: #f2f2f2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+.frete-item-checkout:hover {
+  border-color: #666;
+  transform: scale(1.01);
+}
+.frete-item-checkout.selecionado {
+  border: 1px solid var(--color-strong);
+}
+.frete-logo-checkout {
+  width: 25%;
+  height: 50px;
+  object-fit: contain;
+}
+.frete-detalhes-checkout h4 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.frete-detalhes-checkout p {
+  margin-top: 5px;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.frete-opcoes {
   display: grid;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
+
+.pagamento-opcoes {
+  background-color: #969696;
+  height: 350px;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.abas-pagamento {
+  display: flex;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.aba {
+  flex: 1;
+  padding: 10px;
+  background-color: #969696;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 2px solid #7c7c7c;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  transition: 0.3s;
+}
+.aba.ativa {
+  background-color: rgb(196, 196, 196);
+  border-bottom: 2px solid var(--color-strong);
+  color: var(--color-strong);
+  font-weight: bold;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.conteudo-pagamento {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background-color: rgb(196, 196, 196);
+  color: black;
+  padding: 1rem 2rem 1rem 2rem;
+  flex: 1;
+}
+
+.conteudo-pagamento h4 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+
+.cartao-container {
+  margin: 15px auto;
+  display: flex;
+  gap: 4rem;
+  text-align: center;
+}
+
+.entradas-box {
+  flex: 1;
+}
+
+.tipo-cartao {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-around;
+}
+.input-pagamento {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+}
+
+.cartao-mockup {
+  width: 300px;
+  background: linear-gradient(135deg, #ff6ec7, #ff007f);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+  text-align: left;
+  font-family: monospace;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.chip {
+  width: 40px;
+  height: 30px;
+  background: gold;
+  border-radius: 5px;
+  margin-bottom: 40px;
+}
+.numero-cartao {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+.nome-validade {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
 
 .checkout-buttons {
   display: flex;
@@ -136,11 +274,19 @@
 .btn-prev {
   background: #444;
   color: #fff;
+  transition: background-color 0.3s ease;
+}
+.btn-prev:hover {
+  background-color: #333;
 }
 
 .btn-next {
-  background: #ff4db8;
+  background: var(--color-primary);
   color: #fff;
+  transition: background-color 0.3s ease;
+}
+.btn-next:hover {
+  background-color: var(--color-strong);
 }
 
 .btn-finalizar {

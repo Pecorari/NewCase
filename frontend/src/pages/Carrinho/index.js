@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { BsTrash3 } from "react-icons/bs";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { IMaskInput } from "react-imask";
 
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 import { useNavigate } from 'react-router-dom';
 import { useCarrinho } from '../../context/CarrinhoContext';
-import { calcularFrete } from '../../services/freteService';
 import api from '../../hooks/useApi';
 
 import "./carrinho.css";
@@ -18,32 +16,12 @@ const Carrinho = () => {
   const [produtos, setProdutos] = useState([]);
   const [indiceImagem, setIndiceImagem] = useState({});
   const [valorTotal, setValorTotal] = useState(0);
-  const [modalEntregaAberto, setModalEntregaAberto] = useState(false);
-  const [endereco, setEndereco] = useState({
-    nome: "",
-    cpf: "",
-    rua: "",
-    numero: "",
-    bairro: "",
-    cidade: "",
-    estado: "",
-    cep: "",
-    complemento: ""
-  });
-  const [fretes, setFretes] = useState([]); // eslint-disable-next-line
-  const [freteSelecionado, setFreteSelecionado] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     getProdutos();
   }, []);
-
-  useEffect(() => {
-    if (endereco.cep.replace(/\D/g, '').length === 8) {
-      buscarFretes(endereco.cep);
-    } // eslint-disable-next-line 
-  }, [produtos, endereco.cep]);
 
   const getProdutos = async () => {
     try {
@@ -68,137 +46,6 @@ const Carrinho = () => {
       getProdutos();
     } catch (error) {
       console.log('Não foi possivel remover o produto:', error);
-    }
-  };
-
-  const fechaModal = () => {
-    setEndereco({
-      nome: "",
-      cpf: "",
-      rua: "",
-      numero: "",
-      bairro: "",
-      cidade: "",
-      estado: "",
-      cep: "",
-      complemento: ""
-    });
-    setFreteSelecionado(null);
-    setModalEntregaAberto(false);
-    setFretes([]);
-  }
-
-  const buscarCep = async (cep) => {
-    try {
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const data = await response.json();
-
-      if (data.erro) {
-        alert("CEP não encontrado!");
-        return;
-      }
-
-      setEndereco((prev) => ({
-        ...prev,
-        rua: data.logradouro,
-        bairro: data.bairro,
-        cidade: data.localidade,
-        estado: data.uf,
-        cep: data.cep
-      }));
-    } catch (err) {
-      console.error("Erro ao buscar CEP:", err);
-    }
-  };
-
-  const buscarFretes = async (cep) => {
-    if (!cep) return;
-    if (!produtos || produtos.length === 0) return; 
-    
-    try {
-      const pacote = produtos.reduce((acc, p) => ({
-        peso: acc.peso + Number(p.peso) * Number(p.quantidade),
-        comprimento: Math.max(acc.comprimento, Number(p.comprimento)),
-        altura: Math.max(acc.altura, Number(p.altura)),
-        largura: acc.largura + (parseFloat(p.largura.toString().replace(',', '.')) || 0)
-      }), { peso: 0, comprimento: 0, altura: 0, largura: 0 });
-
-      const valorTotalProdutos = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
-
-      const fretesCalculados = await calcularFrete({
-        cep_destino: cep.replace(/\D/g, ''),
-        peso: pacote.peso,
-        comprimento: pacote.comprimento,
-        altura: pacote.altura,
-        largura: pacote.largura,
-        valor: valorTotalProdutos
-      });
-
-      setFretes(fretesCalculados);
-
-    } catch (err) {
-      console.error("Erro ao buscar fretes:", err);
-    }
-  };
-
-  const gerarPedido = async () => {
-    if (!freteSelecionado) {
-      alert("Selecione um frete para continuar");
-      return;
-    }
-
-    if (!endereco.nome || !endereco.cpf || !endereco.rua || !endereco.numero || !endereco.bairro || !endereco.cidade || !endereco.estado || !endereco.cep) {
-      alert("Preencha todos os campos obrigatórios!");
-      return;
-    }
-
-    const valorFrete = Number(freteSelecionado?.price?.toString().replace(',', '.') || 0);
-    const totalComFrete = Number((valorTotal + valorFrete).toFixed(2));
-
-    const cepFormatado = Number(endereco.cep.replace(/\D/g, ""));
-
-    try {
-      const dataPedido = {
-        total: totalComFrete,
-        endereco_rua: endereco.rua,
-        endereco_numero: Number(endereco.numero),
-        endereco_bairro: endereco.bairro,
-        endereco_cidade: endereco.cidade,
-        endereco_estado: endereco.estado,
-        endereco_cep: cepFormatado,
-        endereco_complemento: endereco.complemento,
-        frete_nome: freteSelecionado.name,
-        frete_logo: freteSelecionado.company?.picture || "",
-        frete_valor: Number(freteSelecionado.price),
-        frete_prazo: freteSelecionado.delivery_time,
-      };
-
-      const itens = produtos.map((p) => ({
-        produto_id: Number(p.produto_id),
-        preco_unitario: Number(p.preco),
-        quantidade: Number(p.quantidade),
-      }));
-
-      console.log({ dataPedido, itens });
-
-      const response = await api.post("/pedidos/add", { dataPedido, itens });
-
-      if (response.data?.pedido) {
-        console.log("Pedido criado:", response.data);
-
-        await api.delete("/carrinho/limpar");
-        setProdutos([]);
-        atualizarQtdCarrinho();
-        setValorTotal(0);
-
-        fechaModal();
-        // aqui você pode redirecionar para página de pagamento
-      } else {
-        alert("Erro ao criar pedido");
-      }
-    } catch (err) {
-      console.error("Erro ao gerar pedido:", err);
-      alert("Erro ao gerar pedido, tente novamente");
     }
   };
     
@@ -265,70 +112,10 @@ const Carrinho = () => {
             <button className="continuar-comprando" onClick={() => navigate('/loja')}>&larr; Voltar as compras</button>
             <button className="finalizar" onClick={() => {
               if (produtos.length === 0) return;
-              // setModalEntregaAberto(true);
               navigate('/checkout');
             }} disabled={produtos.length === 0}>Finalizar Pedido</button>
           </div>
         </div>
-
-        {modalEntregaAberto && (
-          <div className="modal-entrega">
-            <div className="modal-content-entrega">
-              <h2>Informe o endereço de entrega</h2>
-              
-              <div className='content-entrega-left'>
-                <input type="text" placeholder="Nome" value={endereco.nome} onChange={e => setEndereco({...endereco, nome: e.target.value})} required />
-                <IMaskInput mask={"000.000.000-00"} type="text" placeholder="CPF" value={endereco.cpf} onAccept={value => setEndereco({...endereco, cpf: value})} required />
-                <IMaskInput mask={"00000-000"} type="text" placeholder="CEP" value={endereco.cep} style={{ marginTop: '0.8rem' }} required 
-                  onAccept={value => {
-                    const novoCep = value;
-                    setEndereco({...endereco, cep: novoCep});
-
-                    if (novoCep.replace(/\D/g, '').length === 8) {
-                      buscarCep(novoCep.replace(/\D/g, ''));
-                      buscarFretes(novoCep);
-                    }
-                  }}
-                />
-                <input type="text" placeholder="Rua" value={endereco.rua} onChange={e => setEndereco({...endereco, rua: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
-                <input type="number" placeholder="Número" value={endereco.numero} onChange={e => setEndereco({...endereco, numero: e.target.value})} required />
-                <input type="text" placeholder="Bairro" value={endereco.bairro} onChange={e => setEndereco({...endereco, bairro: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
-                <input type="text" placeholder="Cidade" value={endereco.cidade} onChange={e => setEndereco({...endereco, cidade: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
-                <input type="text" placeholder="Estado" value={endereco.estado} onChange={e => setEndereco({...endereco, estado: e.target.value})} disabled style={{ backgroundColor: '#2b2b2bff', border: 'none' }} />
-                <input type="text" placeholder="Complemento" value={endereco.complemento} onChange={e => setEndereco({...endereco, complemento: e.target.value})} />
-              </div>
-
-              <div className='content-entrega-right'>
-                <h3>Escolha o frete</h3>
-                <ul>
-                  {fretes.length === 0 ? (<p style={{ fontSize: '0.9rem', color: '#b8b8b8ff', marginLeft: '20px' }}>Digite o CEP para calcular o frete</p>) : (
-                    fretes.map((opcao, index) => (
-                      <li className={`frete-item ${freteSelecionado?.id === opcao.id ? "selecionado" : ""}`} key={index} onClick={() => setFreteSelecionado(opcao)}>
-                        <img src={opcao.company.picture} alt={opcao.name} className="frete-logo" />
-                        <div className="frete-detalhes">
-                          <h4>{opcao.name}</h4>
-                          {opcao.error ? (
-                            <p>{opcao.error}</p>
-                          ) : (
-                            <p>R$ {opcao.price} - {opcao.delivery_time} dias úteis</p>
-                          )}
-                        </div>
-                      </li>
-                    ))
-                  )}
-                </ul>
-              </div>
-
-              <div className='btn-modal-pedido'>
-                <button className='btn-modal-cancel'onClick={() => fechaModal()}>Cancelar</button>
-                <button className='btn-modal-continuar' onClick={() => {
-                  if (!freteSelecionado) return alert("Selecione um frete!");
-                  gerarPedido();
-                }}> Continuar</button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
       <Footer />
     </div>
