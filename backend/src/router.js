@@ -65,7 +65,7 @@ router.delete('/categorias/del/:id', autenticarToken, verificarPermissao(['admin
 router.get('/profile', autenticarToken, usuariosController.profile);
 
 // INTEGRAÇAO CHECKOUT PAGBANK
-router.post('/checkout/sessao', checkoutController.createSession);
+router.get('/checkout/publicKey', checkoutController.getPublicKeyFromDB);
 router.post('/checkout/pagar', checkoutController.pagamento);
 router.post('/checkout/notificacao', checkoutController.notificacao);
 

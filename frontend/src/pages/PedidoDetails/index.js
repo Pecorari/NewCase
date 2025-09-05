@@ -61,7 +61,9 @@ function PedidoDetail() {
                 <h2>Informações Gerais</h2>
                 <p>Status: {pedido.status}</p>
                 <p>Data do Pedido: {formatarDataHora(pedido.criado_em)}</p>
-                <p>Total + Frete: R$ {pedido.total}</p>
+                <p>Subtotal: R$ {pedido.total - pedido.frete_valor}</p>
+                <p>Frete: R$ {pedido.frete_valor}</p>
+                <p>Total: R$ {pedido.total}</p>
               </section>
 
               <section className="secao-endereco">
@@ -98,15 +100,15 @@ function PedidoDetail() {
             </div>
 
             <div className='left-column'>
-              {pagamento && (
+              {/* {pagamento && ( */}
                 <section className="secao-pagamento">
                   <h2>Pagamento</h2>
-                  <p>Forma de Pagamento: {pagamento.metodo_pagamento}</p>
-                  <p>Status do Pagamento: {pagamento.status_pagamento}</p>
-                  {pagamento.pago_em ? <p>Valor a ser pago: {pagamento.valor_pago}</p> : <></>}
-                  <p>Pago em {formatarDataHora(pagamento.pago_em)}</p>
+                  <p>Forma de Pagamento: {pagamento?.metodo_pagamento}</p>
+                  <p>Status do Pagamento: {pagamento?.status_pagamento || 'Aguardando confirmação do pagamento'}</p>
+                  {pagamento?.pago_em ? <p>Valor a ser pago: {pagamento?.valor_pago}</p> : <></>}
+                  <p>Pago em {formatarDataHora(pagamento?.pago_em)}</p>
                 </section>
-              )}
+              {/* )} */}
               {pedido && (
                 <section className="secao-frete">
                   <h2>Frete</h2>

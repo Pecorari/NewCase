@@ -35,10 +35,30 @@ const Checkout = () => {
   const [validadeCard, setValidadeCard] = useState("");
   const [cvvCard, setCvvCard] = useState("");
   const [tipoCard, setTipoCard] = useState("credito");
+  const [publicKey, setPublicKey] = useState("");
+  const [qrCode, setQrCode] = useState(null);
+  const [chavePix, setChavePix] = useState('');
+  const [pdfBoleto, setPdfBoleto] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    async function fetchKey() {
+      try {
+        const result = await api.get("/checkout/publicKey");
+
+        setPublicKey(result.data)
+      } catch (err) {
+        console.error("Erro ao buscar public key", err);
+      }
+    }
+    fetchKey();
+
+    const script = document.createElement("script");
+    script.src = "https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+
     listarEnderecos();
     getProdutos();
   }, []);
@@ -102,7 +122,6 @@ const Checkout = () => {
     }
   };
 
-
   const gerarPedido = async () => {
     const valorFrete = Number(freteSelecionado?.price?.toString().replace(',', '.') || 0);
     const subTotal = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
@@ -148,12 +167,12 @@ const Checkout = () => {
     }
   };
 
-  const gerarPagamento = async (pedidoGerado) => {
+  const gerarPagamento = async (pedidoGerado, cartaoEncriptado) => {
     const subTotal = pedidoGerado.itens.reduce((acc, p) => acc + Number(p.preco_unitario) * Number(p.quantidade), 0);
     const Total = subTotal + Number(pedidoGerado.pedido.frete_valor);
 
     const payload = {
-      metodo: metodo,
+      metodo,
       pedido: {
         id: pedidoGerado.pedido.id,
         itens: pedidoGerado.itens,
@@ -162,19 +181,51 @@ const Checkout = () => {
         total: (Total.toFixed(2))
       },
       cliente: userData,
-      pagamento: metodo === "cartao" ? {
-        cartao: {
-          tipo: tipoCard,
-          titular: nomeCard,
-          numero: numeroCard,
-          validade: validadeCard,
-          cvv: cvvCard
-        }
-      } : {}
+      endereco_entrega: enderecoSelecionado,
+      pagamento: {}
     }
 
-    console.log(payload);
+    if (metodo === "cartao") {
+      payload.pagamento.cartao = {
+        tipo: tipoCard,
+        encrypted: cartaoEncriptado
+      };
+    } else if (metodo === "boleto") {
+      payload.pagamento = { tipo: "boleto" };
+    } else if (metodo === "pix") {
+      payload.pagamento = { tipo: "pix" };
+    }
+    
+    const response = await api.post("/checkout/pagar", payload);
+
+    console.log(response.data);
+    return response.data;
   }
+
+  const encryptCard = async () => {
+    const [mes, ano] = validadeCard.split('/');
+
+    const onlyDigits = s => s.replace(/\D/g, '');
+
+    const card = window.PagSeguro.encryptCard({
+      publicKey,
+      holder: nomeCard,
+      number: onlyDigits(numeroCard),
+      expMonth: onlyDigits(mes),
+      expYear: `20${onlyDigits(ano)}`,
+      securityCode: onlyDigits(cvvCard),
+    });
+
+    if (card.hasErrors) {
+      const msgs = card.errors.map(e => `${e.code}: ${e.message}`).join(' | ');
+      throw new Error(`Falha ao criptografar: ${msgs}`);
+    }
+
+    const encryptedCard = card.encryptedCard;
+
+    console.log(encryptedCard);
+    return encryptedCard;
+  };
 
   const finalizarCompra = async () => {
     try {
@@ -184,9 +235,28 @@ const Checkout = () => {
         alert("Não foi possível criar o pedido.");
         return;
       }
+      
+      let cartaoEncriptado = null
 
-      await gerarPagamento(novoPedido);
+      if (metodo === 'catao') {
+        cartaoEncriptado = await encryptCard();
+      }
 
+      const pagamento = await gerarPagamento(novoPedido, cartaoEncriptado);
+
+      if (metodo === "boleto") {
+        setPdfBoleto(pagamento.charges[0].links.find(l => l.media === "application/pdf").href);
+      } else if (metodo === "pix") {
+        const qr = pagamento.qr_codes?.[0];
+        if (qr) {
+          console.log("Chave PIX:", qr.text);
+          setQrCode(qr.links.find(l => l.rel === "QRCODE.PNG").href);
+          setChavePix(qr.text);
+        }
+      } else if (metodo === "cartao") {
+        alert("Pagamento com cartão processado!");
+        console.log("Pagamento com cartão processado!");
+      }
     } catch (err) {
       console.error("Erro ao finalizar compra:", err);
       alert("Erro ao finalizar compra");
@@ -387,13 +457,24 @@ const Checkout = () => {
                     <div>
                       <h4>Gerar Boleto</h4>
                         <p>O boleto será gerado com seus dados cadastrados.</p>
-                        {/* <button 
-                          type="button" 
-                          className="btn-gerar-boleto"
-                          onClick={console.log('gerar boleto')}
-                        >
-                          Gerar Boleto
-                        </button> */}
+
+                      <div>
+                        {pdfBoleto && (
+                          <>
+                            <iframe 
+                              src={pdfBoleto} 
+                              width="100%" 
+                              height="300px"
+                              style={{ border: 'none' }}
+                              title="Boleto"
+                            >
+                            </iframe>
+                            <a href={pdfBoleto} target="_blank" rel="noopener noreferrer">
+                              <button>Baixar Boleto</button>
+                            </a>
+                          </>
+                        )}
+                      </div>
                     </div>
                   )}
 
@@ -402,18 +483,14 @@ const Checkout = () => {
                       <h4>Pagar via PIX</h4>
                       <p>Escaneie o QR Code ou copie a chave PIX para pagar.</p>
 
-                      {/* {qrCode ? (
+                      {qrCode && (
                         <>
-                          <img src={`data:image/png;base64,${qrCode}`} alt="QR Code PIX" />
+                          <img src={`${qrCode}`} alt="QR Code PIX" style={{ maxHeight: '200px' }}/>
                           <button onClick={() => navigator.clipboard.writeText(chavePix)}>
                             Copiar Chave PIX
                           </button>
                         </>
-                      ) : (
-                        <button type="button" className="btn-gerar-pix" onClick={gerarPix}>
-                          Gerar QR Code
-                        </button>
-                      )} */}
+                      )}
                     </div>
                   )}
                 </div>
