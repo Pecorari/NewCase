@@ -66,7 +66,8 @@ router.get('/profile', autenticarToken, usuariosController.profile);
 
 // INTEGRAÇAO CHECKOUT PAGBANK
 router.get('/checkout/publicKey', checkoutController.getPublicKeyFromDB);
-router.post('/checkout/pagar', checkoutController.pagamento);
+// router.post('/checkout/pagar', checkoutController.pagamento);
+router.post('/checkout', autenticarToken, verificarPermissao(['admin', 'cliente']), validarPedido, validarRequisicao, checkoutController.checkout);
 router.post('/checkout/notificacao', checkoutController.notificacao);
 
 
@@ -83,7 +84,7 @@ router.get('/enderecos', autenticarToken, verificarPermissao(['admin', 'cliente'
 router.put('/enderecos/edit/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), verificarProprietario('enderecos', 'usuario_id'), validarId, validarEndereco, validarRequisicao, enderecosController.updateEndereco);
 router.delete('/enderecos/del/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), verificarProprietario('enderecos', 'usuario_id'), validarId, validarRequisicao, enderecosController.deleteEndereco);
 
-router.post('/pedidos/add', autenticarToken, verificarPermissao(['admin', 'cliente']), validarPedido, validarRequisicao, pedidosController.createPedido);
+// router.post('/pedidos/add', autenticarToken, verificarPermissao(['admin', 'cliente']), validarPedido, validarRequisicao, pedidosController.createPedido);
 router.get('/pedidos', autenticarToken, verificarPermissao(['admin', 'cliente']), pedidosController.getAllMyPedidos);
 router.get('/pedidos/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), pedidosController.getUniquePedido);
 router.put('/pedidos/cancel/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), verificarProprietario('pedidos', 'usuario_id'), validarId, validarRequisicao, pedidosController.cancelarPedido);

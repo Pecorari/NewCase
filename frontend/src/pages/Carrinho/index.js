@@ -41,7 +41,7 @@ const Carrinho = () => {
   const removeCart = async (id) => {
     try {
       await api.delete(`/carrinho/del/${id}`);
-      console.log('removido!');
+      
       atualizarQtdCarrinho();
       getProdutos();
     } catch (error) {

@@ -1,17 +1,17 @@
 const pedidosModel = require('../models/pedidosModel');
 
-const createPedido = async (req, res) => {
-    try {
-        const { dataPedido, itens } = req.body;
+// const createPedido = async (req, res) => {
+//     try {
+//         const { dataPedido, itens } = req.body;
 
-        const pedido = await pedidosModel.createPedido(dataPedido, itens, req.usuario.id);
+//         const pedido = await pedidosModel.createPedido(dataPedido, itens, req.usuario.id);
 
-        return res.status(200).json(pedido);
-    } catch (error) {
-        console.log('Erro em createPedido:', error);
-        return res.status(500).json({ error: 'Erro interno no servidor' })
-    }
-};
+//         return res.status(200).json(pedido);
+//     } catch (error) {
+//         console.log('Erro em createPedido:', error);
+//         return res.status(500).json({ error: 'Erro interno no servidor' })
+//     }
+// };
 
 const getAllMyPedidos = async (req, res) => {
     try {
@@ -107,7 +107,7 @@ const deletePedido = async (req, res) => {
 
 
 module.exports = {
-    createPedido,
+    // createPedido,
     getAllMyPedidos,
     getUniquePedido,
     cancelarPedido,

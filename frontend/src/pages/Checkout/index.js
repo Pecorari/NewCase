@@ -34,11 +34,7 @@ const Checkout = () => {
   const [nomeCard, setNomeCard] = useState("");
   const [validadeCard, setValidadeCard] = useState("");
   const [cvvCard, setCvvCard] = useState("");
-  const [tipoCard, setTipoCard] = useState("credito");
   const [publicKey, setPublicKey] = useState("");
-  const [qrCode, setQrCode] = useState(null);
-  const [chavePix, setChavePix] = useState('');
-  const [pdfBoleto, setPdfBoleto] = useState('');
 
   const navigate = useNavigate();
 
@@ -122,14 +118,94 @@ const Checkout = () => {
     }
   };
 
-  const gerarPedido = async () => {
-    const valorFrete = Number(freteSelecionado?.price?.toString().replace(',', '.') || 0);
-    const subTotal = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
-    const totalComFrete = Number((subTotal + valorFrete).toFixed(2));
+  // const gerarPedido = async () => {
+  //   const valorFrete = Number(freteSelecionado?.price?.toString().replace(',', '.') || 0);
+  //   const subTotal = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
+  //   const totalComFrete = Number((subTotal + valorFrete).toFixed(2));
 
-    const cepFormatado = Number(enderecoSelecionado.cep.replace(/\D/g, ""));
+  //   const cepFormatado = Number(enderecoSelecionado.cep.replace(/\D/g, ""));
 
+  //   try {
+  //     const dataPedido = {
+  //       total: totalComFrete,
+  //       endereco_rua: enderecoSelecionado.rua,
+  //       endereco_numero: Number(enderecoSelecionado.numero),
+  //       endereco_bairro: enderecoSelecionado.bairro,
+  //       endereco_cidade: enderecoSelecionado.cidade,
+  //       endereco_estado: enderecoSelecionado.estado,
+  //       endereco_cep: cepFormatado,
+  //       endereco_complemento: enderecoSelecionado.complemento,
+  //       frete_nome: freteSelecionado.name,
+  //       frete_logo: freteSelecionado.company?.picture || "",
+  //       frete_valor: Number(freteSelecionado.price),
+  //       frete_prazo: freteSelecionado.delivery_time,
+  //     };
+
+  //     const itens = produtos.map((p) => ({
+  //       produto_id: Number(p.produto_id),
+  //       preco_unitario: Number(p.preco),
+  //       quantidade: Number(p.quantidade),
+  //     }));
+
+  //     const response = await api.post("/pedidos/add", { dataPedido, itens });
+
+  //     if (response.data.pedido) {
+  //       await api.delete("/carrinho/limpar");
+  //       setProdutos([]);
+  //       atualizarQtdCarrinho();
+  //       // setPedidoId(response.data.pedido.id);
+  //       return response.data;
+  //     } else {
+  //       alert("Erro ao criar pedido");
+  //     }
+  //   } catch (err) {
+  //     console.error("Erro ao gerar pedido:", err);
+  //     alert("Erro ao gerar pedido, tente novamente");
+  //   }
+  // };
+  // const gerarPagamento = async (pedidoGerado, cartaoEncriptado) => {
+  //   const subTotal = pedidoGerado.itens.reduce((acc, p) => acc + Number(p.preco_unitario) * Number(p.quantidade), 0);
+  //   const Total = subTotal + Number(pedidoGerado.pedido.frete_valor);
+
+  //   const payload = {
+  //     metodo,
+  //     pedido: {
+  //       id: pedidoGerado.pedido.id,
+  //       itens: pedidoGerado.itens,
+  //       subtotal: (subTotal.toFixed(2)),
+  //       frete: pedidoGerado.pedido.frete_valor,
+  //       total: (Total.toFixed(2))
+  //     },
+  //     cliente: userData,
+  //     endereco_entrega: enderecoSelecionado,
+  //     pagamento: {}
+  //   }
+
+  //   if (metodo === "cartao") {
+  //     payload.pagamento.cartao = {
+  //       encrypted: cartaoEncriptado
+  //     };
+  //   } else if (metodo === "boleto") {
+  //     payload.pagamento = { tipo: "boleto" };
+  //   } else if (metodo === "pix") {
+  //     payload.pagamento = { tipo: "pix" };
+  //   }
+    
+  //   const response = await api.post("/checkout/pagar", payload);
+
+  //   return response.data;
+  // }
+
+
+
+  const checkout = async (cartaoEncriptado) => {
     try {
+      const valorFrete = Number(freteSelecionado?.price?.toString().replace(',', '.') || 0);
+      const subTotal = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
+      const totalComFrete = Number((subTotal + valorFrete).toFixed(2));
+
+      const cepFormatado = Number(enderecoSelecionado.cep.replace(/\D/g, ""));
+
       const dataPedido = {
         total: totalComFrete,
         endereco_rua: enderecoSelecionado.rua,
@@ -141,7 +217,7 @@ const Checkout = () => {
         endereco_complemento: enderecoSelecionado.complemento,
         frete_nome: freteSelecionado.name,
         frete_logo: freteSelecionado.company?.picture || "",
-        frete_valor: Number(freteSelecionado.price),
+        frete_valor: valorFrete,
         frete_prazo: freteSelecionado.delivery_time,
       };
 
@@ -151,56 +227,36 @@ const Checkout = () => {
         quantidade: Number(p.quantidade),
       }));
 
-      const response = await api.post("/pedidos/add", { dataPedido, itens });
+      const payload = {
+        dataPedido,
+        itens,
+        metodo,
+        cliente: userData,
+        endereco_entrega: enderecoSelecionado,
+        pagamento: {}
+      };
 
-      if (response.data.pedido) {
-        await api.delete("/carrinho/limpar");
-        setProdutos([]);
-        atualizarQtdCarrinho();
-        return response.data;
-      } else {
-        alert("Erro ao criar pedido");
+      if (metodo === "cartao") {
+        payload.pagamento = {
+          encrypted: cartaoEncriptado,
+          titular: nomeCard
+        };
+      } else if (metodo === "boleto") {
+        payload.pagamento = { tipo: "boleto" };
+      } else if (metodo === "pix") {
+        payload.pagamento = { tipo: "pix" };
       }
+
+      const response = await api.post("/checkout", payload);
+
+      return response.data;
     } catch (err) {
-      console.error("Erro ao gerar pedido:", err);
-      alert("Erro ao gerar pedido, tente novamente");
+      console.error("Erro ao gerar checkout:", err.response?.data || err.message);
+      alert("Erro ao gerar checkout. Tente novamente.");
     }
   };
 
-  const gerarPagamento = async (pedidoGerado, cartaoEncriptado) => {
-    const subTotal = pedidoGerado.itens.reduce((acc, p) => acc + Number(p.preco_unitario) * Number(p.quantidade), 0);
-    const Total = subTotal + Number(pedidoGerado.pedido.frete_valor);
 
-    const payload = {
-      metodo,
-      pedido: {
-        id: pedidoGerado.pedido.id,
-        itens: pedidoGerado.itens,
-        subtotal: (subTotal.toFixed(2)),
-        frete: pedidoGerado.pedido.frete_valor,
-        total: (Total.toFixed(2))
-      },
-      cliente: userData,
-      endereco_entrega: enderecoSelecionado,
-      pagamento: {}
-    }
-
-    if (metodo === "cartao") {
-      payload.pagamento.cartao = {
-        tipo: tipoCard,
-        encrypted: cartaoEncriptado
-      };
-    } else if (metodo === "boleto") {
-      payload.pagamento = { tipo: "boleto" };
-    } else if (metodo === "pix") {
-      payload.pagamento = { tipo: "pix" };
-    }
-    
-    const response = await api.post("/checkout/pagar", payload);
-
-    console.log(response.data);
-    return response.data;
-  }
 
   const encryptCard = async () => {
     const [mes, ano] = validadeCard.split('/');
@@ -223,40 +279,31 @@ const Checkout = () => {
 
     const encryptedCard = card.encryptedCard;
 
-    console.log(encryptedCard);
     return encryptedCard;
   };
 
   const finalizarCompra = async () => {
-    try {
-      const novoPedido = await gerarPedido();
-
-      if (!novoPedido) {
-        alert("Não foi possível criar o pedido.");
-        return;
-      }
-      
+    try {   
       let cartaoEncriptado = null
 
-      if (metodo === 'catao') {
+      if (metodo === 'cartao') {
         cartaoEncriptado = await encryptCard();
       }
 
-      const pagamento = await gerarPagamento(novoPedido, cartaoEncriptado);
-
-      if (metodo === "boleto") {
-        setPdfBoleto(pagamento.charges[0].links.find(l => l.media === "application/pdf").href);
-      } else if (metodo === "pix") {
-        const qr = pagamento.qr_codes?.[0];
-        if (qr) {
-          console.log("Chave PIX:", qr.text);
-          setQrCode(qr.links.find(l => l.rel === "QRCODE.PNG").href);
-          setChavePix(qr.text);
-        }
-      } else if (metodo === "cartao") {
-        alert("Pagamento com cartão processado!");
+      const response = await checkout(cartaoEncriptado);
+      console.log(response);
+      
+      if (metodo === "cartao") {
         console.log("Pagamento com cartão processado!");
+        
+        navigate(`/pedido/${response.pedido.id}`);
       }
+
+      await api.delete("/carrinho/limpar");
+      setProdutos([]);
+      atualizarQtdCarrinho();
+      navigate(`/pedido/${response.pedido.id}`);
+      
     } catch (err) {
       console.error("Erro ao finalizar compra:", err);
       alert("Erro ao finalizar compra");
@@ -413,17 +460,6 @@ const Checkout = () => {
                   {metodo === "cartao" && (
                     <div className="cartao-container">
                       <div className="entradas-box">
-                        <div className="tipo-cartao">
-                          <label>
-                            <input type="radio" value="credito" checked={tipoCard === "credito"} onChange={() => setTipoCard("credito")} style={{ marginRight: '5px' }}/>
-                            Crédito
-                          </label>
-                          <label>
-                            <input type="radio" value="debito" checked={tipoCard === "debito"} onChange={() => setTipoCard("debito")} style={{ marginRight: '5px' }}/>
-                            Débito
-                          </label>
-                        </div>
-
                         <input className="input-pagamento" type="text" placeholder="Número do Cartão"
                           value={numeroCard}
                           onChange={(e) => setNumeroCard(e.target.value)}
@@ -455,10 +491,9 @@ const Checkout = () => {
 
                   {metodo === "boleto" && (
                     <div>
-                      <h4>Gerar Boleto</h4>
-                        <p>O boleto será gerado com seus dados cadastrados.</p>
+                      <h4>O boleto será gerado após você finalizar a compra.</h4>
 
-                      <div>
+                      {/* <div>
                         {pdfBoleto && (
                           <>
                             <iframe 
@@ -474,23 +509,22 @@ const Checkout = () => {
                             </a>
                           </>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   )}
 
                   {metodo === "pix" && (
                     <div>
-                      <h4>Pagar via PIX</h4>
-                      <p>Escaneie o QR Code ou copie a chave PIX para pagar.</p>
+                      <h4>O código QR / Chave PIX será gerado após você finalizar a compra.</h4>
 
-                      {qrCode && (
+                      {/* {qrCode && (
                         <>
                           <img src={`${qrCode}`} alt="QR Code PIX" style={{ maxHeight: '200px' }}/>
                           <button onClick={() => navigator.clipboard.writeText(chavePix)}>
                             Copiar Chave PIX
                           </button>
                         </>
-                      )}
+                      )} */}
                     </div>
                   )}
                 </div>
