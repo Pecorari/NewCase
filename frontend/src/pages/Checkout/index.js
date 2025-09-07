@@ -35,6 +35,8 @@ const Checkout = () => {
   const [validadeCard, setValidadeCard] = useState("");
   const [cvvCard, setCvvCard] = useState("");
   const [publicKey, setPublicKey] = useState("");
+  const [statusPagamento, setStatusPagamento] = useState(null);
+  const [mensagemErro, setMensagemErro] = useState("");
 
   const navigate = useNavigate();
 
@@ -118,86 +120,6 @@ const Checkout = () => {
     }
   };
 
-  // const gerarPedido = async () => {
-  //   const valorFrete = Number(freteSelecionado?.price?.toString().replace(',', '.') || 0);
-  //   const subTotal = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
-  //   const totalComFrete = Number((subTotal + valorFrete).toFixed(2));
-
-  //   const cepFormatado = Number(enderecoSelecionado.cep.replace(/\D/g, ""));
-
-  //   try {
-  //     const dataPedido = {
-  //       total: totalComFrete,
-  //       endereco_rua: enderecoSelecionado.rua,
-  //       endereco_numero: Number(enderecoSelecionado.numero),
-  //       endereco_bairro: enderecoSelecionado.bairro,
-  //       endereco_cidade: enderecoSelecionado.cidade,
-  //       endereco_estado: enderecoSelecionado.estado,
-  //       endereco_cep: cepFormatado,
-  //       endereco_complemento: enderecoSelecionado.complemento,
-  //       frete_nome: freteSelecionado.name,
-  //       frete_logo: freteSelecionado.company?.picture || "",
-  //       frete_valor: Number(freteSelecionado.price),
-  //       frete_prazo: freteSelecionado.delivery_time,
-  //     };
-
-  //     const itens = produtos.map((p) => ({
-  //       produto_id: Number(p.produto_id),
-  //       preco_unitario: Number(p.preco),
-  //       quantidade: Number(p.quantidade),
-  //     }));
-
-  //     const response = await api.post("/pedidos/add", { dataPedido, itens });
-
-  //     if (response.data.pedido) {
-  //       await api.delete("/carrinho/limpar");
-  //       setProdutos([]);
-  //       atualizarQtdCarrinho();
-  //       // setPedidoId(response.data.pedido.id);
-  //       return response.data;
-  //     } else {
-  //       alert("Erro ao criar pedido");
-  //     }
-  //   } catch (err) {
-  //     console.error("Erro ao gerar pedido:", err);
-  //     alert("Erro ao gerar pedido, tente novamente");
-  //   }
-  // };
-  // const gerarPagamento = async (pedidoGerado, cartaoEncriptado) => {
-  //   const subTotal = pedidoGerado.itens.reduce((acc, p) => acc + Number(p.preco_unitario) * Number(p.quantidade), 0);
-  //   const Total = subTotal + Number(pedidoGerado.pedido.frete_valor);
-
-  //   const payload = {
-  //     metodo,
-  //     pedido: {
-  //       id: pedidoGerado.pedido.id,
-  //       itens: pedidoGerado.itens,
-  //       subtotal: (subTotal.toFixed(2)),
-  //       frete: pedidoGerado.pedido.frete_valor,
-  //       total: (Total.toFixed(2))
-  //     },
-  //     cliente: userData,
-  //     endereco_entrega: enderecoSelecionado,
-  //     pagamento: {}
-  //   }
-
-  //   if (metodo === "cartao") {
-  //     payload.pagamento.cartao = {
-  //       encrypted: cartaoEncriptado
-  //     };
-  //   } else if (metodo === "boleto") {
-  //     payload.pagamento = { tipo: "boleto" };
-  //   } else if (metodo === "pix") {
-  //     payload.pagamento = { tipo: "pix" };
-  //   }
-    
-  //   const response = await api.post("/checkout/pagar", payload);
-
-  //   return response.data;
-  // }
-
-
-
   const checkout = async (cartaoEncriptado) => {
     try {
       const valorFrete = Number(freteSelecionado?.price?.toString().replace(',', '.') || 0);
@@ -251,12 +173,16 @@ const Checkout = () => {
 
       return response.data;
     } catch (err) {
-      console.error("Erro ao gerar checkout:", err.response?.data || err.message);
-      alert("Erro ao gerar checkout. Tente novamente.");
+      if (err.response?.data?.error_messages) {
+        const mensagens = err.response.data.error_messages
+          .map(e => `${e.parameter_name || ''} - ${e.description}`)
+          .join("\n");
+        throw new Error(mensagens);
+      }
+
+      throw new Error("Erro inesperado ao gerar checkout.");
     }
   };
-
-
 
   const encryptCard = async () => {
     const [mes, ano] = validadeCard.split('/');
@@ -283,7 +209,10 @@ const Checkout = () => {
   };
 
   const finalizarCompra = async () => {
-    try {   
+    try {
+      setStatusPagamento("loading");
+      setMensagemErro("");
+
       let cartaoEncriptado = null
 
       if (metodo === 'cartao') {
@@ -292,21 +221,31 @@ const Checkout = () => {
 
       const response = await checkout(cartaoEncriptado);
       console.log(response);
-      
-      if (metodo === "cartao") {
-        console.log("Pagamento com cartão processado!");
-        
-        navigate(`/pedido/${response.pedido.id}`);
-      }
 
-      await api.delete("/carrinho/limpar");
-      setProdutos([]);
-      atualizarQtdCarrinho();
-      navigate(`/pedido/${response.pedido.id}`);
+      const statusPag = response?.dadosOrder?.charges?.[0]?.status;
+      const codePag = response?.dadosOrder?.charges?.[0]?.payment_response?.code;
       
+      if (statusPag === "DECLINED" ||codePag === "10002") {
+        setStatusPagamento("error");
+        setMensagemErro(response?.dadosOrder?.charges[0].payment_response?.message || "Pagamento recusado");
+        setTimeout(() => setStatusPagamento(null), 5000);
+        return;
+      }
+      
+      setStatusPagamento("success");
+
+      setTimeout(async () => {
+        await api.delete("/carrinho/limpar");
+        setProdutos([]);
+        atualizarQtdCarrinho();
+        navigate(`/pedido/${response.pedido.id}`);
+      }, 1500); // espera 1.5s para mostrar o check animado
+    
     } catch (err) {
-      console.error("Erro ao finalizar compra:", err);
-      alert("Erro ao finalizar compra");
+      console.error("Erro ao finalizar compra:", err.message);
+      setMensagemErro(err.message || "Erro ao processar pagamento");
+      setStatusPagamento("error");
+      setTimeout(() => setStatusPagamento(null), 3000);
     }
   };
 
@@ -476,6 +415,7 @@ const Checkout = () => {
                           value={cvvCard}
                           onChange={(e) => setCvvCard(e.target.value)}
                         />
+                        {mensagemErro ? <p className="error-feedback">{mensagemErro}</p> : <></>}
                       </div>
 
                       <div className="cartao-mockup">
@@ -539,6 +479,38 @@ const Checkout = () => {
           )}
         </div>
       </div>
+
+      {statusPagamento && (
+        <div className="overlay"   onClick={() => {if (statusPagamento === "error") setStatusPagamento(null)}}>
+          <div className="overlay-content">
+            {statusPagamento === "loading" && (
+              <>
+                <div className="spinner"></div>
+                <p className="msg">Processando pagamento...</p>
+              </>
+            )}
+
+            {statusPagamento === "success" && (
+              <>
+                <div className="circle success">
+                  <span>✔</span>
+                </div>
+                <p className="msg success">Pagamento confirmado!</p>
+              </>
+            )}
+
+            {statusPagamento === "error" && (
+              <>
+                <div className="circle error">
+                  <span>✖</span>
+                </div>
+                <p className="msg error">Erro no pagamento</p>
+                <p className="msg small">{mensagemErro}</p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

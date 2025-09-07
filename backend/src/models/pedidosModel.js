@@ -1,40 +1,5 @@
 const connection = require('../database/connection');
 
-// const createPedido = async (dataPedido, itens, idLogado) => {
-//   const conn = await connection.getConnection();
-//   try {
-//     await conn.beginTransaction();
-    
-//     const { total, endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo } = dataPedido;
-//     const [result] = await connection.execute(`
-//       INSERT INTO pedidos(usuario_id, total, status, endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo) 
-//       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-//     `, [idLogado, total, 'Aguardando Pagamento', endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo]);
-
-//     const pedidoId = result.insertId;
-
-//     for (const item of itens) {
-//       await connection.execute('INSERT INTO pedido_itens (pedido_id, produto_id, preco_unitario, quantidade) VALUES (?, ?, ?, ?)',
-//         [pedidoId, item.produto_id, item.preco_unitario, item.quantidade]);
-//     }
-
-//     const [pedidoCriado] = await connection.execute('SELECT * FROM pedidos WHERE id = ?', [pedidoId]);
-//     const [pedidoItensCriado] = await connection.execute('SELECT * FROM pedido_itens WHERE pedido_id = ?', [pedidoId]);
-
-//     await conn.commit();
-
-//     return {
-//       pedido: pedidoCriado[0],
-//       itens: pedidoItensCriado,
-//     };
-//   } catch (err) {
-//     await conn.rollback();
-//     throw err;
-//   } finally {
-//     conn.release();
-//   }
-// };
-
 const createPedidoWithConn = async (conn, dataPedido, itens, idLogado) => {
   const { total, endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo } = dataPedido;
 
@@ -360,7 +325,6 @@ const deletePedido = async (id) => {
 };
 
 module.exports = {
-  // createPedido,
   createPedidoWithConn,
   getAllMyPedidos,
   getUniquePedido,
