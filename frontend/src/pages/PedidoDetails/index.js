@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { QRCodeSVG } from "qrcode.react";
 import api from '../../hooks/useApi';
 
 import Header from '../../components/Header';
@@ -15,6 +16,7 @@ function PedidoDetail() {
   const [pagamento, setPagamento] = useState(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
+  const [mensagemPag, setmensagemPag] = useState(null);
 
   useEffect(() => {
     getPedido();
@@ -29,6 +31,7 @@ function PedidoDetail() {
       setItens(response.data.itens);
       setPagamento(response.data.pagamento[0]);
       setLoading(false);
+      console.log(response.data.pagamento[0]);
     } catch (error) {
       setErro('Não foi possível carregar o pedido.');
       setLoading(false);
@@ -100,15 +103,58 @@ function PedidoDetail() {
             </div>
 
             <div className='left-column'>
-              {/* {pagamento && ( */}
+              {pagamento && (
                 <section className="secao-pagamento">
                   <h2>Pagamento</h2>
-                  <p>Forma de Pagamento: {pagamento?.metodo_pagamento}</p>
-                  <p>Status do Pagamento: {pagamento?.status_pagamento || 'Aguardando confirmação do pagamento'}</p>
-                  {pagamento?.pago_em ? <p>Valor a ser pago: {pagamento?.valor_pago}</p> : <></>}
-                  <p>Pago em {formatarDataHora(pagamento?.pago_em)}</p>
+                  <div className='pagamento-container'>
+                    <div className='infPagamento'>
+                      <p>Forma de Pagamento: {pagamento?.metodo_pagamento}</p>
+                      <p>Status do Pagamento: {pagamento?.status_pagamento || 'Aguardando confirmação do pagamento'}</p>
+                      {pagamento?.pago_em === null && (
+                        <p>Valor a ser pago: {Number(pagamento.valor_total).toFixed(2)}</p>
+                      )}
+                      {pagamento?.pago_em !== null && (
+                        <>
+                          <p>Valor pago: {Number(pagamento.valor_total).toFixed(2)}</p>
+                          <p>Pago em {formatarDataHora(pagamento?.pago_em)}</p>
+                        </>
+                      )}
+                    </div>
+          
+                    {pagamento?.chave_pix && (
+                      <div className='boleto-pix'>
+                        <QRCodeSVG value={pagamento?.chave_pix} marginSize={1} className='qrCode' />
+                        <div className='btn-msg'>
+                          {mensagemPag && <span>{mensagemPag}</span>}
+                          <button className='pagamentoBtn' onClick={() => {
+                            navigator.clipboard.writeText(pagamento?.chave_pix);
+                            setmensagemPag('Chave Pix copiada!');
+                          }}>
+                            Copiar Chave PIX
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {pagamento?.link_boleto && (
+                    <div className='boleto-pix'>
+                      <iframe 
+                        src={pagamento?.link_boleto}
+                        title="Boleto"
+                        className='boleto'
+                      >
+                      </iframe>
+                      <div className='btn-msg'>
+                        {mensagemPag && <span>{mensagemPag}</span>}
+                        <a href={pagamento?.link_boleto} target="_blank" rel="noopener noreferrer">
+                          <button className='pagamentoBtn'>Baixar Boleto</button>
+                        </a>
+                      </div>
+                    </div>
+                  )}
                 </section>
-              {/* )} */}
+              )}
               {pedido && (
                 <section className="secao-frete">
                   <h2>Frete</h2>

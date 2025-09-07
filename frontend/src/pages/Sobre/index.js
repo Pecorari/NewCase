@@ -65,8 +65,6 @@ function Sobre() {
             <p>Trabalhamos em conjunto com marcas que compartilham os mesmos valores que a nossa loja.</p>
             <div className="logos">
               <a href='https://homecellofficial.com.br/' target='blank'><img src={homecell} alt="HomeCell" /></a>
-              <a href='https://homecellofficial.com.br/' target='blank'><img src={homecell} alt="HomeCell" /></a>
-              <a href='https://homecellofficial.com.br/' target='blank'><img src={homecell} alt="HomeCell" /></a>
             </div>
           </section>
 

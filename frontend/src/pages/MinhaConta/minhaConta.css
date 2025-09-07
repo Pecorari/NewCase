@@ -40,7 +40,7 @@ form .label-account {
   width: 100%;
   padding: 8px 15px;
   font-size: 0.8rem;
-  border: 1px solid #FF6EC7;
+  border: 1px solid var(--color-primary);
   border-radius: 8px;
   outline: none;
   color: white;
@@ -124,6 +124,16 @@ form .lb-password {
 .meus-pedidos {
   margin-top: 30px;
 }
+.pedidos {
+  max-height: 400px;
+  overflow-y: auto;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pedidos::-webkit-scrollbar {
+  display: none;
+}
 .pedidos p {
   font-size: 0.8rem;
 }
@@ -141,8 +151,15 @@ form .lb-password {
 .pedido-card:hover {
   transform: scale(1.02);
 }
-.pedido-box {
+.pedido-box-first {
   display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+.pedido-box-second {
+  display: flex;
+  flex: 2;
   flex-direction: column;
   gap: 5px;
 }
@@ -231,7 +248,9 @@ form .lb-password {
     grid-row: 1;
     margin-top: 0px;
   }
-  
+  .pedidos {
+    max-height: 1050px;
+  }
   .pedidos p {
     font-size: 0.9rem;
   }

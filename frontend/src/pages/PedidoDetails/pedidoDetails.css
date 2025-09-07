@@ -134,6 +134,47 @@ ul {
   gap: 5px;
 }
 
+.infPagamento {
+  margin-bottom: 1.5rem;
+}
+.boleto-pix {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+}
+.boleto {
+  width: 100%;
+  height: 200px;
+  border: none;
+}
+.qrCode {
+  width: 150px;
+  height: auto;
+}
+.btn-msg {
+  display: flex;
+  flex-direction: column;
+  margin: 15px auto;
+}
+.btn-msg span {
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+}
+.pagamentoBtn {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 6px 15px;
+  font-size: 0.8rem;
+  transition: 0.3s;
+}
+.pagamentoBtn:hover {
+  background-color: var(--color-strong);
+}
+
 .secao-frete img {
   height: 20px;
 }
@@ -163,6 +204,13 @@ ul {
     width: 68%;
     justify-content: space-between;
   }
+  
+  .boleto {
+    height: 350px;
+  }
+  .qrCode {
+    width: 170px;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -179,6 +227,10 @@ ul {
   }
   .secao-frete img {
     height: 30px;
+  }
+
+  .boleto {
+    height: 200px;
   }
 }
 
@@ -238,6 +290,15 @@ ul {
     gap: 10px;
   }
 
+  .pagamento-container {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 5px;
+  }
+  .qrCode {
+    margin: 5px;
+  }
+
   .rodape {
     margin-top: 6rem;
     font-size: 0.8rem;
@@ -282,6 +343,12 @@ ul {
     font-size: 1rem;
   }
 
+  .boleto {
+    height: 280px;
+  }
+  .qrCode {
+    width: 200px;
+  }
 }
 
 @media (min-width: 1900px) {
@@ -319,6 +386,11 @@ ul {
   .boxes-valor-pd {
     gap: 13px;
   }
+
+  .pagamentoBtn {
+    padding: 7px 16px;
+    font-size: 0.95rem;
+  }
   
   .rodape {
     font-size: 0.95rem;
@@ -354,6 +426,10 @@ ul {
   }
   .boxes-valor-pd {
     gap: 17px;
+  }
+
+  .qrCode {
+    width: 230px;
   }
 
   .rodape {

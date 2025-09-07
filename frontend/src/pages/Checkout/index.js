@@ -432,39 +432,12 @@ const Checkout = () => {
                   {metodo === "boleto" && (
                     <div>
                       <h4>O boleto será gerado após você finalizar a compra.</h4>
-
-                      {/* <div>
-                        {pdfBoleto && (
-                          <>
-                            <iframe 
-                              src={pdfBoleto} 
-                              width="100%" 
-                              height="300px"
-                              style={{ border: 'none' }}
-                              title="Boleto"
-                            >
-                            </iframe>
-                            <a href={pdfBoleto} target="_blank" rel="noopener noreferrer">
-                              <button>Baixar Boleto</button>
-                            </a>
-                          </>
-                        )}
-                      </div> */}
                     </div>
                   )}
 
                   {metodo === "pix" && (
                     <div>
                       <h4>O código QR / Chave PIX será gerado após você finalizar a compra.</h4>
-
-                      {/* {qrCode && (
-                        <>
-                          <img src={`${qrCode}`} alt="QR Code PIX" style={{ maxHeight: '200px' }}/>
-                          <button onClick={() => navigator.clipboard.writeText(chavePix)}>
-                            Copiar Chave PIX
-                          </button>
-                        </>
-                      )} */}
                     </div>
                   )}
                 </div>

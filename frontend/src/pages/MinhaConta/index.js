@@ -234,11 +234,11 @@ const MinhaConta = () => {
                 <p style={{ marginBottom: '10px', marginLeft: '10px' }}>Você ainda não fez um pedido.</p>
               : pedidos.map((pedido) => (
                 <div key={pedido.id} className={'pedido-card'} onClick={() => {navigate(`/pedido/${pedido.id}`)}}>
-                  <div className='pedido-box'>
+                  <div className='pedido-box-first'>
                     <p><strong>Pedido #{pedido.id}</strong></p>
                     <p>Total: {pedido.total}</p>
                   </div>
-                  <div className='pedido-box'>
+                  <div className='pedido-box-second'>
                     <p>Data: {formatarDataHora(pedido.criado_em)}</p>
                     <p>Status: {pedido.status}</p>
                   </div>
