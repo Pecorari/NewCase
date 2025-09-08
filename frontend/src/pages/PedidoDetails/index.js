@@ -121,7 +121,7 @@ function PedidoDetail() {
                       )}
                     </div>
           
-                    {pagamento?.chave_pix && (
+                    {pagamento?.chave_pix && pagamento?.status_pagamento !== 'Expirado' && pagamento?.pago_em === null && (
                       <div className='boleto-pix'>
                         <QRCodeSVG value={pagamento?.chave_pix} marginSize={1} className='qrCode' />
                         <div className='btn-msg'>
@@ -137,7 +137,7 @@ function PedidoDetail() {
                     )}
                   </div>
 
-                  {pagamento?.link_boleto && (
+                  {pagamento?.link_boleto && pagamento?.pago_em === null && (
                     <div className='boleto-pix'>
                       <iframe 
                         src={pagamento?.link_boleto}

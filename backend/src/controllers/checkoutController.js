@@ -111,22 +111,22 @@ const notificacao = async (req, res) => {
     const valor = charge.amount?.value ? charge.amount.value / 100 : 0;
 
     if (status === "PAID" || status === "AUTHORIZED") {
-      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Aprovado', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[metodo, valor, paid_at, pagbank_pag_id, status, pedidoId]);
+      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Aprovado', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[valor, paid_at, pagbank_pag_id, status, pedidoId]);
       await connection.execute(`UPDATE pedidos SET status = 'Preparando para envio' WHERE id = ?`, [pedidoId]);
     } else if (status === "WAITING" || status === "IN_ANALYSIS") {
-      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Pendente', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[metodo, valor, paid_at, pagbank_pag_id, status, pedidoId]);
+      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Pendente', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[valor, paid_at, pagbank_pag_id, status, pedidoId]);
       await connection.execute(`UPDATE pedidos SET status = 'Aguardando pagamento' WHERE id = ?`, [pedidoId]);
     } else if (status === "CANCELED" || status === "DECLINED") {
-      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Cancelado', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[metodo, valor, paid_at, pagbank_pag_id, status, pedidoId]);
+      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Cancelado', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[valor, paid_at, pagbank_pag_id, status, pedidoId]);
       await connection.execute(`UPDATE pedidos SET status = 'Cancelado' WHERE id = ?`, [pedidoId]);
     } else if (status === "EXPIRED") {
-      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Expirado', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[metodo, valor, paid_at, pagbank_pag_id, status, pedidoId]);
+      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Expirado', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[valor, paid_at, pagbank_pag_id, status, pedidoId]);
       await connection.execute(`UPDATE pedidos SET status = 'Cancelado' WHERE id = ?`, [pedidoId]);
     } else if (status === "CHARGEBACK" || status === "IN_DISPUTE")  {
-      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Em análise', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[metodo, valor, paid_at, pagbank_pag_id, status, pedidoId]);
+      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Em análise', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[valor, paid_at, pagbank_pag_id, status, pedidoId]);
       await connection.execute(`UPDATE pedidos SET status = 'Cancelado' WHERE id = ?`, [pedidoId]);
-    } if (status === "REFUNDED")  {
-      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Reembolsado', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[metodo, valor, paid_at, pagbank_pag_id, status, pedidoId]);
+    } else if (status === "REFUNDED")  {
+      await connection.execute(`UPDATE pagamentos SET status_pagamento = 'Reembolsado', valor_total = ?, pago_em = ?, pagbank_pag_id = ?, pagbank_status = ? WHERE pedido_id = ?`,[valor, paid_at, pagbank_pag_id, status, pedidoId]);
       await connection.execute(`UPDATE pedidos SET status = 'Cancelado' WHERE id = ?`, [pedidoId]);
     }
 
