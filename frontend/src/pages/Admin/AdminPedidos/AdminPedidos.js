@@ -92,21 +92,21 @@ const AdminPedidos = () => {
       )}
 
       {pedidoSelecionado && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="modal-adm">
+          <div className="modal-content-adm">
             <h2>Detalhes do Pedido #{pedidoSelecionado.pedido_id}</h2>
 
-            <div className="modal-grid">
+            <div className="modal-grid-adm">
               <div>
                 <section>
-                  <h3 className="subtitles-sections">Informações Gerais</h3>
+                  <h3 className="subtitles-sections-adm">Informações Gerais</h3>
                   <p>Status: {pedidoSelecionado.status}</p>
                   <p>Data do Pedido:{new Date(pedidoSelecionado.criado_em).toLocaleString()}</p>
                   <p>Total: R$ {pedidoSelecionado.total}</p>
                 </section>
 
                 <section>
-                  <h3 className="subtitles-sections">Endereço a ser entregue</h3>
+                  <h3 className="subtitles-sections-adm">Endereço a ser entregue</h3>
                   <p>Rua: {pedidoSelecionado.endereco.rua}</p>
                   <p>Número: {pedidoSelecionado.endereco.numero}</p>
                   <p>Bairro: {pedidoSelecionado.endereco.bairro}</p>
@@ -119,7 +119,7 @@ const AdminPedidos = () => {
 
               <div>
                 <section>
-                  <h3 className="subtitles-sections">Pagamento</h3>
+                  <h3 className="subtitles-sections-adm">Pagamento</h3>
                   {pedidoSelecionado.pagamento ? (
                     <>
                       <p>Forma de Pagamento: {pedidoSelecionado.pagamento.metodo}</p>
@@ -132,7 +132,7 @@ const AdminPedidos = () => {
                 </section>
 
                 <section>
-                  <h3 className="subtitles-sections">Frete</h3>
+                  <h3 className="subtitles-sections-adm">Frete</h3>
                   <p>Serviço: {pedidoSelecionado.frete.nome}</p>
                   <p>Entrega: {pedidoSelecionado.frete.prazo} dias úteis</p>
                   <p>Valor: R$ {pedidoSelecionado.frete.valor}</p>
@@ -141,17 +141,17 @@ const AdminPedidos = () => {
             </div>
 
             <section>
-              <h3 className="subtitles-sections">Itens do Pedido</h3>
-              <div className="itens-grid">
+              <h3 className="subtitles-sections-adm">Itens do Pedido</h3>
+              <div className="itens-grid-adm">
                 {pedidoSelecionado.itens.map((item, i) => (
-                  <div className="item-card" key={i}>
-                    <img src={item.produto_imagem_url} alt='Imagem do produto' className='img-item'/>
-                    <div className="item-pd-info">
-                      <div className='boxes-info-pd'>
-                        <h3>{item.nome} <span className='span-id'>ID: #{item.produto_id}</span></h3>
-                        <p className='compatibilidade'>{item.aparelho_nome}</p>
+                  <div className="item-card-adm" key={i}>
+                    <img src={item.produto_imagem_url} alt='Imagem do produto' className='img-item-adm'/>
+                    <div className="item-pd-info-adm">
+                      <div className='boxes-info-pd-adm'>
+                        <h3>{item.nome} <span className='span-id-adm'>ID: #{item.produto_id}</span></h3>
+                        <p className='compatibilidade-adm'>{item.aparelho_nome}</p>
                     </div>
-                    <div className='boxes-valor-pd'>
+                    <div className='boxes-valor-pd-adm'>
                         <p>Qtd: {item.quantidade}</p>
                         <p>R$ {item.preco_unitario}</p>
                       </div>

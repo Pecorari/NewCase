@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+// import visa from "../../assets/utils/pagamentos/bandeiras/visa.svg"
 import visa from "../../assets/utils/pagamentos/visa.png"
 import mastercard from "../../assets/utils/pagamentos/mastercard.png"
 import pix from "../../assets/utils/pagamentos/pix.png"

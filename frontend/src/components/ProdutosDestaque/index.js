@@ -45,7 +45,7 @@ function ProductCard() {
         const indice = indiceImagem[produto.id] || 0;
 
         return (
-          <div key={produto.id} onClick={() => {navigate('/carrinho')}} className="link-dstq">
+          <div key={produto.id} onClick={() => {navigate(`produto/${produto.id}`)}} className="link-dstq">
             <div className="produto-card-dstq">
               <div className="imagem-container-dtq">
                 {imagens.length > 0 && (

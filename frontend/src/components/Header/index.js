@@ -6,7 +6,7 @@ import { BsBag, BsSearch } from "react-icons/bs";
 import { IoIosArrowForward } from "react-icons/io";
 import { useAuth } from "../../context/AuthContext";
 import { useCarrinho } from '../../context/CarrinhoContext';
-import logoMyCellStore from '../../assets/utils/logo_semFundo.png';
+import logoMyCellStore from '../../assets/utils/logo/logo_nome2.png';
 import api from '../../hooks/useApi';
 
 import "./header.css";
@@ -125,7 +125,7 @@ function Header({ inLoja }) {
                 <ul className="sugestoes-list">
                   {sugestoes.map((item) => (
                     <li key={item.id} onClick={() => handleSelectSugestao(item.id)}>
-                      {item.nome} <br/> {item.aparelho} - {item.cor}
+                      {item.nome} <br/> {item.aparelho}
                     </li>
                   ))}
                 </ul>

@@ -3,6 +3,8 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import ModalNovoEndereco from '../../components/ModalNovoEndereco';
 
+import { FcSimCardChip } from "react-icons/fc";
+
 import { Stepper } from 'react-form-stepper';
 import { IMaskInput } from "react-imask";
 import { useNavigate } from 'react-router-dom';
@@ -419,7 +421,7 @@ const Checkout = () => {
                       </div>
 
                       <div className="cartao-mockup">
-                        <div className="chip"></div>
+                        <div className="chip"><FcSimCardChip /></div>
                         <div className="numero-cartao">{numeroCard || "•••• •••• •••• ••••"}</div>
                         <div className="nome-validade">
                           <span>{nomeCard || "NOME NO CARTÃO"}</span>

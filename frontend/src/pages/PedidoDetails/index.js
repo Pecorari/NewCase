@@ -55,7 +55,7 @@ function PedidoDetail() {
     <div className='myPedido'>
       <Header />
         <div className="pedido-detalhes">
-          <button className="btn-voltar" onClick={() => navigate(-1)}>&larr; Voltar</button>
+          <button className="btn-voltar" onClick={() => navigate('/perfil')}>&larr; Voltar</button>
           <h1>Detalhes do Pedido #{pedido.id}</h1>
 
           <div className='column-container'>

@@ -117,9 +117,10 @@
   top: 30px;
 }
 .sugestoes-list li {
-  padding: 8px 12px;
+  padding: 8px 5px;
   border-bottom: 1px solid #bebebe;
   cursor: pointer;
+  font-size: 0.7rem;
 }
 .sugestoes-list li:hover {
   background-color: #f0f0f0;
@@ -232,6 +233,11 @@
   }
   .search.scrolled {
     width: 12rem;
+  }
+
+  .sugestoes-list li {
+    padding: 8px 12px;
+    font-size: 1rem;
   }
   
   .loginIcon {
