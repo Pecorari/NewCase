@@ -4,6 +4,7 @@ import Footer from "../../components/Footer";
 import ModalNovoEndereco from '../../components/ModalNovoEndereco';
 
 import { FcSimCardChip } from "react-icons/fc";
+import { FaRegCreditCard, FaLock } from "react-icons/fa6";
 
 import { Stepper } from 'react-form-stepper';
 import { IMaskInput } from "react-imask";
@@ -187,8 +188,15 @@ const Checkout = () => {
   };
 
   const encryptCard = async () => {
-    const [mes, ano] = validadeCard.split('/');
+    const erro = validarCartao({ numeroCard, nomeCard, validadeCard, cvvCard });
 
+    if (erro) {
+      setStatusPagamento("error");
+      setMensagemErro(erro);
+      throw new Error(erro);
+    }
+
+    const [mes, ano] = validadeCard.split('/');
     const onlyDigits = s => s.replace(/\D/g, '');
 
     const card = window.PagSeguro.encryptCard({
@@ -209,6 +217,41 @@ const Checkout = () => {
 
     return encryptedCard;
   };
+
+  function validarCartao({ numeroCard, nomeCard, validadeCard, cvvCard }) {
+    const onlyDigits = (s) => s.replace(/\D/g, "");
+
+    const numeroLimpo = onlyDigits(numeroCard);
+    if (numeroLimpo.length < 13 || numeroLimpo.length > 19) {
+      return "Número do cartão inválido.";
+    }
+
+    if (!nomeCard || nomeCard.trim().length < 3 || !nomeCard.includes(" ")) {
+      return "Informe o nome completo do titular.";
+    }
+
+    if (!/^\d{2}\/\d{2}$/.test(validadeCard)) {
+      return "Validade inválida. Use MM/AA.";
+    }
+    const [mes, ano] = validadeCard.split("/").map((v) => parseInt(v, 10));
+    const dataAtual = new Date();
+    const anoAtual = parseInt(dataAtual.getFullYear().toString().slice(-2), 10);
+    const mesAtual = dataAtual.getMonth() + 1;
+
+    if (mes < 1 || mes > 12) {
+      return "Mês da validade inválido.";
+    }
+    if (ano < anoAtual || (ano === anoAtual && mes < mesAtual)) {
+      return "Cartão expirado.";
+    }
+
+    const cvvLimpo = onlyDigits(cvvCard);
+    if (cvvLimpo.length < 3 || cvvLimpo.length > 4) {
+      return "CVV inválido.";
+    }
+
+    return null;
+  }
 
   const finalizarCompra = async () => {
     try {
@@ -384,6 +427,10 @@ const Checkout = () => {
           {/* Etapa 4 - Pagamento */}
           {step === 3 && (
             <div className="checkout-step">
+              <div className="processado-por">
+                <span>Processado com segurança pelo</span>
+                <img src='/bandeiras/pagbank2.svg' alt="PagBank" />
+              </div>
               <div className="pagamento-opcoes">
                 <div className="abas-pagamento">
                   <button className={`aba ${metodo === "cartao" ? "ativa" : ""}`} onClick={() => setMetodo("cartao")}>
@@ -393,6 +440,7 @@ const Checkout = () => {
                     Boleto
                   </button>
                   <button className={`aba ${metodo === "pix" ? "ativa" : ""}`} onClick={() => setMetodo("pix")}>
+                    <img src='bandeiras/pix2.svg' className="icon-pix" alt="icone do PIX" />
                     PIX
                   </button>
                 </div>
@@ -401,31 +449,57 @@ const Checkout = () => {
                   {metodo === "cartao" && (
                     <div className="cartao-container">
                       <div className="entradas-box">
-                        <input className="input-pagamento" type="text" placeholder="Número do Cartão"
-                          value={numeroCard}
-                          onChange={(e) => setNumeroCard(e.target.value)}
-                        />
+                        <div className="input-icon">
+                          <IMaskInput
+                            mask="0000 0000 0000 0000"
+                            className="input-pagamento"
+                            placeholder="Número do Cartão"
+                            value={numeroCard}
+                            onAccept={(value) => setNumeroCard(value)}
+                          />
+                          <FaRegCreditCard />
+                        </div>
                         <input className="input-pagamento" type="text" placeholder="Nome no Cartão"
                           value={nomeCard}
                           onChange={(e) => setNomeCard(e.target.value.toUpperCase())}
                         />
-                        <input className="input-pagamento" type="text" placeholder="Validade (MM/AA)"
+                        <IMaskInput
+                          mask="00/00"
+                          className="input-pagamento"
+                          placeholder="Validade (MM/AA)"
                           value={validadeCard}
-                          onChange={(e) => setValidadeCard(e.target.value)}
+                          onAccept={(value) => setValidadeCard(value)}
                         />
-                        <input className="input-pagamento" type="text" placeholder="CVV"
-                          value={cvvCard}
-                          onChange={(e) => setCvvCard(e.target.value)}
-                        />
+                        <div className="input-icon">
+                          <IMaskInput
+                            mask="0000"
+                            className="input-pagamento"
+                            placeholder="CVV"
+                            value={cvvCard}
+                            onAccept={(value) => setCvvCard(value)}
+                          />
+                          <FaLock />
+                        </div>
                         {mensagemErro ? <p className="error-feedback">{mensagemErro}</p> : <></>}
                       </div>
 
-                      <div className="cartao-mockup">
-                        <div className="chip"><FcSimCardChip /></div>
-                        <div className="numero-cartao">{numeroCard || "•••• •••• •••• ••••"}</div>
-                        <div className="nome-validade">
-                          <span>{nomeCard || "NOME NO CARTÃO"}</span>
-                          <span className="validade">{validadeCard || "MM/AA"}</span>
+                      <div>
+                        <div className="cartao-mockup">
+                          <div className="chip"><FcSimCardChip /></div>
+                          <div className="numero-cartao">{numeroCard || "•••• •••• •••• ••••"}</div>
+                          <div className="nome-validade">
+                            <span>{nomeCard || "NOME NO CARTÃO"}</span>
+                            <span className="validade">{validadeCard || "MM/AA"}</span>
+                          </div>
+                        </div>
+                        <div className="logos-pagamento">
+                          <img src='/bandeiras/visa.svg' alt="Visa" className="bandeiras" />
+                          <img src='/bandeiras/mastercard.svg' alt="Mastercard" className="bandeiras" />
+                          <img src='/bandeiras/elo.svg' alt="Elo" className="bandeiras" />
+                          <img src='/bandeiras/hipercard.svg' alt="Hipercard" className="bandeiras" />
+                          <img src='/bandeiras/hiper.svg' alt="Hiper" className="bandeiras" />
+                          <img src='/bandeiras/american-express.svg' alt="American-Express" className="bandeiras" />
+                          <img src='/bandeiras/diners-club.svg' alt="Diners-Club" className="bandeiras" />
                         </div>
                       </div>
                     </div>
@@ -443,6 +517,11 @@ const Checkout = () => {
                     </div>
                   )}
                 </div>
+
+                <p className="info-seguranca">
+                  🔒 Não armazenamos dados do seu cartão.  
+                  Seus pagamentos são processados de forma 100% segura pelo PagBank.
+                </p>
               </div>
 
               <div className="checkout-buttons">

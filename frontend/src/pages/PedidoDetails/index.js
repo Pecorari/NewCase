@@ -105,7 +105,13 @@ function PedidoDetail() {
             <div className='left-column'>
               {pagamento && (
                 <section className="secao-pagamento">
-                  <h2>Pagamento</h2>
+                  <div className="title-pag">
+                    <h2>Pagamento</h2>
+                    <div className="pagbank-info">
+                      <span>Processado com segurança pelo</span>
+                      <img src="/bandeiras/pagbank2.svg" alt="Logo do PagBank" className="pagbank-logo" />
+                    </div>
+                  </div>
                   <div className='pagamento-container'>
                     <div className='infPagamento'>
                       <p>Forma de Pagamento: {pagamento?.metodo_pagamento}</p>
@@ -124,6 +130,7 @@ function PedidoDetail() {
                     {pagamento?.chave_pix && pagamento?.status_pagamento !== 'Expirado' && pagamento?.pago_em === null && (
                       <div className='boleto-pix'>
                         <QRCodeSVG value={pagamento?.chave_pix} marginSize={1} className='qrCode' />
+                        <p className='chave-pix'>{pagamento?.chave_pix}</p>
                         <div className='btn-msg'>
                           {mensagemPag && <span>{mensagemPag}</span>}
                           <button className='pagamentoBtn' onClick={() => {

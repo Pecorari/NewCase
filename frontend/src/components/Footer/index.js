@@ -1,9 +1,4 @@
 import { Link } from "react-router-dom";
-// import visa from "../../assets/utils/pagamentos/bandeiras/visa.svg"
-import visa from "../../assets/utils/pagamentos/visa.png"
-import mastercard from "../../assets/utils/pagamentos/mastercard.png"
-import pix from "../../assets/utils/pagamentos/pix.png"
-import boleto from "../../assets/utils/pagamentos/boleto.png"
 import facebook from "../../assets/utils/redes/facebook.png"
 import instagram from "../../assets/utils/redes/instagram.png"
 import whatsapp from "../../assets/utils/redes/whatsapp.png"
@@ -32,10 +27,16 @@ function Footer() {
         <div className="footer-section">
           <h3>Formas de Pagamento</h3>
           <div className="payment-methods">
-            <img src={visa} alt="Visa" />
-            <img src={mastercard} alt="Mastercard" />
-            <img src={pix} alt="Pix" />
-            <img src={boleto} alt="Boleto" />
+            <img src='/bandeiras/visa.svg' alt="Visa" />
+            <img src='/bandeiras/mastercard.svg' alt="Mastercard" />
+            <img src='/bandeiras/elo.svg' alt="Elo" />
+            <img src='/bandeiras/hipercard.svg' alt="Hipercard" />
+            <br />
+            {/* <img src='/bandeiras/hiper.svg' alt="Hiper" /> */}
+            <img src='/bandeiras/american-express.svg' alt="American-Express" />
+            <img src='/bandeiras/diners-club.svg' alt="Diners-Club" />
+            <img src='/bandeiras/pix.svg' alt="Pix" />
+            <img src='/bandeiras/boleto.svg' alt="Boleto" />
           </div>
         </div>
 

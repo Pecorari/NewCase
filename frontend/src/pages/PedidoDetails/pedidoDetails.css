@@ -58,7 +58,6 @@
 .secao-info h2,
 .secao-endereco h2,
 .secao-itens h2,
-.secao-pagamento h2,
 .secao-frete h2 {
   color: var(--color-primary);
   font-size: 1rem;
@@ -134,6 +133,38 @@ ul {
   gap: 5px;
 }
 
+.title-pag {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid #333;
+  margin-bottom: 1rem;
+  padding-bottom: 5px;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pagbank-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.75rem;
+  margin-top: 0;
+}
+
+.pagbank-logo {
+  height: 22px;
+  object-fit: contain;
+}
+
+.secao-pagamento h2 {
+  color: var(--color-primary);
+  font-size: 1rem;
+}
+
 .infPagamento {
   margin-bottom: 1.5rem;
 }
@@ -151,6 +182,19 @@ ul {
 .qrCode {
   width: 150px;
   height: auto;
+  margin-bottom: 10px;
+}
+.chave-pix {
+  font-size: 0.7rem;
+  line-height: 20px;
+  background-color: #47474783;
+  width: 100%;
+  max-width: 250px;
+  height: 105px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .btn-msg {
   display: flex;
@@ -204,12 +248,28 @@ ul {
     width: 68%;
     justify-content: space-between;
   }
+
+
+.title-pag {
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 5px;
+}
+
+.pagbank-info {
+  font-size: 0.85rem;
+}
   
   .boleto {
     height: 350px;
   }
   .qrCode {
     width: 170px;
+  }
+  .chave-pix {
+    max-width: 350px;
+    height: 90px;
   }
 }
 
@@ -231,6 +291,10 @@ ul {
 
   .boleto {
     height: 200px;
+  }
+  .chave-pix {
+    max-width: 350px;
+    height: 90px;
   }
 }
 
@@ -297,6 +361,10 @@ ul {
   }
   .qrCode {
     margin: 5px;
+  }
+  .chave-pix {
+    max-width: 230px;
+    height: 115px;
   }
 
   .rodape {
@@ -387,6 +455,10 @@ ul {
     gap: 13px;
   }
 
+  .chave-pix {
+    max-width: 320px;
+    height: 125px;
+  }
   .pagamentoBtn {
     padding: 7px 16px;
     font-size: 0.95rem;
@@ -430,6 +502,9 @@ ul {
 
   .qrCode {
     width: 230px;
+  }
+  .chave-pix {
+    max-width: 350px;
   }
 
   .rodape {
