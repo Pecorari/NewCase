@@ -15,7 +15,8 @@
   cursor: pointer;
   transition: color 0.3s ease;
   width: max-content;
-  margin-top: 7rem;
+  margin-top: 11rem;
+  margin-left: 1rem;
 }
 .btn-voltar-checkout:hover {
   color: var(--color-strong);
@@ -24,24 +25,7 @@
 .checkout-box {
   width: 100%;
   max-width: 1000px;
-  margin: -3rem auto;
-}
-
-.steps {
-  display: flex;
-  justify-content: space-between;
-}
-
-.step {
-  flex: 1;
-  text-align: center;
-  padding: 10px;
-  border-bottom: 2px solid #444;
-  color: #aaa;
-}
-.step.active {
-  color: var(--color-primary);
-  border-color: var(--color-strong);
+  margin: auto;
 }
 
 .checkout-step {
@@ -72,19 +56,14 @@
   background-color: white;
 }
 
-.form-checkout .input-endereco {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  margin-bottom: 0.75rem;
-  background-color: white;
-}
+/* ====== ENDEREÇO ====== */
+
 .enderecos-lista {
   display: grid;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
+
 .endereco-card {
   padding: 0.8rem;
   border: 1px solid transparent;
@@ -92,6 +71,7 @@
   background: #222;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 0.85rem;
 }
 .endereco-card:hover {
   border-color: #666;
@@ -104,6 +84,18 @@
   text-align: center;
   font-weight: bold;
   color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+.endereco-card .title-end {
+  font-size: 0.9rem;
+}
+
+/* ====== FRETE ====== */
+
+.frete-opcoes {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .frete-item-checkout {
@@ -128,28 +120,42 @@
 .frete-item-checkout.selecionado {
   border: 1px solid var(--color-strong);
 }
+
 .frete-logo-checkout {
   width: 25%;
   height: 50px;
   object-fit: contain;
 }
-.frete-detalhes-checkout h4 {
-  font-size: 1rem;
+
+.frete-detalhes-checkout .frete-title {
+  font-size: 0.9rem;
   font-weight: bold;
 }
 .frete-detalhes-checkout p {
   margin-top: 5px;
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: #ccc;
 }
 
-.frete-opcoes {
-  display: grid;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+/* ====== PAGAMENTO ====== */
+
+.step-pagamento {
+  margin-top: 0px;
 }
 
-/* ====== PAGAMENTO ====== */
+.processado-por {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #999999ab;
+}
+.processado-por img {
+  height: 25px;
+}
 
 .pagamento-opcoes {
   background: #f1f1f1;
@@ -157,7 +163,7 @@
   overflow: hidden;
   margin-bottom: 2rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-height: 400px; /* 🔹 altura fixa mínima para evitar encolhimento */
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -174,7 +180,7 @@
   background: #eee;
   border: none;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
   transition: 0.2s;
   display: flex;
@@ -195,10 +201,11 @@
   height: 20px;
 }
 
-/* Conteúdo */
+/* Conteúdo Cartao*/
+
 .conteudo-pagamento {
   background: #fff;
-  padding: 1.8rem;
+  padding: 1.3rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -236,9 +243,9 @@
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
+  padding: 10px;
+  margin-bottom: 14px;
+  font-size: 0.85rem;
 }
 .input-pagamento:focus {
   border-color: var(--color-strong);
@@ -255,10 +262,15 @@
 }
 
 /* Mockup do Cartão */
+.feedback-box {
+  width: 100%;
+}
+
 .cartao-mockup {
   flex: 1;
-  min-width: 250px;
-  height: 180px;
+  min-width: 240px;
+  max-width: 350px;
+  height: 170px;
   background: linear-gradient(135deg, #ff6ec7, #ff007f);
   border-radius: 15px;
   padding: 24px;
@@ -267,6 +279,7 @@
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  margin: auto;
 }
 
 .chip {
@@ -274,7 +287,7 @@
   height: 30px;
   background: gold;
   border-radius: 5px;
-  margin-bottom: 40px;
+  margin-bottom: 35px;
 }
 .chip svg{
   width: 70px;
@@ -284,47 +297,35 @@
 }
 .numero-cartao {
   text-align: start;
-  font-size: 1.4rem;
-  letter-spacing: 3px;
+  font-size: 1rem;
+  letter-spacing: 2px;
 }
 .nome-validade {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
 }
 
 /* Bandeiras */
 .logos-pagamento {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 .bandeiras {
-  height: 30px;
-  width: 40px;
-}
-
-/* Texto "Processado por" */
-.processado-por {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #999999ab;
-}
-.processado-por img {
-  height: 25px;
+  height: 20px;
+  width: 30px;
 }
 
 /* Info segurança */
 .info-seguranca {
-  margin: 1.2rem auto 1rem auto;
-  font-size: 0.85rem;
+  margin: 1rem auto 1rem auto;
+  font-size: 0.7rem;
   text-align: center;
   color: #555;
   max-width: 80%;
@@ -370,7 +371,7 @@
   width: 200px;
   background: #00c853;
   color: #fff;
-  font-size: 1rem;
+  font-size: 0.9rem;
   padding: 12px;
   transition: background 0.2s;
 }
@@ -378,25 +379,19 @@
   background: #00a94d;
 }
 
-/* Selos de segurança */
-.selos-seguranca {
-  margin-top: auto; /* 🔹 empurra pro rodapé do box */
-  padding: 1rem 0 0.5rem 0;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
+/* Conteúdo Pix & Boleto*/
+
+.pix-boleto-container {
+  color: black;
 }
-.selos-seguranca img {
-  height: 70px;
-  width: 110px;
+
+.instructions {
+  margin-top: 2rem;
+  margin-left: 1.2rem;
+  line-height: 25px;
+  font-size: 0.9rem;
 }
-.texto-seguranca {
-  text-align: center;
-  margin-top: 0.3rem;
-  font-size: 0.85rem;
-  color: #777;
-  margin-bottom: 2rem;
-}
+
 
 /* ====== MODAL-CONFIRM ====== */
 
@@ -484,22 +479,34 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 @media (min-width: 768px) {
   .btn-voltar-checkout {
     margin-left: 2rem;
+  }
+
+  /* Mockup do Cartão */
+  .cartao-mockup {
+    height: 180px;
+  }
+
+   /* Bandeiras */
+  .logos-pagamento {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .bandeiras {
+    height: 30px;
+    width: 40px;
+  }
+
+  /* Info segurança */
+  .info-seguranca {
+    font-size: 0.85rem;
   }
 }
 
@@ -509,12 +516,50 @@
     margin-left: 4rem;
     margin-top: 8rem;
   }
+  
+  /* Cartão */
+  .cartao-container {
+    flex-wrap: nowrap;
+  }
+
+  /* Mockup do Cartão */
+  .feedback-box {
+    width: auto;
+  }
+  
+  /* Conteúdo Pix & Boleto*/
+  .pix-boleto-container h4 {
+    margin-top: 0.5rem;
+  }
+  .instructions {
+    margin-top: 3rem;
+    line-height: 35px;
+  }
 }
 
 @media (min-width: 1440px) {
   .btn-voltar-checkout {
     margin-left: 5rem;
     margin-top: 8.5rem;
+  }
+
+  /* ====== ENDEREÇO ====== */
+
+  .endereco-card {
+  font-size: 0.95rem;
+  }
+  .endereco-card .title-end {
+  font-size: 1rem;
+  }
+
+  /* ====== FRETE ====== */
+
+  .frete-detalhes-checkout .frete-title {
+  font-size: 1rem;
+  font-weight: bold;
+  }
+  .frete-detalhes-checkout p {
+  font-size: 0.95rem;
   }
 }
 
@@ -524,11 +569,82 @@
     margin-left: 6rem;
     margin-top: 10rem;
   }
+
+  .processado-por {
+    font-size: 0.9rem;
+  }
+
+  /* Abas */
+  .aba {
+    font-size: 1rem;
+  }
+  /* Cartão */
+  .input-pagamento {
+    padding: 12px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+  }
+
+  /* Mockup do Cartão */
+  .numero-cartao {
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+  }
+  .nome-validade {
+    font-size: 0.85rem;
+  }
 }
 
 @media (min-width: 1900px) {
   .btn-voltar-checkout {
     margin-left: 10rem;
+    margin-top: 11.5rem;
+  }
+
+  .processado-por {
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  /* Conteúdo Cartao*/
+  .conteudo-pagamento {
+    padding: 2rem 2rem 0rem 2rem;
+  }
+
+  /* Conteúdo Pix & Boleto*/
+  .instructions {
+    line-height: 40px;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 2200px) {
+  .btn-voltar-checkout {
+    margin-left: 18rem;
     margin-top: 14rem;
+  }
+  
+  .step-pagamento {
+    margin-top: 2rem;
+  }
+
+  .processado-por {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Conteúdo Cartao*/
+  .conteudo-pagamento {
+    padding: 2rem;
+  }
+  
+  .info-seguranca {
+    font-size: 0.9rem;
+  }
+
+  /* Conteúdo Pix & Boleto*/
+  .instructions {
+    line-height: 40px;
+    font-size: 1rem;
   }
 }

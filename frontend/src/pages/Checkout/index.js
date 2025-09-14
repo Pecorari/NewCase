@@ -368,7 +368,7 @@ const Checkout = () => {
                       setNovoEndereco(false);
                     }}
                   >
-                    <strong>{end.rua}, {end.numero} - {end.bairro}</strong>
+                    <strong className="title-end">{end.rua}, {end.numero} - {end.bairro}</strong>
                     <p>{end.cidade} / {end.estado}</p>
                     <p>CEP: {end.cep}</p>
                     {end.complemento ? <p>Complemento: {end.complemento}</p> : <></>}
@@ -405,7 +405,7 @@ const Checkout = () => {
                     <li className={`frete-item-checkout ${freteSelecionado?.id === opcao.id ? "selecionado" : ""}`} key={index} onClick={() => setFreteSelecionado(opcao)}>
                       <img src={opcao.company.picture} alt={opcao.name} className="frete-logo-checkout" />
                       <div className="frete-detalhes-checkout">
-                        <h4>{opcao.name}</h4>
+                        <h4 className="frete-title">{opcao.name}</h4>
                         {opcao.error ? (
                           <p>{opcao.error}</p>
                         ) : (
@@ -426,7 +426,7 @@ const Checkout = () => {
 
           {/* Etapa 4 - Pagamento */}
           {step === 3 && (
-            <div className="checkout-step">
+            <div className="checkout-step step-pagamento">
               <div className="processado-por">
                 <span>Processado com segurança pelo</span>
                 <img src='/bandeiras/pagbank2.svg' alt="PagBank" />
@@ -483,7 +483,7 @@ const Checkout = () => {
                         {mensagemErro ? <p className="error-feedback">{mensagemErro}</p> : <></>}
                       </div>
 
-                      <div>
+                      <div className="feedback-box">
                         <div className="cartao-mockup">
                           <div className="chip"><FcSimCardChip /></div>
                           <div className="numero-cartao">{numeroCard || "•••• •••• •••• ••••"}</div>
@@ -506,14 +506,25 @@ const Checkout = () => {
                   )}
 
                   {metodo === "boleto" && (
-                    <div>
+                    <div className="pix-boleto-container">
                       <h4>O boleto será gerado após você finalizar a compra.</h4>
+
+                      <ol className="instructions">
+                        <li>Abra o PDF ou copie a linha digitável.</li>
+                        <li>Pague em internet banking, app do banco, caixas eletrônicos ou lotéricas.</li>
+                      </ol>
                     </div>
                   )}
 
                   {metodo === "pix" && (
-                    <div>
+                    <div className="pix-boleto-container">
                       <h4>O código QR / Chave PIX será gerado após você finalizar a compra.</h4>
+                      
+                      <ol className="instructions">
+                        <li>{`Abra o app do seu banco → Área Pix`}</li>
+                        <li>{`Pagar com QR → aponte a câmera para o QR ou cole o código.`}</li>
+                        <li>Confirme o valor e conclua o pagamento no app.</li>
+                      </ol>
                     </div>
                   )}
                 </div>
