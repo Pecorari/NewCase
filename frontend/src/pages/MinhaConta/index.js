@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import api from '../../hooks/useApi';
 import { useAuth } from "../../context/AuthContext";
@@ -30,6 +32,7 @@ const MinhaConta = () => {
   const [modalSaveEndOpen, setModalSaveEndOpen] = useState(false);
   const [modalDeleteEndOpen, setModalDeleteEndOpen] = useState(false);
   const [modalDadosUpdtOpen, setModalDadosUpdtOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -39,20 +42,26 @@ const MinhaConta = () => {
   }, []);
 
   async function listarEnderecos() {
+    setLoading(true);
     try {
       const result = await api.get('/enderecos');
 
       setEnderecos(result.data);
     } catch (error) {
       console.log('erro ao listar endereços:', error)
+    } finally {
+      setLoading(false);
     }
   };
   async function listarPedidos() {
+    setLoading(true);
     try {
       const result = await api.get('/pedidos');
       setPedidos(result.data);
     } catch (error) {
       console.log('erro ao listar pedidos:', error)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -193,58 +202,74 @@ const MinhaConta = () => {
 
             <div className='endereco-section'>
               <h3 className='h3-account'>Meus Endereços</h3>
-              <div className="enderecos">
-                {enderecos.length === 0 ?
-                  <p style={{ marginBottom: '10px', marginLeft: '10px' }}>Você ainda não tem um endereço cadastrado.</p>
-                : enderecos.map((end) => (
-                  <>
-                  <div key={end.id} className="endereco-card">
-                    <strong>{end.rua}, {end.numero} - {end.bairro}</strong>
-                    <p>{end.cidade} / {end.estado}</p>
-                    <p>CEP: {end.cep}</p>
-                    {end.complemento ? <p>Complemento: {end.complemento}</p> : <></>}
-                    <button onClick={() => {setEnderecoSelecionado(end); setModalSaveEndOpen(true)}} className='submit-endereco'>Editar</button>
-                    <button onClick={(e) => {e.preventDefault(); setModalDeleteEndOpen(true);}} className='submit-endereco'>Remover</button>
-                  </div>
+              {loading ? (
+                <div className="enderecos">
+                  {[1, 2, 3].map((s) => (
+                    <Skeleton height={120} className="skeleton" style={{ marginBottom: '10px' }} />
+                  ))}
+                </div>
+              ) : (
+                <div className="enderecos">
+                  {enderecos.length === 0 ?
+                    <p style={{ marginBottom: '10px', marginLeft: '10px' }}>Você ainda não tem um endereço cadastrado.</p>
+                  : enderecos.map((end) => (
+                    <>
+                    <div key={end.id} className="endereco-card">
+                      <strong>{end.rua}, {end.numero} - {end.bairro}</strong>
+                      <p>{end.cidade} / {end.estado}</p>
+                      <p>CEP: {end.cep}</p>
+                      {end.complemento ? <p>Complemento: {end.complemento}</p> : <></>}
+                      <button onClick={() => {setEnderecoSelecionado(end); setModalSaveEndOpen(true)}} className='submit-endereco'>Editar</button>
+                      <button onClick={(e) => {e.preventDefault(); setModalDeleteEndOpen(true);}} className='submit-endereco'>Remover</button>
+                    </div>
 
-                  <CustomModal
-                    isOpen={modalDeleteEndOpen}
-                    onClose={() => setModalDeleteEndOpen(false)}
-                    title="Confirmar exclusão"
-                    confirmText="Confirmar"
-                    onConfirm={() => handleRemoverEndereco(end.id)}
-                  >
-                    <p>Você tem certeza que deseja excluir esse endereço?</p>
-                  </CustomModal>
-                  </>
-                ))}
-                <button onClick={() => {setEnderecoSelecionado(null); setModalSaveEndOpen(true)}} className="btn-add-endereco">+ Adicionar Endereço</button>
-                {modalSaveEndOpen && (
-                  <ModalNovoEndereco enderecoInicial={enderecoSelecionado} onSave={(enderecoSelecionado ? editarEndereco : salvarEndereco)} onCancel={() => { setModalSaveEndOpen(false); setEnderecoSelecionado(null); }}/>
-                )}
-              </div>
+                    <CustomModal
+                      isOpen={modalDeleteEndOpen}
+                      onClose={() => setModalDeleteEndOpen(false)}
+                      title="Confirmar exclusão"
+                      confirmText="Confirmar"
+                      onConfirm={() => handleRemoverEndereco(end.id)}
+                    >
+                      <p>Você tem certeza que deseja excluir esse endereço?</p>
+                    </CustomModal>
+                    </>
+                  ))}
+                  <button onClick={() => {setEnderecoSelecionado(null); setModalSaveEndOpen(true)}} className="btn-add-endereco">+ Adicionar Endereço</button>
+                  {modalSaveEndOpen && (
+                    <ModalNovoEndereco enderecoInicial={enderecoSelecionado} onSave={(enderecoSelecionado ? editarEndereco : salvarEndereco)} onCancel={() => { setModalSaveEndOpen(false); setEnderecoSelecionado(null); }}/>
+                  )}
+                </div>
+              )}
             </div>
             <hr />
           </div>
 
           <div className='meus-pedidos'>
             <h3 className='h3-account'>Pedidos</h3>
-            <div className="pedidos">
-              {pedidos.length === 0 ?
-                <p style={{ marginBottom: '10px', marginLeft: '10px' }}>Você ainda não fez um pedido.</p>
-              : pedidos.map((pedido) => (
-                <div key={pedido.id} className={'pedido-card'} onClick={() => {navigate(`/pedido/${pedido.id}`)}}>
-                  <div className='pedido-box-first'>
-                    <p><strong>Pedido #{pedido.id}</strong></p>
-                    <p>Total: {pedido.total}</p>
+            {loading ? (
+              <div className="pedidos">
+                {[1, 2, 3].map((s) => (
+                  <Skeleton height={70} className="pedido-card skeleton" />
+                ))}
+              </div>
+            ) : (
+              <div className="pedidos">
+                {pedidos.length === 0 ?
+                  <p style={{ marginBottom: '10px', marginLeft: '10px' }}>Você ainda não fez um pedido.</p>
+                : pedidos.map((pedido) => (
+                  <div key={pedido.id} className={'pedido-card'} onClick={() => {navigate(`/pedido/${pedido.id}`)}}>
+                    <div className='pedido-box-first'>
+                      <p><strong>Pedido #{pedido.id}</strong></p>
+                      <p>Total: {pedido.total}</p>
+                    </div>
+                    <div className='pedido-box-second'>
+                      <p>Data: {formatarDataHora(pedido.criado_em)}</p>
+                      <p>Status: {pedido.status}</p>
+                    </div>
                   </div>
-                  <div className='pedido-box-second'>
-                    <p>Data: {formatarDataHora(pedido.criado_em)}</p>
-                    <p>Status: {pedido.status}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <button onClick={logout} className="btn-logout">Sair da Conta</button>

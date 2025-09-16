@@ -392,9 +392,7 @@
   font-size: 0.9rem;
 }
 
-
 /* ====== MODAL-CONFIRM ====== */
-
 .overlay {
   position: fixed;
   inset: 0;
@@ -474,9 +472,6 @@
   20%, 60% { transform: translateX(-8px); }
   40%, 80% { transform: translateX(8px); }
 }
-
-
-
 
 
 @media (min-width: 768px) {

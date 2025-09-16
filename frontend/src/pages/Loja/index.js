@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import Header from '../../components/Header';
 import SidebarFiltros from '../../components/SidebarFiltros';
@@ -11,6 +13,8 @@ import api from '../../hooks/useApi';
 import './loja.css';
 
 const Loja = () => {
+  const [loading, setLoading] = useState(true);
+  const [imagensCarregadas, setImagensCarregadas] = useState({});
   const [produtos, setProdutos] = useState([]);
   const [indiceImagem, setIndiceImagem] = useState({});
   const [categorias, setCategorias] = useState([]);
@@ -27,7 +31,7 @@ const Loja = () => {
   const [filtrosVisiveis, setFiltrosVisiveis] = useState(false);
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
-  const itensPorPagina = 16;
+  const itensPorPagina = 18;
   
   const searchRef = useRef(null);
   const inputRef = useRef(null);
@@ -37,6 +41,7 @@ const Loja = () => {
 
   useEffect(() => {
     getAllCategorias();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -62,6 +67,7 @@ const Loja = () => {
   }, [filters, paginaAtual]);
 
   const getProdutosPagina = async (pagina) => {
+    setLoading(true);
     try {
       const query = new URLSearchParams({
         page: pagina,
@@ -81,6 +87,8 @@ const Loja = () => {
       setTotalPaginas(Math.ceil(response.data.total / itensPorPagina));
     } catch (err) {
       console.error('Erro ao buscar produtos:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -190,6 +198,7 @@ const Loja = () => {
           handlePrecoChange={handlePrecoChange}
           handleCorChange={handleCorChange}
           limparFiltros={limparFiltros}
+          loading={loading}
         />
         {filtrosVisiveis ? <div className='overlay-filtro' onClick={() => setFiltrosVisiveis(false)}></div>
         : <div style={{ display: 'none' }}></div>}
@@ -219,34 +228,54 @@ const Loja = () => {
               </ul>
             )}
           </div>
+          
+          {loading ? (
+            <div className="grid-produtos">
+              {Array.from({ length: 18 }).map((s) => (
+                <Skeleton key={s} height={`100%`} className="card-produto skeleton" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid-produtos">
+              {produtos.map((produto) => {
+                const imagens = produto.imagens || [];
+                const indice = indiceImagem[produto.id] || 0;
 
-          <div className="grid-produtos">
-            {produtos.map((produto) => {
-              const imagens = produto.imagens || [];
-              const indice = indiceImagem[produto.id] || 0;
-
-              return (
-                <div key={produto.id} className="card-produto" onClick={() => navigate(`/produto/${produto.id}`)}>
-                  <div className="imagem-container">
-                    {imagens.length > 0 && (
-                      <>
-                        <img src={imagens[indice] || '/placeholder.png'} alt={produto.nome} className="imagem-produto" />
-                        {imagens.length > 1 && (
-                          <>
-                            <button className="seta seta-esquerda" onClick={(e) =>  {e.stopPropagation(); imagemAnterior(produto.id, imagens.length)}}><IoIosArrowBack /></button>
-                            <button className="seta seta-direita" onClick={(e) => {e.stopPropagation(); proximaImagem(produto.id, imagens.length)}}><IoIosArrowForward /></button>
-                          </>
-                        )}
-                      </>
-                    )}
+                return (
+                  <div key={produto.id} className="card-produto" onClick={() => navigate(`/produto/${produto.id}`)}>
+                    <div className="imagem-container">
+                      {!imagensCarregadas[produto.id] && (
+                        <Skeleton width={`100%`} height='100%' borderRadius={8} className="skeleton" />
+                      )}
+                      {imagens.length > 0 && (
+                        <>
+                          <img src={imagens[indice]} alt={produto.nome} className="imagem-produto"
+                            style={{ display: imagensCarregadas[produto.id] ? 'block' : 'none' }}
+                            onLoad={() =>
+                              setImagensCarregadas(prev => ({ ...prev, [produto.id]: true }))
+                            }
+                            onError={(e) => {
+                              e.target.src = "/placeholder-img.svg";
+                              setImagensCarregadas(prev => ({ ...prev, [produto.carrinho_id]: true }));
+                            }}
+                          />
+                          {imagens.length > 1 && (
+                            <>
+                              <button className="seta seta-esquerda" onClick={(e) =>  {e.stopPropagation(); imagemAnterior(produto.id, imagens.length)}}><IoIosArrowBack /></button>
+                              <button className="seta seta-direita" onClick={(e) => {e.stopPropagation(); proximaImagem(produto.id, imagens.length)}}><IoIosArrowForward /></button>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+                    <h3 className='title-produto'>{produto.nome}</h3>
+                    <p className="preco">R$ {produto.preco}</p>
+                    <button className='btn-comprar' onClick={() => navigate(`/produto/${produto.id}`)}>Comprar</button>
                   </div>
-                  <h3 className='title-produto'>{produto.nome}</h3>
-                  <p className="preco">R$ {produto.preco}</p>
-                  <button className='btn-comprar' onClick={() => navigate(`/produto/${produto.id}`)}>Comprar</button>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          )}
           
           <div className="paginacao">
             {[...Array(totalPaginas)].map((_, index) => (

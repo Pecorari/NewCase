@@ -8,6 +8,8 @@ import { FaRegCreditCard, FaLock } from "react-icons/fa6";
 
 import { Stepper } from 'react-form-stepper';
 import { IMaskInput } from "react-imask";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { calcularFrete } from '../../services/freteService';
@@ -40,6 +42,7 @@ const Checkout = () => {
   const [publicKey, setPublicKey] = useState("");
   const [statusPagamento, setStatusPagamento] = useState(null);
   const [mensagemErro, setMensagemErro] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -68,12 +71,15 @@ const Checkout = () => {
   const handlePrev = () => setStep((prev) => prev - 1);
 
   async function listarEnderecos() {
+    setLoading(true);
     try {
       const result = await api.get('/enderecos');
 
       setEnderecos(result.data);
     } catch (error) {
       console.log('erro ao listar endereços:', error)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,6 +100,8 @@ const Checkout = () => {
   }
 
   const buscarFretes = async (cep) => {
+    setLoading(true);
+
     if (!cep) return;
     if (!produtos || produtos.length === 0) return; 
     
@@ -120,6 +128,8 @@ const Checkout = () => {
 
     } catch (err) {
       console.error("Erro ao buscar fretes:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -348,7 +358,7 @@ const Checkout = () => {
                 <IMaskInput mask={"(00) 00000-0000"} type="text" placeholder="Telefone" value={userData.telefone} onAccept={value => setUserData({ ...userData, telefone: value })} required />
               
                 <div className="checkout-buttons" style={{ marginTop: '15px' }}>
-                  <button className="btn-prev" onClick={() => navigate(-1)}>Cancelar</button>
+                  <button type="button" className="btn-prev" onClick={() => navigate(-1)}>Cancelar</button>
                   <button type="submit" className="btn-next">Continuar</button>
                 </div>
               </form>
@@ -359,36 +369,52 @@ const Checkout = () => {
           {step === 1 && (
             <div className="checkout-step">
 
-              <div className="enderecos-lista">
-                {enderecos.map((end) => (
-                  <div key={end.id}
-                    className={`endereco-card ${enderecoSelecionado?.id === end.id ? "selecionado" : ""}`}
-                    onClick={() => {
-                      setEnderecoSelecionado(end);
-                      setNovoEndereco(false);
-                    }}
-                  >
-                    <strong className="title-end">{end.rua}, {end.numero} - {end.bairro}</strong>
-                    <p>{end.cidade} / {end.estado}</p>
-                    <p>CEP: {end.cep}</p>
-                    {end.complemento ? <p>Complemento: {end.complemento}</p> : <></>}
+                {loading ? (
+                  <div className="enderecos-lista">
+                    {[1, 2, 3].map((s) => (
+                        <div className="endereco-card">
+                          <Skeleton width={`70%`} height={16} className="skeleton" />
+                          <Skeleton width={`60%`} height={16} className="skeleton" />
+                          <Skeleton width={`30%`} height={16} className="skeleton" />
+                          <Skeleton width={`40%`} height={16} className="skeleton" />
+                        </div>
+                    ))}
+                    <div className="endereco-card add-novo">
+                      <Skeleton width={`30%`} height={20} className="skeleton" />
+                    </div>
                   </div>
-                ))}
-
-                <div className={`endereco-card add-novo ${novoEndereco ? "selecionado" : ""}`} onClick={() => {
-                    setEnderecoSelecionado(null);
-                    setNovoEndereco(true);
-                }}>
-                  + Adicionar novo endereço
-                </div>
-                {novoEndereco && (
-                  <ModalNovoEndereco onSave={(cadastrarEndereco)} onCancel={() => {setNovoEndereco(false); setEnderecoSelecionado(null);}}/>
+                ) : (
+                  <div className="enderecos-lista">
+                    {enderecos.map((end) => (
+                      <div key={end.id}
+                        className={`endereco-card ${enderecoSelecionado?.id === end.id ? "selecionado" : ""}`}
+                        onClick={() => {
+                          setEnderecoSelecionado(end);
+                          setNovoEndereco(false);
+                        }}
+                      >
+                        <strong className="title-end">{end.rua}, {end.numero} - {end.bairro}</strong>
+                        <p>{end.cidade} / {end.estado}</p>
+                        <p>CEP: {end.cep}</p>
+                        {end.complemento ? <p>Complemento: {end.complemento}</p> : <></>}
+                      </div>
+                    ))}
+    
+                    <div className={`endereco-card add-novo ${novoEndereco ? "selecionado" : ""}`} onClick={() => {
+                        setEnderecoSelecionado(null);
+                        setNovoEndereco(true);
+                    }}>
+                      + Adicionar novo endereço
+                    </div>
+                    {novoEndereco && (
+                      <ModalNovoEndereco onSave={(cadastrarEndereco)} onCancel={() => {setNovoEndereco(false); setEnderecoSelecionado(null);}}/>
+                    )}
+                  </div>
                 )}
-              </div>
 
               <div className="checkout-buttons">
                 <button className="btn-prev" onClick={(e) => {e.preventDefault(); handlePrev();}}>Voltar</button>
-                <button className="btn-next" onClick={(e) => {e.preventDefault(); handleNext(); buscarFretes(enderecoSelecionado.cep);}} disabled={!enderecoSelecionado && !novoEndereco}>
+                <button className="btn-next" onClick={(e) => {e.preventDefault(); handleNext(); buscarFretes(enderecoSelecionado.cep);}} disabled={(!enderecoSelecionado && !novoEndereco) || loading}>
                   Continuar
                 </button>
               </div>
@@ -399,27 +425,41 @@ const Checkout = () => {
           {step === 2 && (
             <div className="checkout-step">
 
-              <ul className="frete-opcoes">
-                {fretes.length === 0 ? (<p style={{ fontSize: '0.9rem', color: '#b8b8b8ff', marginLeft: '20px' }}>Estamos os melhores serviços de frete! ...</p>) : (
-                  fretes.map((opcao, index) => (
-                    <li className={`frete-item-checkout ${freteSelecionado?.id === opcao.id ? "selecionado" : ""}`} key={index} onClick={() => setFreteSelecionado(opcao)}>
-                      <img src={opcao.company.picture} alt={opcao.name} className="frete-logo-checkout" />
+              {loading ? (
+                <ul className="frete-opcoes">
+                  {[1, 2, 3].map((s) => (
+                    <li className="frete-item-checkout">
+                      <Skeleton width={150} height={60} className="skeleton" />
                       <div className="frete-detalhes-checkout">
-                        <h4 className="frete-title">{opcao.name}</h4>
-                        {opcao.error ? (
-                          <p>{opcao.error}</p>
-                        ) : (
-                          <p>R$ {opcao.price} - {opcao.delivery_time} dias úteis</p>
-                        )}
+                        <Skeleton width={180} height={16} className="skeleton" />
+                        <Skeleton width={130} height={16} className="skeleton" />
                       </div>
                     </li>
-                  ))
-                )}
-              </ul>
+                  ))}
+                </ul>
+              ) : (
+                <ul className="frete-opcoes">
+                  {fretes.length === 0 ? (<p style={{ fontSize: '0.9rem', color: '#b8b8b8ff', marginLeft: '20px' }}>Nao encontramos nenhum frete!</p>) : (
+                    fretes.map((opcao, index) => (
+                      <li className={`frete-item-checkout ${freteSelecionado?.id === opcao.id ? "selecionado" : ""}`} key={index} onClick={() => setFreteSelecionado(opcao)}>
+                        <img src={opcao.company.picture} alt={opcao.name} className="frete-logo-checkout" />
+                        <div className="frete-detalhes-checkout">
+                          <h4 className="frete-title">{opcao.name}</h4>
+                          {opcao.error ? (
+                            <p>{opcao.error}</p>
+                          ) : (
+                            <p>R$ {opcao.price} - {opcao.delivery_time} dias úteis</p>
+                          )}
+                        </div>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              )}
 
               <div className="checkout-buttons">
                 <button className="btn-prev" onClick={(e) => {e.preventDefault(); handlePrev();}}>Voltar</button>
-                <button className="btn-next" onClick={(e) => {e.preventDefault(); handleNext();}} disabled={!freteSelecionado}>Continuar</button>
+                <button className="btn-next" onClick={(e) => {e.preventDefault(); handleNext();}} disabled={!freteSelecionado || loading}>Continuar</button>
               </div>
             </div>
           )}
@@ -530,7 +570,7 @@ const Checkout = () => {
                 </div>
 
                 <p className="info-seguranca">
-                  🔒 Não armazenamos dados do seu cartão.  
+                  🔒 Não armazenamos dados do seu cartão. <br />
                   Seus pagamentos são processados de forma 100% segura pelo PagBank.
                 </p>
               </div>
