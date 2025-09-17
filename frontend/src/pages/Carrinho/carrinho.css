@@ -42,6 +42,7 @@
 .imagem-carrinho-container {
   position: relative;
   height: 80px;
+  width: 80px;
   margin-right: 5%;
 }
 .imagem-carrinho-container .produto-img {
@@ -181,6 +182,7 @@ button.finalizar:hover:disabled {
   }
   .imagem-carrinho-container {
     height: 90px;
+    width: 90px;
   }
   .title {
     font-size: 1rem;
@@ -228,6 +230,7 @@ button.finalizar:hover:disabled {
 
   .imagem-carrinho-container {
     height: 100px;
+    width: 100px;
   }
 
   .info-item {
@@ -292,6 +295,7 @@ button.finalizar:hover:disabled {
 
   .imagem-carrinho-container {
     height: 120px;
+    width: 120px;
   }
   .imagem-carrinho-container .seta {
     font-size: 1.7rem;
@@ -355,6 +359,7 @@ button.finalizar:hover:disabled {
 
   .imagem-carrinho-container {
     height: 140px;
+    width: 140px;
   }
   .imagem-carrinho-container .seta {
     font-size: 1.9rem;

@@ -155,7 +155,7 @@
             <div className="imagens-section-detail">
               <div className="imagem-principal-detail">
                 {!imagensCarregadas[imagemSelecionada] && (
-                  <Skeleton width={350} height={350} borderRadius={10} className="imagem-zoom-detail-detail skeleton" />
+                  <Skeleton width={`100%`} height={`100%`} borderRadius={10} className="imagem-zoom-detail-detail skeleton" />
                 )}
                 <img src={produto?.imagens?.[imagemSelecionada]} alt={produto?.nome} className="imagem-zoom-detail-detail"
                   style={{ display: imagensCarregadas[imagemSelecionada] ? 'block' : 'none' }}

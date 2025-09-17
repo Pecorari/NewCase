@@ -83,15 +83,15 @@ const Carrinho = () => {
             {[1, 2, 3].map((s) => (
               <li key={s} className="item">
                 <div className="imagem-carrinho-container">
-                  <Skeleton width={125} height='100%' borderRadius={8} className="skeleton" />
+                  <Skeleton width={`100%`} height={`100%`} borderRadius={8} className="skeleton" />
                 </div>
                 <div className="info-item">
-                  <Skeleton width={`60%`} height={20} className="skeleton" />
+                  <Skeleton width={`60%`} height={16} className="skeleton" />
                   <Skeleton width={`40%`} height={16} className="skeleton" />
                 </div>
                 <div className="info-preco-item">
                   <Skeleton width={`30%`} height={16} className="skeleton" />
-                  <Skeleton width={`40%`} height={20} className="skeleton" />
+                  <Skeleton width={`40%`} height={18} className="skeleton" />
                 </div>
               </li>
             ))}
@@ -106,7 +106,7 @@ const Carrinho = () => {
                 <li key={index} className="item" onClick={() => navigate(`/produto/${produto.produto_id}`)}>
                   <div className="imagem-carrinho-container">
                     {!imagensCarregadas[produto.carrinho_id] && (
-                      <Skeleton width={150} height='100%' borderRadius={8} className="skeleton" />
+                      <Skeleton width={`100%`} height={`100%`} borderRadius={8} className="produto-img skeleton" />
                     )}
                     {imagens.length > 0 && (
                       <>

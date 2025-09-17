@@ -126,7 +126,9 @@
   height: 50px;
   object-fit: contain;
 }
-
+.frete-detalhes-checkout {
+  width: 75%;
+}
 .frete-detalhes-checkout .frete-title {
   font-size: 0.9rem;
   font-weight: bold;
@@ -172,7 +174,7 @@
 /* Abas */
 .abas-pagamento {
   display: flex;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ccc;
 }
 .aba {
   flex: 1;
@@ -241,7 +243,7 @@
 .input-pagamento {
   width: 100%;
   background: #fff;
-  border: 1px solid #ccc;
+  border: 1px solid #aaa;
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 14px;

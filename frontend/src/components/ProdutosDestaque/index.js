@@ -75,7 +75,7 @@ function ProductCard() {
                 <div className="produto-card-dstq">
                   <div className="imagem-container-dtq">
                     {!imagensCarregadas[produto.id] && (
-                      <Skeleton width={`100%`} height={250} className="skeleton" />
+                      <Skeleton width={`100%`} height={`100%`} className="imagem-container-dtq skeleton" />
                     )}
                     {imagens.length > 0 && (
                       <>

@@ -205,7 +205,16 @@ const MinhaConta = () => {
               {loading ? (
                 <div className="enderecos">
                   {[1, 2, 3].map((s) => (
-                    <Skeleton height={120} className="skeleton" style={{ marginBottom: '10px' }} />
+                    <div key={s} className="endereco-card">
+                      <Skeleton width={`75%`} height={16} className="skeleton" />
+                      <Skeleton width={`55%`} height={16} className="skeleton" />
+                      <Skeleton width={`40%`} height={16} className="skeleton" />
+                      <Skeleton width={`70%`} height={16} className="skeleton" />
+                      <div style={{ display:'flex', width: '500px', gap: '20px' }}>
+                        <Skeleton width={`100%`} height={`70%`} className="submit-endereco skeleton" />
+                        <Skeleton width={`100%`} height={`70%`} className="submit-endereco skeleton" />
+                      </div>
+                    </div>
                   ))}
                 </div>
               ) : (

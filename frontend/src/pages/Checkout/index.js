@@ -429,10 +429,13 @@ const Checkout = () => {
                 <ul className="frete-opcoes">
                   {[1, 2, 3].map((s) => (
                     <li className="frete-item-checkout">
-                      <Skeleton width={150} height={60} className="skeleton" />
+                      <div style={{ width: '25%' }}>
+                      <Skeleton width={`100%`} height={60} className="frete-logo-checkout skeleton" />
+
+                      </div>
                       <div className="frete-detalhes-checkout">
-                        <Skeleton width={180} height={16} className="skeleton" />
-                        <Skeleton width={130} height={16} className="skeleton" />
+                        <Skeleton width={`70%`} height={16} className="frete-title skeleton" />
+                        <Skeleton width={`50%`} height={16} className="skeleton" />
                       </div>
                     </li>
                   ))}
