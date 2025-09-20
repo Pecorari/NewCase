@@ -40,6 +40,7 @@
         setLoading(true);
         try {
           const response = await api.get(`/produtos/${id}`);
+          
           setProduto(response.data);
         } catch (error) {
           console.error("Erro ao buscar produto:", error);
@@ -306,13 +307,12 @@
                 <p className='caracteristicas'>Largura: {produto?.largura}</p>
                 <p className='caracteristicas'>comprimento: {produto?.comprimento}</p>
                 <br/>
-                <p className='caracteristicas'>Material: </p>
+                <p className='caracteristicas'>Material: {produto?.material}</p>
                 <p className='caracteristicas'>Peso: {produto?.peso}</p>
                 <p className='caracteristicas'>Cor: {produto?.cor}</p>
                 <br/>
                 <p className='caracteristicas'>Compatibilidade: {produto?.aparelho_nome}</p>
                 <p className='caracteristicas'>Categoria: {produto?.categoria_nome}</p>
-                <p className='caracteristicas'>Material: {produto?.material}</p>
               </div>
             )}
           </section>
