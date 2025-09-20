@@ -18,6 +18,8 @@ const getAllProdutos = async (req, res) => {
 
         const { produtos, total } = await produtosModel.getAllProdutos(page, limit);
 
+        console.log(produtos);
+
         const totalPaginas = Math.ceil(total / limit);
 
         return res.status(200).json({ produtos, total, totalPaginas, page });
@@ -93,6 +95,8 @@ const getUniqueProduto = async (req, res) => {
     const { id } = req.params;
     try {
         const result = await produtosModel.getUniqueProduto(id);
+
+        console.log(result);
 
         if (!result) {
             return res.status(404).json({ error: 'Produto não encontrado' });
