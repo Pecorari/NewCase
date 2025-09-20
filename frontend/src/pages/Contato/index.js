@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import CustomModal from '../../components/Modal/CustomModal';
 
-import whatsapp from '../../assets/utils/redes/whatsapp.png';
-import instagram from '../../assets/utils/redes/instagram.png';
-import facebook from '../../assets/utils/redes/facebook.png';
-
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
@@ -63,13 +59,13 @@ function Contato() {
             <p>Ou fale com a gente pelas redes:</p>
             <div className="redes-links">
               <a href="/" target="_blank" rel="noopener noreferrer">
-                <img src={whatsapp} alt="WhatsApp" />
+                <img src='/redes/whatsapp.svg' alt="WhatsApp" />
               </a>
               <a href="/" target="_blank" rel="noopener noreferrer">
-                <img src={instagram} alt="Instagram" />
+                <img src='/redes/instagram.svg' alt="Instagram" />
               </a>
               <a href="/" target="_blank" rel="noopener noreferrer">
-                <img src={facebook} alt="E-mail" />
+                <img src='/redes/facebook.svg' alt="E-mail" />
               </a>
             </div>
           </div>

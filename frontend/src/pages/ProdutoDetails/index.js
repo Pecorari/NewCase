@@ -15,7 +15,6 @@
 
   import { IoIosStar, IoIosStarOutline } from "react-icons/io";
   import { BsTrash3 } from "react-icons/bs";
-  import whatsapp from '../../assets/utils/redes/whatsapp-logo-white.png';
 
   import './ProdutoDetails.css';
 
@@ -241,7 +240,7 @@
 
                     <button className="botao-whatsapp" onClick={compartilharNoWhatsApp}>
                       Compartilhar 
-                      <img src={whatsapp} alt='whatsapp' />
+                      <img src='/redes/whatsapp-logo-white.svg' alt='whatsapp' />
                     </button>
                   </div>
                 </div>
@@ -312,6 +311,8 @@
                 <p className='caracteristicas'>Cor: {produto?.cor}</p>
                 <br/>
                 <p className='caracteristicas'>Compatibilidade: {produto?.aparelho_nome}</p>
+                <p className='caracteristicas'>Categoria: {produto?.categoria_nome}</p>
+                <p className='caracteristicas'>Material: {produto?.material}</p>
               </div>
             )}
           </section>

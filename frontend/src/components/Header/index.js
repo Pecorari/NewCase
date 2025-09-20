@@ -6,7 +6,6 @@ import { BsBag, BsSearch } from "react-icons/bs";
 import { IoIosArrowForward } from "react-icons/io";
 import { useAuth } from "../../context/AuthContext";
 import { useCarrinho } from '../../context/CarrinhoContext';
-import logoMyCellStore from '../../assets/utils/logo/logo_nome2.png';
 import api from '../../hooks/useApi';
 
 import "./header.css";
@@ -68,10 +67,8 @@ function Header({ inLoja }) {
         }
 
         if (currentScrollY > 150  && currentScrollY > lastScrollY) {
-          // Scrolling down
           subHeaderRef.current?.classList.add('merge');
         } else {
-          // Scrolling up
           subHeaderRef.current?.classList.remove('merge');
         }
         
@@ -105,7 +102,7 @@ function Header({ inLoja }) {
         
         <div className="logo-area"  ref={logoRef}>
           <Link to="/">
-            <img src={logoMyCellStore} className="logo" alt="logo" />
+            <img src='/logo/logo_com_nome.svg' className="logo" alt="logo" />
           </Link>
         </div>
 

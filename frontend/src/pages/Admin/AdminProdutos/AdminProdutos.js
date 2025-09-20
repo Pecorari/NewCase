@@ -9,6 +9,8 @@ import './AdminProdutos.css';
 
 const AdminProdutos = () => {
   const [produtos, setProdutos] = useState([]);
+  const [aparelhos, setAparelhos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [formAberto, setFormAberto] = useState(false);
@@ -20,6 +22,7 @@ const AdminProdutos = () => {
     descricao: '',
     preco: '',
     categoria_id: '',
+    material: '',
     estoque: '',
     destaque: '',
     peso: '',
@@ -37,6 +40,8 @@ const AdminProdutos = () => {
 
   useEffect(() => {
     buscarProdutos(1);
+    buscarAparelhos();
+    buscarCategorias();
   }, []);
 
   const buscarProdutos = async (valuePage = 1) => {
@@ -52,6 +57,25 @@ const AdminProdutos = () => {
       console.error('Erro ao buscar produtos:', err);
     }
   };
+  const buscarAparelhos = async () => {
+    try {
+      const response = await api.get('/aparelhos');
+      setAparelhos(response.data);
+    } catch (err) {
+      setErro(err.response?.data?.mensagem || 'Erro ao  listar aparelhos');
+      console.error('Erro ao buscar aparelhos:', err);
+    }
+  };
+  const buscarCategorias = async () => {
+    try {
+      const response = await api.get('/categorias');
+      setCategorias(response.data);
+    } catch (err) {
+      setErro(err.response.data.mensagem);
+      console.error('Erro ao buscar categorias:', err);
+    }
+  };
+
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -66,8 +90,6 @@ const AdminProdutos = () => {
           acao: "nova"
         }))
       ];
-
-      console.log(updatedImages);
       
       setForm({ ...form, imagens: updatedImages });
       setPreviews(updatedImages.map(img => img.url));
@@ -97,8 +119,6 @@ const AdminProdutos = () => {
 
   const handleRemoveImage = (indexToRemove) => {
     const imgDel = form.imagens[indexToRemove];
-    console.log('indexToRemove:', indexToRemove);
-    console.log('imgDel:', imgDel);
 
     let updatedImages;
     if (imgDel) {
@@ -109,7 +129,6 @@ const AdminProdutos = () => {
       updatedImages = form.imagens.filter((_, idx) => idx !== indexToRemove);
     }
 
-    console.log('updatedImages:', updatedImages);
     setForm({ ...form, imagens: updatedImages });
     setPreviews(updatedImages.filter(img => img.acao !== "remover").map(img => img.url));
   };
@@ -130,6 +149,7 @@ const AdminProdutos = () => {
         descricao: form.descricao,
         preco: parseFloat(form.preco),
         categoria_id: form.categoria_id,
+        material: form.material,
         estoque: form.estoque,
         destaque: form.destaque,
         peso: form.peso,
@@ -141,10 +161,8 @@ const AdminProdutos = () => {
 
       
       if (editandoId) {
-        console.log('EDITANDO:', payload);
         await api.put(`/produtos/edit/${editandoId}`, payload);
       } else {
-        console.log('CRIANDO:', payload);
         await api.post('/produtos/add', payload);
       }
 
@@ -157,7 +175,7 @@ const AdminProdutos = () => {
   };
 
   const reset = () => {
-    setForm({nome: '', aparelho_id: '', cor: '', descricao: '', preco: '', categoria_id: '', estoque: '', destaque: '', peso: '', altura: '', largura: '', comprimento: '', imagens: []});
+    setForm({nome: '', aparelho_id: '', cor: '', descricao: '', preco: '', categoria_id: '', material: '', estoque: '', destaque: '', peso: '', altura: '', largura: '', comprimento: '', imagens: []});
     setEditandoId(null);
     setPreviews([]);
     buscarProdutos();
@@ -171,6 +189,7 @@ const AdminProdutos = () => {
       descricao: produto.descricao,
       preco: produto.preco,
       categoria_id: produto.categoria_id,
+      material: produto.material,
       estoque: produto.estoque,
       destaque: produto.destaque,
       peso: produto.peso,
@@ -184,13 +203,6 @@ const AdminProdutos = () => {
           acao: "manter"
       }))
     });
-
-    console.log(produto);
-    console.log(produto.imagens.map(img => ({
-      id: img.id,
-      url: img.url,
-      acao: 'manter'
-    })));
 
     setPreviews(produto.imagens.map(img => img.url));
     setEditandoId(produto.id);
@@ -212,7 +224,7 @@ const AdminProdutos = () => {
   return (
     <div className='admin-container'>
       {erro && <span className='erro'>{erro}</span>}
-      <div className='form-btn'  onClick={() => console.log(form)}>
+      <div className='form-btn'  onClick={() => setFormAberto(!formAberto)}>
         <h2 className='title-admin-produto'>{editandoId ? 'Editar Produto' : 'Novo Produto'}</h2>
       </div>
       <div className={`form-wrapper ${formAberto ? 'aberto' : 'fechado'}`}>
@@ -221,20 +233,31 @@ const AdminProdutos = () => {
           <div className="form-grid">
             <div className="form-col">
               <input className='input-admin-produto' type="text" name="nome" placeholder="Nome" value={form.nome} onChange={handleInputChange} required />
-              <input className='input-admin-produto' type="number" name="aparelho_id" placeholder="Aparelho" value={form.aparelho_id} onChange={handleInputChange} required />
+              <select name="aparelhos_id" value={form.aparelho_id} onChange={handleInputChange} className='input-admin-produto'>
+                <option value=''>Aparelhos</option>
+                {aparelhos.map(aparelho => (
+                  <option key={aparelho.id} value={aparelho.id}>{aparelho.nome}</option>
+                ))}
+              </select>
               <input className='input-admin-produto' type="text" name="cor" placeholder="Cor" value={form.cor} onChange={handleInputChange} required />
               <textarea className='input-admin-produto' name="descricao" placeholder="Descrição" value={form.descricao} onChange={handleInputChange} required />
               <input className='input-admin-produto' type="number" name="preco" placeholder="Preço" value={form.preco} onChange={handleInputChange} required />
-            </div>
-
-            <div className="form-col">
-              <input className='input-admin-produto' type="number" name="categoria_id" placeholder="Categoria" value={form.categoria_id} onChange={handleInputChange} required />
-              <input className='input-admin-produto' type="number" name="estoque" placeholder="Estoque" value={form.estoque} onChange={handleInputChange} required />
               <select name="destaque" value={form.destaque} onChange={handleInputChange} className='input-admin-produto'>
                 <option value="">Destaque</option>
                 <option value='sim'>Sim</option>
                 <option value='nao'>Não</option>
               </select>
+            </div>
+
+            <div className="form-col">
+              <select name="categoria_id" value={form.categoria_id} onChange={handleInputChange} className='input-admin-produto'>
+                <option value=''>Categorias</option>
+                {categorias.map(categoria => (
+                  <option key={categoria.id} value={categoria.id}>{categoria.nome}</option>
+                ))}
+              </select>
+              <input className='input-admin-produto' type="text" name="material" placeholder="Material" value={form.material} onChange={handleInputChange} required />
+              <input className='input-admin-produto' type="number" name="estoque" placeholder="Estoque" value={form.estoque} onChange={handleInputChange} required />
               <input className='input-admin-produto' type="number" name="peso" placeholder="Peso (g)" value={form.peso} onChange={handleInputChange} required />
               <input className='input-admin-produto' type="number" name="altura" placeholder="Altura (cm)" value={form.altura} onChange={handleInputChange} required />
               <input className='input-admin-produto' type="number" name="largura" placeholder="Largura (cm)" value={form.largura} onChange={handleInputChange} required />
@@ -293,11 +316,11 @@ const AdminProdutos = () => {
               </div>
               <span>{produto.id}</span>
               <span>{produto.nome}</span>
-              <span>{produto.aparelho_id}</span>
+              <span>{produto.aparelho_nome}</span>
               <span>{produto.cor}</span>
               <span>{produto.descricao}</span>
               <span>R$ {produto.preco}</span>
-              <span>{produto.categoria_id}</span>
+              <span>{produto.categoria_nome}</span>
               <span>{produto.estoque}</span>
               <span>{produto.destaque}</span>
               <span>{produto.peso} g</span>

@@ -15,7 +15,7 @@ function Sobre() {
       <div className='sobre-container'>
         <div className="sobre-content">
           <section className="sobre-hero">
-            <h1>Sobre a MyCell Store</h1>
+            <h1>Sobre a NewCase</h1>
             <p>
               Cada produto é escolhido com cuidado para garantir não só proteção, mas também aquele visual que chama atenção e te destaca na multidão. <br/><br/>
               Valorizamos a experiência completa — desde o momento em que você navega na loja até o recebimento rápido do seu pedido, embalado com carinho e prontinho pra uso. <br/><br/>

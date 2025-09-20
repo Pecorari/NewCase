@@ -1,8 +1,4 @@
 import { Link } from "react-router-dom";
-import facebook from "../../assets/utils/redes/facebook.png"
-import instagram from "../../assets/utils/redes/instagram.png"
-import whatsapp from "../../assets/utils/redes/whatsapp.png"
-
 import "./footer.css";
 
 function Footer() {
@@ -45,15 +41,15 @@ function Footer() {
           <p className="contato-email">Email: contato@mycell.com</p>
           <p>WhatsApp: (19) 97401-2628</p>
           <div className="socials">
-            <a href="/"><img src={facebook} alt="Facebook" /></a>
-            <a href="/"><img src={instagram} alt="Instagram" /></a>
-            <a href="/"><img src={whatsapp} alt="Whatsapp" /></a>
+            <a href="/"><img src='/redes/facebook.svg' alt="Facebook" /></a>
+            <a href="/"><img src='/redes/instagram.svg' alt="Instagram" /></a>
+            <a href="/"><img src='/redes/whatsapp.svg' alt="Whatsapp" /></a>
           </div>
         </div>
       </div>
       
       <div className="footer-bottom">
-        <p>&copy; 2025 MyCell Store. Todos os direitos reservados.</p>
+        <p>&copy; 2025 NewCase. Todos os direitos reservados.</p>
       </div>
     </div>
   );

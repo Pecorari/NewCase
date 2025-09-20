@@ -1,10 +1,10 @@
 const connection = require('../database/connection');
 
 const createProduto = async (dataProduto) => {
-    const { nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque, peso, altura, largura, comprimento, imagens } = dataProduto;
+    const { nome, aparelho_id, cor, descricao, preco, categoria_id, material, estoque, destaque, peso, altura, largura, comprimento, imagens } = dataProduto;
     
-    const [result] = await connection.execute('INSERT INTO produtos(nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque, peso, altura, largura, comprimento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque || 'nao', peso, altura, largura, comprimento]
+    const [result] = await connection.execute('INSERT INTO produtos(nome, aparelho_id, cor, descricao, preco, categoria_id, material, estoque, destaque, peso, altura, largura, comprimento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [nome, aparelho_id, cor, descricao, preco, categoria_id, material, estoque, destaque || 'nao', peso, altura, largura, comprimento]
     );
     
     if (imagens && imagens.length > 0) {
@@ -27,17 +27,15 @@ const getAllProdutos = async (page, limit) => {
     const offsetInt = parseInt(offset, 10);
 
      const [rows] = await connection.execute(`
-        SELECT
-            p.*,
-            JSON_ARRAYAGG(
-                JSON_OBJECT('id', pi.id, 'url', pi.url)
-            ) AS imagens
-        FROM
-            produtos p
-        LEFT JOIN
-            produto_imagens pi ON p.id = pi.produto_id
-        GROUP BY
-            p.id
+        SELECT p.*,
+        a.nome AS aparelho_nome,
+        c.nome AS categoria_nome,
+        JSON_ARRAYAGG(JSON_OBJECT('id', pi.id, 'url', pi.url)) AS imagens
+        FROM produtos p
+        JOIN aparelhos a ON p.aparelho_id = a.id
+        JOIN categorias c ON p.categoria_id = c.id
+        LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
+        GROUP BY p.id
         LIMIT ${limitInt} OFFSET ${offsetInt}
     `);
 
@@ -136,10 +134,12 @@ const getUniqueProduto = async (id) => {
     const [produto] = await connection.execute(`
         SELECT p.*,
         a.nome AS aparelho_nome,
+        c.nome AS categoria_nome,
         GROUP_CONCAT(pi.url) AS imagens,
         AVG(av.avaliacao) AS avaliacao_media
         FROM produtos p
         JOIN aparelhos a ON p.aparelho_id = a.id
+        JOIN categorias c ON p.categoria_id = c.id
         LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
         LEFT JOIN avaliacoes av ON p.id = av.produto_id
         WHERE p.id = ?
@@ -150,10 +150,10 @@ const getUniqueProduto = async (id) => {
 };
 
 const updateProduto = async (dataProduto, id) => {
-    const { nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque, peso, altura, largura, comprimento, imagens  } = dataProduto;
+    const { nome, aparelho_id, cor, descricao, preco, categoria_id, material, estoque, destaque, peso, altura, largura, comprimento, imagens  } = dataProduto;
 
-    await connection.execute('UPDATE produtos SET nome=?, aparelho_id=?, cor=?, descricao=?, preco=?, categoria_id=?, estoque=?, destaque=?, peso=?, altura=?, largura=?, comprimento=? WHERE id = ?',
-        [nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque, peso, altura, largura, comprimento , id]
+    await connection.execute('UPDATE produtos SET nome=?, aparelho_id=?, cor=?, descricao=?, preco=?, categoria_id=?, material=?, estoque=?, destaque=?, peso=?, altura=?, largura=?, comprimento=? WHERE id = ?',
+        [nome, aparelho_id, cor, descricao, preco, categoria_id, material, estoque, destaque, peso, altura, largura, comprimento , id]
     );
 
     if (imagens && imagens.length > 0) {

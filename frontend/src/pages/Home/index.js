@@ -1,9 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import capaDestaque1 from '../../assets/utils/capaDestaque1 - teste.png';
-import colorExplosion from '../../assets/utils/color-explosion2.jpg'
-
 import ProdutosDestaque from "../../components/ProdutosDestaque";
 import RedesSociais from "../../components/RedesSociais";
 import Header from '../../components/Header';
@@ -21,7 +18,7 @@ function Home() {
           <section className="hero">
             <div className="hero-content">
               <div className="hero-image">
-                <img src={capaDestaque1} alt="capa em destaque" className="produto-banner" />
+                <img src='/destaqueHome/capaDestaque1.svg' alt="capa em destaque" className="produto-banner" />
               </div>
               <div className="hero-text">
                 <h1 className="title-hero">PROTEJA SEU CELULAR COM ESTILO</h1>
@@ -29,7 +26,7 @@ function Home() {
                 <Link to="/loja"><button className="hero-btn">ACESSAR A LOJA</button></Link>
               </div>
             </div>
-            <img src={colorExplosion} alt="explosão de cores" className="backgroundImg"/>
+            <img src='/destaqueHome/color-explosion2.svg' alt="explosão de cores" className="backgroundImg"/>
           </section>
 
           <section className="produtos-destaques">
