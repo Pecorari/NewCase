@@ -249,7 +249,7 @@ const Loja = () => {
                       )}
                       {imagens.length > 0 && (
                         <>
-                          <img src={imagens[indice]} alt={produto.nome} className="imagem-produto"
+                          <img src={imagens[indice].url} alt={produto.nome} className="imagem-produto"
                             style={{ display: imagensCarregadas[produto.id] ? 'block' : 'none' }}
                             onLoad={() =>
                               setImagensCarregadas(prev => ({ ...prev, [produto.id]: true }))

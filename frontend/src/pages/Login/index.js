@@ -29,7 +29,7 @@ function Login() {
       setForm({email: '', senha: ''});
       navigate('/loja');
     } catch (err) {
-      setErro(err.response.data.mensagem);
+      setErro(err.response?.data?.mensagem || 'Erro ao realizar o login');
       console.error('Erro ao logar:', err);
     }
   }

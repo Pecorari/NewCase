@@ -26,7 +26,11 @@ const AdminProdutos = () => {
     altura: '',
     largura: '',
     comprimento: '',
-    imagens: [],
+    imagens: [{
+      id: '',
+      url: '',
+      acao: 'manter'
+    }],
   });
   const [editandoId, setEditandoId] = useState(null);
   const [previews, setPreviews] = useState([]);
@@ -38,8 +42,8 @@ const AdminProdutos = () => {
   const buscarProdutos = async (valuePage = 1) => {
     try {
       const response = await api.get(`/produtos?page=${valuePage}`);
-      console.log("Resposta da API:", response.data);
 
+      console.log(response.data.produtos);
       setProdutos(response.data.produtos);
       setPage(response.data.page);
       setTotalPaginas(response.data.totalPaginas);
@@ -51,39 +55,63 @@ const AdminProdutos = () => {
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
+
     if (name === 'imagens') {
       const newFiles = Array.from(files);
-    
-      const updatedImages = [...form.imagens, ...newFiles];
-      const newPreviews = newFiles.map(file => URL.createObjectURL(file));
-      const updatedPreviews = [...previews, ...newPreviews];
-  
+      const updatedImages = [
+        ...form.imagens,
+        ...newFiles.map(file => ({
+          file,
+          url: URL.createObjectURL(file), 
+          acao: "nova"
+        }))
+      ];
+
+      console.log(updatedImages);
+      
       setForm({ ...form, imagens: updatedImages });
-      setPreviews(updatedPreviews);
-      // const previewUrls = Array.from(files).map(file => URL.createObjectURL(file));
+      setPreviews(updatedImages.map(img => img.url));
     } else {
       setForm({ ...form, [name]: value });
     }
   };
 
   const uploadImagens = async (imagens) => {
-    const urls = [];
+    const uploaded = [];
+
     for (const imagem of imagens) {
-      const nomeArquivo = `produtos/${uuidv4()}-${imagem.name}`;
-      const imagemRef = ref(storage, nomeArquivo);
-      await uploadBytes(imagemRef, imagem);
-      const url = await getDownloadURL(imagemRef);
-      urls.push(url);
+      if (imagem.acao === "nova" && imagem.file) {
+        const nomeArquivo = `produtos/${uuidv4()}-${imagem.file.name}`;
+        const imagemRef = ref(storage, nomeArquivo);
+        await uploadBytes(imagemRef, imagem.file);
+        const url = await getDownloadURL(imagemRef);
+
+        uploaded.push({ url, acao: "nova" });
+      } else if (imagem.id) {
+        uploaded.push(imagem);
+      }
     }
-    return urls;
+
+    return uploaded;
   };
 
   const handleRemoveImage = (indexToRemove) => {
-    const updatedImages = form.imagens.filter((_, index) => index !== indexToRemove);
-    const updatedPreviews = previews.filter((_, index) => index !== indexToRemove);
-  
+    const imgDel = form.imagens[indexToRemove];
+    console.log('indexToRemove:', indexToRemove);
+    console.log('imgDel:', imgDel);
+
+    let updatedImages;
+    if (imgDel) {
+      updatedImages = form.imagens.map((item, idx) =>
+        idx === indexToRemove ? { ...item, acao: "remover" } : item
+      );
+    } else { 
+      updatedImages = form.imagens.filter((_, idx) => idx !== indexToRemove);
+    }
+
+    console.log('updatedImages:', updatedImages);
     setForm({ ...form, imagens: updatedImages });
-    setPreviews(updatedPreviews);
+    setPreviews(updatedImages.filter(img => img.acao !== "remover").map(img => img.url));
   };
 
   const handleSubmit = async (e) => {
@@ -111,16 +139,20 @@ const AdminProdutos = () => {
         imagens,
       };
 
+      
       if (editandoId) {
+        console.log('EDITANDO:', payload);
         await api.put(`/produtos/edit/${editandoId}`, payload);
       } else {
+        console.log('CRIANDO:', payload);
         await api.post('/produtos/add', payload);
       }
 
       reset()
     } catch (err) {
-      setErro(err.response.data.mensagem);
-      console.error('Erro ao salvar produto:', err);
+        const msg = err.response?.data?.mensagem || err.message || "Erro inesperado";
+        setErro(msg);
+        console.error('Erro ao salvar produto:', err);
     }
   };
 
@@ -145,10 +177,22 @@ const AdminProdutos = () => {
       altura: produto.altura,
       largura: produto.largura,
       comprimento: produto.comprimento,
-      imagens: [],
+      imagens:
+        produto.imagens.map(img => ({
+          id: img.id,
+          url: img.url,
+          acao: "manter"
+      }))
     });
 
-    setPreviews(produto.imagens || []);
+    console.log(produto);
+    console.log(produto.imagens.map(img => ({
+      id: img.id,
+      url: img.url,
+      acao: 'manter'
+    })));
+
+    setPreviews(produto.imagens.map(img => img.url));
     setEditandoId(produto.id);
     setFormAberto(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -160,7 +204,7 @@ const AdminProdutos = () => {
       await api.delete(`/produtos/del/${id}`);
       buscarProdutos();
     } catch (err) {
-      setErro(err.response.data.mensagem);
+      setErro(err.response?.data?.mensagem || "Erro ao deletar produto"); 
       console.error('Erro ao deletar produto:', err);
     }
   };
@@ -168,7 +212,7 @@ const AdminProdutos = () => {
   return (
     <div className='admin-container'>
       {erro && <span className='erro'>{erro}</span>}
-      <div className='form-btn'  onClick={() => setFormAberto(!formAberto)}>
+      <div className='form-btn'  onClick={() => console.log(form)}>
         <h2 className='title-admin-produto'>{editandoId ? 'Editar Produto' : 'Novo Produto'}</h2>
       </div>
       <div className={`form-wrapper ${formAberto ? 'aberto' : 'fechado'}`}>
@@ -211,7 +255,7 @@ const AdminProdutos = () => {
           <input className='input-admin-produto' type="file" name="imagens" accept="image/*" multiple onChange={handleInputChange} />
 
           <button className='form-btn-admin-produto' type="submit">{editandoId ? 'Atualizar' : 'Criar'}</button>
-          {editandoId ? <button className='form-btn-admin-produto-cancel' onClick={() => {reset()}} type="reset">Cancelar</button> : null}
+          {editandoId ? <button className='form-btn-admin-produto-cancel' onClick={() => {reset()}} type="button">Cancelar</button> : null}
         </form>
       </div>
 
@@ -244,7 +288,7 @@ const AdminProdutos = () => {
             <div className="produto-row" key={produto.id}>
               <div className="produto-imagens">
                 {produto.imagens?.map((img, i) => (
-                  <img key={i} src={img} alt={produto.nome} />
+                  <img key={i} src={img.url} alt={produto.nome} />
                 ))}
               </div>
               <span>{produto.id}</span>

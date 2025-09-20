@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const  { enviarEmailVerificacao } = require('../utils/confirmEmail');
 const { salvarData, exibirData } = require('../utils/formatarDatas');
+const gerarTokenFirebase = require('../utils/firebaseTokenAdmin.js');
 
 const createUsuario = async (req, res) => {
   try {
@@ -123,12 +124,18 @@ const loginUsuario = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24,
     });
 
-    return res.status(200).json({ id: usuario.id, nome: usuario.nome, email: usuario.email });
+    let firebaseToken = null;
+    if (usuario.tipo === 'admin') {
+      firebaseToken = await gerarTokenFirebase(usuario.id.toString());
+    }
+
+    return res.status(200).json({ id: usuario.id, nome: usuario.nome, email: usuario.email, firebaseToken });
   } catch (error) {
     console.error('Erro no loginUsuario:', error);
     return res.status(500).json({ mensagem: 'Erro interno no servidor.' });
   }
 };
+
 const logout = async (req, res) => {
   try {    
     res.clearCookie('token', {

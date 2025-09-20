@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import api from '../hooks/useApi';
+import { signInWithCustomToken } from "firebase/auth";
+import { auth } from '../services/firebase';
 
 const AuthContext = createContext();
 
@@ -23,9 +25,15 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, senha) => {
-    await api.post('/usuarios/login', { email, senha });
-    const res = await api.get('/profile');
-    setUsuario(res.data);
+    const res = await api.post('/usuarios/login', { email, senha });
+    const dadosUser = await api.get('/profile');
+    
+    if (res.data.firebaseToken) {
+      await signInWithCustomToken(auth, res.data.firebaseToken);
+      console.log('logado firebase!');
+    }
+
+    setUsuario(dadosUser.data);
   };
 
   const cadastro = async (nome, cpf, telefone, data_nasc, email, senha) => {

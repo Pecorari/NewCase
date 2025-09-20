@@ -1,11 +1,19 @@
 const connection = require('../database/connection');
 
 const createProduto = async (dataProduto) => {
-    const { nome, aparelho_id, cor, descricao, preco, categoria_id, estoque } = dataProduto;
+    const { nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque, peso, altura, largura, comprimento, imagens } = dataProduto;
     
-    const [result] = await connection.execute('INSERT INTO produtos(nome, aparelho_id, cor, descricao, preco, categoria_id, estoque) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [nome, aparelho_id, cor, descricao, preco, categoria_id, estoque]
+    const [result] = await connection.execute('INSERT INTO produtos(nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque, peso, altura, largura, comprimento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque || 'nao', peso, altura, largura, comprimento]
     );
+    
+    if (imagens && imagens.length > 0) {
+        for (const img of imagens) {
+            if(img.acao === 'nova') {
+                await connection.execute('INSERT INTO produto_imagens(produto_id, url) VALUES (?, ?)',[result.insertId, img.url]);
+            }
+        }
+    }
 
     const [produtoCriado] = await connection.execute('SELECT * FROM produtos WHERE id = ?', [result.insertId]);
 
@@ -18,14 +26,38 @@ const getAllProdutos = async (page, limit) => {
     const limitInt = parseInt(limit, 10);
     const offsetInt = parseInt(offset, 10);
 
-     const [produtos] = await connection.execute(`
-        SELECT p.*,
-            GROUP_CONCAT(pi.url) AS imagens
-            FROM produtos p
-            LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
-            GROUP BY p.id
-            LIMIT ${limitInt} OFFSET ${offsetInt}
+     const [rows] = await connection.execute(`
+        SELECT
+            p.*,
+            JSON_ARRAYAGG(
+                JSON_OBJECT('id', pi.id, 'url', pi.url)
+            ) AS imagens
+        FROM
+            produtos p
+        LEFT JOIN
+            produto_imagens pi ON p.id = pi.produto_id
+        GROUP BY
+            p.id
+        LIMIT ${limitInt} OFFSET ${offsetInt}
     `);
+
+    const produtos = rows.map(row => {
+        let imagens = [];
+        if (typeof row.imagens === 'string') {
+            try {
+                imagens = JSON.parse(row.imagens);
+            } catch (e) {
+                console.error("Erro ao fazer o parse do JSON das imagens:", e);
+            }
+        } else if (Array.isArray(row.imagens)) {
+            imagens = row.imagens;
+        }
+
+        return {
+            ...row,
+            imagens: imagens
+        };
+    });
     
     const [[{ total }]] = await connection.execute(`SELECT COUNT(*) AS total FROM produtos`);
 
@@ -118,11 +150,21 @@ const getUniqueProduto = async (id) => {
 };
 
 const updateProduto = async (dataProduto, id) => {
-    const { nome, aparelho_id, cor, descricao, preco, categoria_id, estoque } = dataProduto;
+    const { nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque, peso, altura, largura, comprimento, imagens  } = dataProduto;
 
-    await connection.execute('UPDATE produtos SET nome=?, aparelho_id=?, cor=?, descricao=?, preco=?, categoria_id=?, estoque=? WHERE id = ?',
-        [nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, id]
+    await connection.execute('UPDATE produtos SET nome=?, aparelho_id=?, cor=?, descricao=?, preco=?, categoria_id=?, estoque=?, destaque=?, peso=?, altura=?, largura=?, comprimento=? WHERE id = ?',
+        [nome, aparelho_id, cor, descricao, preco, categoria_id, estoque, destaque, peso, altura, largura, comprimento , id]
     );
+
+    if (imagens && imagens.length > 0) {
+        for (const img of imagens) {
+            if (img.acao === "remover" && img.id) {
+                await connection.execute('DELETE FROM produto_imagens WHERE id = ?', [img.id]);
+            } else if (img.acao === "nova" && img.url) {
+                await connection.execute('INSERT INTO produto_imagens (produto_id, url) VALUES (?, ?)', [id, img.url]);
+            }
+        }
+    }
 
     const [produtoAtualizado] = await connection.execute('SELECT * FROM produtos WHERE id = ?', [id]);
 

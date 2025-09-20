@@ -16,12 +16,7 @@ const getAllProdutos = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 16;
 
-        const { produtos: results, total } = await produtosModel.getAllProdutos(page, limit);
-
-        const produtos = results.map(produto => ({
-            ...produto,
-            imagens: produto.imagens ? produto.imagens.split(',') : []
-        }));
+        const { produtos, total } = await produtosModel.getAllProdutos(page, limit);
 
         const totalPaginas = Math.ceil(total / limit);
 
