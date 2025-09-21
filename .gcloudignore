@@ -1,0 +1,11 @@
+# Ignorar a pasta do frontend
+frontend/
+
+# Ignorar outros arquivos
+.gitignore
+.gcloudignore
+.git
+.gitattributes
+
+# Manter a pasta do backend
+!backend/
