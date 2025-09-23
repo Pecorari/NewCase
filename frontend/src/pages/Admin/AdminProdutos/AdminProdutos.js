@@ -29,11 +29,12 @@ const AdminProdutos = () => {
     altura: '',
     largura: '',
     comprimento: '',
-    imagens: [{
-      id: '',
-      url: '',
-      acao: 'manter'
-    }],
+    imagens: [],
+    // {
+    //   id: '',
+    //   url: '',
+    //   acao: 'manter'
+    // }
   });
   const [editandoId, setEditandoId] = useState(null);
   const [previews, setPreviews] = useState([]);
@@ -267,9 +268,9 @@ const AdminProdutos = () => {
 
           {previews.length > 0 && (
             <div className="preview-container">
-              {previews.map((preview, index) => (
+              {previews.filter(img => img.acao !== "remover").map((preview, index) => (
                 <div key={index} className="preview-item">
-                  <img src={preview} alt={`Preview ${index}`} width={100} />
+                  <img src={preview.url} alt={`Preview ${index}`} width={100} />
                   <button type="button" onClick={() => handleRemoveImage(index)}>X</button>
                 </div>
               ))}
