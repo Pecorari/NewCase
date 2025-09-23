@@ -5,7 +5,7 @@ const connection = mysql.createPool({
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWD,
         database: process.env.MYSQL_NAME,
-        host: process.env.MYSQL_HOST,
+        socketPath: `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`,
         port: 3306,
 });
 

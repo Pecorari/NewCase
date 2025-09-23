@@ -233,7 +233,7 @@ const AdminProdutos = () => {
           <div className="form-grid">
             <div className="form-col">
               <input className='input-admin-produto' type="text" name="nome" placeholder="Nome" value={form.nome} onChange={handleInputChange} required />
-              <select name="aparelhos_id" value={form.aparelho_id} onChange={handleInputChange} className='input-admin-produto'>
+              <select name="aparelho_id" value={form.aparelho_id} onChange={handleInputChange} className='input-admin-produto'>
                 <option value=''>Aparelhos</option>
                 {aparelhos.map(aparelho => (
                   <option key={aparelho.id} value={aparelho.id}>{aparelho.nome}</option>
