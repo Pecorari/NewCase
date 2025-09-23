@@ -93,7 +93,6 @@ const AdminProdutos = () => {
       ];
       
       setForm({ ...form, imagens: updatedImages });
-      setPreviews(updatedImages.map(img => img.url));
     } else {
       setForm({ ...form, [name]: value });
     }
@@ -119,19 +118,11 @@ const AdminProdutos = () => {
   };
 
   const handleRemoveImage = (indexToRemove) => {
-    const imgDel = form.imagens[indexToRemove];
-
-    let updatedImages;
-    if (imgDel) {
-      updatedImages = form.imagens.map((item, idx) =>
+    const updatedImages = form.imagens.map((item, idx) =>
         idx === indexToRemove ? { ...item, acao: "remover" } : item
       );
-    } else { 
-      updatedImages = form.imagens.filter((_, idx) => idx !== indexToRemove);
-    }
 
     setForm({ ...form, imagens: updatedImages });
-    setPreviews(updatedImages.filter(img => img.acao !== "remover").map(img => img.url));
   };
 
   const handleSubmit = async (e) => {
@@ -178,7 +169,6 @@ const AdminProdutos = () => {
   const reset = () => {
     setForm({nome: '', aparelho_id: '', cor: '', descricao: '', preco: '', categoria_id: '', material: '', estoque: '', destaque: '', peso: '', altura: '', largura: '', comprimento: '', imagens: []});
     setEditandoId(null);
-    setPreviews([]);
     buscarProdutos();
   };
 
@@ -266,11 +256,11 @@ const AdminProdutos = () => {
             </div>
           </div>
 
-          {previews.length > 0 && (
+          {form.imagens.filter(img => img.acao !== "remover").length > 0 && (
             <div className="preview-container">
-              {previews.filter(img => img.acao !== "remover").map((preview, index) => (
+              {form.imagens.filter(img => img.acao !== "remover").map((img, index) => (
                 <div key={index} className="preview-item">
-                  <img src={preview.url} alt={`Preview ${index}`} width={100} />
+                  <img src={img.url} alt={`Preview ${index}`} width={100} />
                   <button type="button" onClick={() => handleRemoveImage(index)}>X</button>
                 </div>
               ))}
