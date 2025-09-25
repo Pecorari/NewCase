@@ -89,8 +89,11 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   max-width: calc(2 * 200px + 0.6rem);
   margin: 6.5rem auto 40px auto;
+}
+.grid-prod-skeleton {
   min-height: calc(2 * 1100px + 0.6rem); 
 }
+
 .card-produto {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
@@ -198,6 +201,8 @@
   .grid-produtos {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     max-width: calc(3 * 200px + 0.6rem);
+  }
+  .grid-prod-skeleton {
     min-height: calc(3 * 516px + 0.6rem); 
   }
 }
@@ -265,6 +270,8 @@
   .grid-produtos {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     max-width: calc(4 * 250px + 0.6rem);
+  }
+  .grid-prod-skeleton {
     min-height: calc(4 * 310px + 0.6rem); 
   }
 
@@ -285,6 +292,8 @@
   .grid-produtos {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     max-width: calc(5 * 250px + 0.6rem);
+  }
+  .grid-prod-skeleton {
     min-height: calc(5 * 200px + 0.6rem);
   }
 
@@ -324,6 +333,8 @@
   .grid-produtos {
     grid-template-columns: repeat(6, minmax(0, 1fr));
     max-width: calc(6 * 250px + 0.6rem);
+  }
+  .grid-prod-skeleton {
     min-height: calc(6 * 125px + 0.6rem);
   }
 
@@ -367,6 +378,8 @@
   .grid-produtos {
     gap: 0.8rem;
     max-width: calc(6 * 280px + 0.6rem);
+  }
+  .grid-prod-skeleton {
     min-height: calc(6 * 170px + 0.6rem);
   }
 
@@ -413,6 +426,8 @@
 
   .grid-produtos {
     max-width: calc(6 * 400px + 0.6rem);
+  }
+  .grid-prod-skeleton {
     min-height: calc(6 * 200px + 0.6rem);
   }
 
@@ -443,7 +458,7 @@
     right: 0;
   }
 
-  .grid-produtos {
+  .grid-prod-skeleton {
     min-height: calc(6 * 230px + 0.6rem);
   }
 

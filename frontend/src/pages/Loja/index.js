@@ -230,7 +230,7 @@ const Loja = () => {
           </div>
           
           {loading ? (
-            <div className="grid-produtos">
+            <div className="grid-produtos grid-prod-skeleton">
               {Array.from({ length: 18 }).map((s) => (
                 <Skeleton key={s} height={`100%`} className="card-produto skeleton" />
               ))}

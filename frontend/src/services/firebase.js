@@ -3,12 +3,12 @@ import { getStorage } from 'firebase/storage';
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDJ2pYN0Tan8u6IkyEBUsujcUmYNC08OOQ",
-  authDomain: "mycellstore-da6f9.firebaseapp.com",
-  projectId: "mycellstore-da6f9",
-  storageBucket: "mycellstore-da6f9.firebasestorage.app",
-  messagingSenderId: "700054947412",
-  appId: "1:700054947412:web:666a6e81007e99eaeb0fc1"
+  apiKey: "AIzaSyBYh9zJbsrgPeqDBQ-cydu4Bg2h0RhpDns",
+  authDomain: "newcase-a6d58.firebaseapp.com",
+  projectId: "newcase-a6d58",
+  storageBucket: "newcase-a6d58.firebasestorage.app",
+  messagingSenderId: "189534612683",
+  appId: "1:189534612683:web:aebd1e5169f96a7c2dff4e"
 };
 
 const app = initializeApp(firebaseConfig);

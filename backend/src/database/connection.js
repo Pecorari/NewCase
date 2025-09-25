@@ -2,11 +2,12 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const connection = mysql.createPool({
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWD,
-        database: process.env.MYSQL_NAME,
-        socketPath: `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`,
-        port: 3306,
+    user: process.env.MYSQL_USER_local,
+    password: process.env.MYSQL_PASSWD_local,
+    database: process.env.MYSQL_NAME_local,
+    socketPath: `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`,
+    // host: process.env.MYSQL_HOST_local,
+    port: 3306
 });
 
 async function testConnection() {

@@ -29,15 +29,9 @@ const AdminProdutos = () => {
     altura: '',
     largura: '',
     comprimento: '',
-    imagens: [],
-    // {
-    //   id: '',
-    //   url: '',
-    //   acao: 'manter'
-    // }
+    imagens: []
   });
   const [editandoId, setEditandoId] = useState(null);
-  const [previews, setPreviews] = useState([]);
 
   useEffect(() => {
     buscarProdutos(1);
@@ -160,7 +154,7 @@ const AdminProdutos = () => {
 
       reset()
     } catch (err) {
-        const msg = err.response?.data?.mensagem || err.message || "Erro inesperado";
+        const msg = err.response?.data?.erros?.[0]?.msg || err.message || "Erro inesperado";
         setErro(msg);
         console.error('Erro ao salvar produto:', err);
     }
@@ -169,6 +163,7 @@ const AdminProdutos = () => {
   const reset = () => {
     setForm({nome: '', aparelho_id: '', cor: '', descricao: '', preco: '', categoria_id: '', material: '', estoque: '', destaque: '', peso: '', altura: '', largura: '', comprimento: '', imagens: []});
     setEditandoId(null);
+    setErro('');
     buscarProdutos();
   };
 
@@ -195,7 +190,6 @@ const AdminProdutos = () => {
       }))
     });
 
-    setPreviews(produto.imagens.map(img => img.url));
     setEditandoId(produto.id);
     setFormAberto(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
