@@ -1,14 +1,14 @@
 steps:
-  # 1. Build e push usando gcloud buildpacks
+  # 1. Build e push usando Cloud Buildpacks
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       [
         'builds',
         'submit',
+        './backend',
         '--pack',
-        '--tag=gcr.io/$PROJECT_ID/backend:$SHORT_SHA',
-        './backend'
+        '--tag=gcr.io/$PROJECT_ID/backend:$SHORT_SHA'
       ]
 
   # 2. Deploy no Cloud Run
@@ -27,7 +27,7 @@ steps:
 
 options:
   logging: CLOUD_LOGGING_ONLY
-
+  
 # steps:
 #   # 1. Construir imagem Docker a partir do Dockerfile que está na pasta backend/
 #   - name: 'gcr.io/cloud-builders/docker'
