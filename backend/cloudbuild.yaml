@@ -1,0 +1,23 @@
+steps:
+  # 1. Construir imagem Docker a partir do Dockerfile que está na pasta backend/
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-west1-docker.pkg.dev/$PROJECT_ID/newcase-repo/backend:$SHORT_SHA', './backend']
+
+  # 2. Enviar imagem para o Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-west1-docker.pkg.dev/$PROJECT_ID/newcase-repo/backend:$SHORT_SHA']
+
+  # 3. Implantar no Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - backend
+      - --image=us-west1-docker.pkg.dev/$PROJECT_ID/newcase-repo/backend:$SHORT_SHA
+      - --region=us-west1
+      - --platform=managed
+      - --allow-unauthenticated
+
+images:
+  - 'us-west1-docker.pkg.dev/$PROJECT_ID/newcase-repo/backend:$SHORT_SHA'
