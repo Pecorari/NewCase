@@ -15,7 +15,7 @@ steps:
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  
+
 # steps:
 #   # 1. Construir imagem Docker a partir do Dockerfile que está na pasta backend/
 #   - name: 'gcr.io/cloud-builders/docker'
