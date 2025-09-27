@@ -1,17 +1,5 @@
 steps:
-  # 1. Build e push usando Cloud Buildpacks
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      [
-        'builds',
-        'submit',
-        './backend',
-        '--pack',
-        '--tag=gcr.io/$PROJECT_ID/backend:$SHORT_SHA'
-      ]
-
-  # 2. Deploy no Cloud Run
+  # 1. Deploy direto no Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -19,7 +7,7 @@ steps:
         'run',
         'deploy',
         'backend',
-        '--image=gcr.io/$PROJECT_ID/backend:$SHORT_SHA',
+        '--source=./backend',
         '--region=us-west1',
         '--platform=managed',
         '--allow-unauthenticated'
