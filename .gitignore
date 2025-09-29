@@ -39,3 +39,5 @@ yarn-error.log*
 # Chave privada de acesso ao Firebase
 backend/config
 backend/config/firebase-service-account.json
+
+frontend/build
