@@ -24,7 +24,10 @@
     const [imagemSelecionada, setImagemSelecionada] = useState(0);
     const [avaliacoes, setAvaliacoes] = useState([]);
     const [cep, setCep] = useState('');
-    const [fretes, setFretes] = useState([]);
+    const [freteSimulado, setFreteSimulado] = useState({
+      prazo: '',
+      valor: ''
+    });
     const [loadingFrete, setLoadingFrete] = useState(false);
     const [modalInfo, setModalInfo] = useState({ open: false, avaliacaoId: null });
     const [loading, setLoading] = useState(true);
@@ -84,8 +87,31 @@
           largura: produto.largura,
           valor: produto.preco
         });
+
+        let valor = Infinity;
+        let prazo = null;
+
+        for (const opcao of resultado) {
+          if (!opcao || opcao.price == null) continue;
+          const preco = parseFloat(String(opcao.price).replace(',', '.'));
+          if (isNaN(preco)) continue;
+
+          if (preco < valor) {
+            valor = preco;
+            prazo = opcao.delivery_time;
+          }
+        }
         
-        setFretes(resultado);
+
+        if (!prazo) {
+          console.log('Nenhuma opção de frete válida');
+        } else {
+          console.log('Prazo:', prazo, 'Dias', 'Valor: R$', valor.toFixed(2));
+          setFreteSimulado({
+            prazo,
+            valor
+          });
+        }
       } catch (e) {
         console.log('Erro ao calcular o frete', e);
       } finally {
@@ -254,36 +280,29 @@
                 <button onClick={handleFrete} disabled={loadingFrete}>{loadingFrete ? 'Calculando...' : 'Calcular Frete'}</button>
               </div>
             
-              {fretes.length > 0 && (
+              {freteSimulado.valor !== '' && (
                 <div className="resultado-frete">
-                  <h4>Opções de envio:</h4>
                   <ul className="frete-lista">
-                    {fretes.map((opcao, index) => (
-                      <li className="frete-item" key={index}>
+                      <li className="frete-item">
                         <img
-                          src={opcao.company.picture}
-                          alt={opcao.name}
+                          src='/frete-icon.svg'
+                          alt='Frete Logo'
                           className="frete-logo"
                         />
                         <div className="frete-detalhes">
-                          <h4>{opcao.name}</h4>
-                          {opcao.error ? (
-                            <p>{opcao.error}</p>
+                          <h4>{freteSimulado.name}Frete a partir de R$ {freteSimulado.valor} - {freteSimulado.prazo} dias úteis</h4>
+                          {freteSimulado.error ? (
+                            <p>{freteSimulado.error}</p>
                           ) : (
-                            <p>
-                              R$ {opcao.price} - {opcao.delivery_time} dias úteis
-                            </p>
+                            <p>*Simulação, mais opções no checkout.</p>
                           )}
                         </div>
                       </li>
-                    ))}
                   </ul>
                 </div>
               )}
             </div>
-
             </div>
-
           </section>
         
 
