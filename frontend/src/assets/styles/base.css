@@ -23,15 +23,15 @@ body {
 .skeleton {
   background: linear-gradient(90deg, #2a2a40 25%, #3a3a55 50%, #2a2a40 75%);
   background-size: 200% 100%;
-  animation: loading 1.5s infinite;
+  animation: loading 1.5s infinite linear;
   border-radius: 8px;
 }
 
 @keyframes loading {
-  from {
+  0% {
     background-position: 200% 0;
   }
-  to {
+  100% {
     background-position: -200% 0;
   }
 }

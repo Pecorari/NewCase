@@ -155,6 +155,22 @@ body {
   max-width: 900px;
   max-height: 90%;
   overflow-y: auto;
+  position: relative;
+}
+
+.close-modal-adminPedidos {
+  border: none;
+  background-color: transparent;
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 10px;
+  position: absolute;
+  right: 20px;
+  top: 15px;
+}
+.close-modal-adminPedidos:hover {
+  color: var(--color-strong);
 }
 
 .modal-content-adm h2 {
@@ -208,16 +224,19 @@ body {
 .item-card-adm p {
   margin: 2px 0;
 }
-
-.modal-content-adm button {
+.container-gerar-etiqueta {
+  text-align: center;
+}
+.gerar-etiqueta {
   padding: 8px 30px;
   background-color: var(--color-primary);
   border: none;
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 45%;
+  margin: auto;
+  font-weight: 600;
 }
-.modal-content-adm button:hover {
+.gerar-etiqueta:hover {
   background-color: var(--color-strong);
 }

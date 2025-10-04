@@ -17,6 +17,11 @@ const getUserEnderecos = async (idLogado) => {
     return enderecos;
 };
 
+const getUniqueUserEnderecos = async (id) => {
+    const [endereco] = await connection.execute('SELECT * FROM enderecos WHERE id = ?', [id]);
+    return endereco;
+};
+
 const updateEndereco = async (dataEndereco, idLogado, id) => {
     const { cep, rua, numero, complemento, bairro, cidade, estado } = dataEndereco;
 
@@ -38,6 +43,7 @@ const deleteEndereco = async (id) => {
 module.exports = {
     createEndereco,
     getUserEnderecos,
+    getUniqueUserEnderecos,
     updateEndereco,
     deleteEndereco
 };

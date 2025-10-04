@@ -45,6 +45,13 @@ const AdminPedidos = () => {
     }
   };
 
+  async function gerarEtiqueta(id) {
+    console.log('id do pedido:', id);
+
+    const response = await api.post(`/pedidos/${id}/gerar-etiqueta`);
+    console.log(response);
+  }
+
   return (
     <div className="admin-container">
       {erro && <span className="erro">{erro}</span>}
@@ -94,6 +101,7 @@ const AdminPedidos = () => {
       {pedidoSelecionado && (
         <div className="modal-adm">
           <div className="modal-content-adm">
+            <button className="close-modal-adminPedidos" onClick={() => setPedidoSelecionado(null)}>X</button>
             <h2>Detalhes do Pedido #{pedidoSelecionado.pedido_id}</h2>
 
             <div className="modal-grid-adm">
@@ -107,17 +115,31 @@ const AdminPedidos = () => {
 
                 <section>
                   <h3 className="subtitles-sections-adm">Endereço a ser entregue</h3>
-                  <p>Rua: {pedidoSelecionado.endereco.rua}</p>
-                  <p>Número: {pedidoSelecionado.endereco.numero}</p>
-                  <p>Bairro: {pedidoSelecionado.endereco.bairro}</p>
-                  <p>Cidade: {pedidoSelecionado.endereco.cidade}</p>
-                  <p>Estado: {pedidoSelecionado.endereco.estado}</p>
-                  <p>CEP: {pedidoSelecionado.endereco.cep}</p>
-                  <p>Complemento: {pedidoSelecionado.endereco.complemento}</p>
+                  <p>Rua: {pedidoSelecionado.endereco.endereco_rua}</p>
+                  <p>Número: {pedidoSelecionado.endereco.endereco_numero}</p>
+                  <p>Bairro: {pedidoSelecionado.endereco.endereco_bairro}</p>
+                  <p>Cidade: {pedidoSelecionado.endereco.endereco_cidade}</p>
+                  <p>Estado: {pedidoSelecionado.endereco.endereco_estado}</p>
+                  <p>CEP: {pedidoSelecionado.endereco.endereco_cep}</p>
+                  <p>Complemento: {pedidoSelecionado.endereco.endereco_complemento}</p>
                 </section>
               </div>
 
               <div>
+                <section>
+                  <h3 className="subtitles-sections-adm">destinatario</h3>
+                  {pedidoSelecionado.destinatario ? (
+                    <>
+                      <p>Nome: {pedidoSelecionado.destinatario.nome}</p>
+                      <p>CPF: {pedidoSelecionado.destinatario.cpf}</p>
+                      <p>Email: {pedidoSelecionado.destinatario.email}</p>
+                      <p>Telefone: {pedidoSelecionado.destinatario.telefone}</p>
+                    </>
+                  ) : (
+                    <p>Sem pagamento registrado</p>
+                  )}
+                </section>
+
                 <section>
                   <h3 className="subtitles-sections-adm">Pagamento</h3>
                   {pedidoSelecionado.pagamento ? (
@@ -150,8 +172,8 @@ const AdminPedidos = () => {
                       <div className='boxes-info-pd-adm'>
                         <h3>{item.nome} <span className='span-id-adm'>ID: #{item.produto_id}</span></h3>
                         <p className='compatibilidade-adm'>{item.aparelho_nome}</p>
-                    </div>
-                    <div className='boxes-valor-pd-adm'>
+                      </div>
+                      <div className='boxes-valor-pd-adm'>
                         <p>Qtd: {item.quantidade}</p>
                         <p>R$ {item.preco_unitario}</p>
                       </div>
@@ -161,7 +183,9 @@ const AdminPedidos = () => {
               </div>
             </section>
 
-            <button onClick={() => setPedidoSelecionado(null)}>Fechar</button>
+            <div className="container-gerar-etiqueta">
+              <button className="gerar-etiqueta" onClick={() => gerarEtiqueta(pedidoSelecionado.pedido_id)}>Gerar Etiqueta</button>
+            </div>
           </div>
         </div>
       )}

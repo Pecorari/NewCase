@@ -139,17 +139,10 @@ const Checkout = () => {
       const subTotal = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
       const totalComFrete = Number((subTotal + valorFrete).toFixed(2));
 
-      const cepFormatado = Number(enderecoSelecionado.cep.replace(/\D/g, ""));
-
       const dataPedido = {
         total: totalComFrete,
-        endereco_rua: enderecoSelecionado.rua,
-        endereco_numero: Number(enderecoSelecionado.numero),
-        endereco_bairro: enderecoSelecionado.bairro,
-        endereco_cidade: enderecoSelecionado.cidade,
-        endereco_estado: enderecoSelecionado.estado,
-        endereco_cep: cepFormatado,
-        endereco_complemento: enderecoSelecionado.complemento,
+        endereco_id: enderecoSelecionado.id,
+        frete_id: freteSelecionado.id,
         frete_nome: freteSelecionado.name,
         frete_logo: freteSelecionado.company?.picture || "",
         frete_valor: valorFrete,
@@ -303,7 +296,7 @@ const Checkout = () => {
       setTimeout(() => setStatusPagamento(null), 3000);
     }
   };
-
+  
   return (
     <div className="checkout">
       <Header />
@@ -314,7 +307,7 @@ const Checkout = () => {
           <div className="p-8">
             <Stepper
               steps={[
-                { label: "Dados Pessoais" },
+                { label: "Destinatário" },
                 { label: "Escolha o Endereço" },
                 { label: "Escolha o Frete" },
                 { label: "Pagamento" }

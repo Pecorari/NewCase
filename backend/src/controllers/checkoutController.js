@@ -43,7 +43,7 @@ const checkout = async (req, res) => {
 
     const { dataPedido, itens, metodo, cliente, endereco_entrega, pagamento } = req.body;
 
-    const { pedido, itensPedido } = await pedidosModel.createPedidoWithConn(conn, dataPedido, itens, req.usuario.id);
+    const { pedido, itensPedido } = await pedidosModel.createPedidoWithConn(conn, dataPedido, cliente, itens, req.usuario.id);
   
     const body = montarBodyPagbank(pedido, itensPedido, metodo, cliente, endereco_entrega, pagamento);
 
@@ -64,12 +64,13 @@ const checkout = async (req, res) => {
     const paid_at = charge?.paid_at ? new Date(charge.paid_at) : null;
 
     let status_pagamento = 'Pendente';
-    if (status === "PAID" || status === "AUTHORIZED") status_pagamento = 'Aprovado';
-    else if (status === "WAITING" || status === "IN_ANALYSIS") status_pagamento = 'Pendente';
-    else if (status === "CANCELED" || status === "DECLINED") status_pagamento = 'Cancelado';
-    else if (status === "EXPIRED") status_pagamento = 'Expirado';
+    let status_pedido = 'Aguardando Pagamento';
+    if (status === "PAID" || status === "AUTHORIZED") status_pagamento = 'Aprovado', status_pedido = 'Preparando para envio';
+    else if (status === "WAITING" || status === "IN_ANALYSIS") status_pagamento = 'Pendente', status_pedido = 'Aguardando Pagamento';
+    else if (status === "CANCELED" || status === "DECLINED") status_pagamento = 'Cancelado', status_pedido = 'Cancelado';
+    else if (status === "EXPIRED") status_pagamento = 'Expirado', status_pedido = 'Cancelado';
 
-    await conn.execute(`UPDATE pedidos SET pagbank_ped_id = ? WHERE id = ?`, [dadosOrder.id, pedido.id]);
+    await conn.execute(`UPDATE pedidos SET status = ? , pagbank_ped_id = ? WHERE id = ?`, [status_pedido , dadosOrder.id, pedido.id]);
 
     await conn.execute(`INSERT INTO pagamentos (pedido_id, metodo_pagamento, status_pagamento, valor_total, pago_em, chave_pix, link_boleto, pagbank_pag_id, pagbank_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [

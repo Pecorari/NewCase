@@ -1,4 +1,5 @@
 const connection = require('../database/connection');
+const pedidosModel = require('../models/pedidosModel');
 const axios = require('axios');
 require('dotenv').config();
 
@@ -102,7 +103,6 @@ const calcularFrete = async (req, res) => {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'User-Agent': 'MyCellStore (mycell.store.official@gmail.com)'
       }
     });
 
@@ -113,4 +113,103 @@ const calcularFrete = async (req, res) => {
   }
 };
 
-module.exports = { obterToken, calcularFrete };
+
+
+
+
+const gerarEtiqueta = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const accessToken = await getValidToken();
+
+    // 1️⃣ Busca dados do pedido no banco
+    const pedido = await pedidosModel.getAdminPedidoBySearch(id);
+    if (!pedido) {
+        return res.status(404).json({ error: "Pedido não encontrado" });
+    }
+
+    // 2️⃣ Monta o corpo do shipment (dados do pedido + frete escolhido)
+    const shipmentBody = {
+        service: pedido.frete_id,
+        from: {
+            name: "NEWCASE STORE",
+            phone: "19974012628",
+            email: "contato@newcase.com",
+            company_document: "00000000000191",
+            address: "Rua Exemplo",
+            complement: "",
+            number: "123",
+            district: "Centro",
+            city: "São Paulo",
+            state_abbr: "SP",
+            postal_code: "01001000"
+        },
+        to: {
+            name: pedido.cliente_nome,
+            phone: pedido.cliente_telefone,
+            email: pedido.cliente_email,
+            document: pedido.cliente_cpf,
+            address: pedido.endereco_rua,
+            complement: pedido.endereco_complemento || "",
+            number: pedido.endereco_numero,
+            district: pedido.endereco_bairro,
+            city: pedido.endereco_cidade,
+            state_abbr: pedido.endereco_estado,
+            postal_code: pedido.endereco_cep
+        },
+        packages: [
+            {
+                height: pedido.produto_altura,
+                width: pedido.produto_largura,
+                length: pedido.produto_comprimento,
+                weight: pedido.produto_peso
+            }
+        ],
+        options: {
+            insurance_value: pedido.total,
+            receipt: false,
+            own_hand: false,
+            reverse: false,
+            non_commercial: false
+        }
+    };
+    
+    // 3️⃣ Cria o shipment
+    const shipmentResponse = await axios.post(`https://melhorenvio.com.br/api/v2/shipment`, [shipmentBody], {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    });
+    console.log(shipmentResponse);
+
+    const shipmentId = shipmentResponse.data[0]?.id;
+    if (!shipmentId) {
+      throw new Error("Não foi possível criar o shipment no Melhor Envio.");
+    }
+    console.log("Shipment criado:", shipmentId);
+    
+    // salva o shipment_id no pedido
+    pedido.shipment_id = shipmentId;
+    await pedidosModel.updateAdminPedido(id, { shipment_id: shipmentId });
+
+
+
+
+
+    return res.status(200).json({ message: 'Etiqueta gerada com sucesso!' });
+  } catch (error) {
+    console.error("Erro ao gerar etiqueta:", error.response?.data || error.message);
+    return res.status(500).json({
+      error: "Falha ao gerar etiqueta",
+      details: error.response?.data || error.message
+    });
+  }
+};
+
+module.exports = {
+  obterToken,
+  calcularFrete,
+  gerarEtiqueta
+};

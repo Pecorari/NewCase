@@ -22,6 +22,19 @@ const getUserEnderecos = async (req, res) => {
     }
 };
 
+const getUniqueUserEnderecos = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const enderecos = await enderecosModel.getUniqueUserEnderecos(id);
+
+        return res.status(200).json(enderecos);
+    } catch (error) {
+        console.error('Erro em getUniqueUserEnderecos:', error);
+        return res.status(500).json({ error: 'Erro interno no servidor' });
+    }
+};
+
 const updateEndereco = async (req, res) => {
     try {
         const { id } = req.params;
@@ -51,6 +64,7 @@ const deleteEndereco = async (req, res) => {
 module.exports = {
     createEndereco,
     getUserEnderecos,
+    getUniqueUserEnderecos,
     updateEndereco,
     deleteEndereco
 };

@@ -39,6 +39,7 @@ router.post('/contato-email', async (req, res) => {
 
 router.get('/oauth/callback', freteController.obterToken);
 router.post('/calcular-frete', freteController.calcularFrete);
+router.post('/frete/:id/gerar-etiqueta', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, freteController.gerarEtiqueta);
 
 router.post('/produtos/add', autenticarToken, verificarPermissao(['admin']), validarProduto, validarRequisicao, produtosController.createProduto);
 router.get('/produtos', produtosController.getAllProdutos);
@@ -80,6 +81,7 @@ router.delete('/carrinho/limpar', autenticarToken, verificarPermissao(['admin', 
 
 router.post('/enderecos/add', autenticarToken, verificarPermissao(['admin', 'cliente']), validarEndereco, validarRequisicao, enderecosController.createEndereco);
 router.get('/enderecos', autenticarToken, verificarPermissao(['admin', 'cliente']), enderecosController.getUserEnderecos);
+router.get('/enderecos/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), enderecosController.getUniqueUserEnderecos);
 router.put('/enderecos/edit/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), verificarProprietario('enderecos', 'usuario_id'), validarId, validarEndereco, validarRequisicao, enderecosController.updateEndereco);
 router.delete('/enderecos/del/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), verificarProprietario('enderecos', 'usuario_id'), validarId, validarRequisicao, enderecosController.deleteEndereco);
 
@@ -102,7 +104,7 @@ router.post('/redefinir-senha', validarSenha, validarRequisicao, senhaController
 
 router.get('/pedidosAdmin', autenticarToken, verificarPermissao(['admin']), pedidosController.getAdminPedidos);
 router.get('/pedidosAdmin/search/:value', autenticarToken, verificarPermissao(['admin']), validarRequisicao, pedidosController.getAdminPedidoBySearch);
-router.put('/pedidosAdmin/edit/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarPedido, validarRequisicao, pedidosController.updateAdminPedido);
+router.put('/pedidosAdmin/edit/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, pedidosController.updateAdminPedido);
 router.delete('/pedidosAdmin/del/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, pedidosController.deletePedido);
 
 router.get('/usuarios', autenticarToken, verificarPermissao(['admin']), usuariosController.getAllUsuarios);

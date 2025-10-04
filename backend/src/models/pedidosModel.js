@@ -1,12 +1,14 @@
 const connection = require('../database/connection');
+const enderecosController = require('../controllers/enderecosController');
 
-const createPedidoWithConn = async (conn, dataPedido, itens, idLogado) => {
-  const { total, endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo } = dataPedido;
+const createPedidoWithConn = async (conn, dataPedido, cliente, itens, idLogado) => {
+  const { total, endereco_id, frete_id, frete_nome, frete_logo, frete_valor, frete_prazo } = dataPedido;
+  const { nome, cpf, email, telefone } = cliente;
 
   const [result] = await conn.execute(`
-    INSERT INTO pedidos(usuario_id, total, status, endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `, [idLogado, total, 'Aguardando Pagamento', endereco_rua, endereco_numero, endereco_bairro, endereco_cidade, endereco_estado, endereco_cep, endereco_complemento, frete_nome, frete_logo, frete_valor, frete_prazo]);
+    INSERT INTO pedidos(usuario_id, total, status, cliente_nome, cliente_cpf, cliente_email, cliente_telefone, endereco_id, frete_id, frete_nome, frete_logo, frete_valor, frete_prazo) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `, [idLogado, total, 'Aguardando Pagamento', nome, cpf, email, telefone, endereco_id, frete_id, frete_nome, frete_logo, frete_valor, frete_prazo]);
 
   const pedidoId = result.insertId;
 
@@ -67,19 +69,25 @@ const cancelarPedido = async (id, idLogado) => {
 
 const getAdminPedidos = async () => {
   const [rows] = await connection.execute(`
-SELECT
+    SELECT
       -- Pedido
       p.id AS pedido_id,
       p.usuario_id,
       p.total,
       p.status AS status_pedido,
-      p.endereco_rua,
-      p.endereco_numero,
-      p.endereco_bairro,
-      p.endereco_cidade,
-      p.endereco_estado,
-      p.endereco_cep,
-      p.endereco_complemento,
+      p.cliente_nome,
+      p.cliente_cpf,
+      p.cliente_email,
+      p.cliente_telefone,
+      p.endereco_id,
+      e.rua AS endereco_rua,
+      e.numero AS endereco_numero,
+      e.bairro AS endereco_bairro,
+      e.cidade AS endereco_cidade,
+      e.estado AS endereco_estado,
+      e.complemento AS endereco_complemento,
+      e.cep AS endereco_cep,
+      p.frete_id,
       p.frete_nome,
       p.frete_logo,
       p.frete_valor,
@@ -96,6 +104,10 @@ SELECT
       pi.id AS item_id,
       pi.produto_id,
       pr.nome AS produto_nome,
+      pr.peso AS produto_peso,
+      pr.comprimento AS produto_comprimento,
+      pr.largura AS produto_largura,
+      pr.altura AS produto_altura,
       pi.quantidade,
       pi.preco_unitario,
       
@@ -114,6 +126,7 @@ SELECT
 
     FROM pedidos AS p
     JOIN usuarios AS u ON u.id = p.usuario_id
+    LEFT JOIN enderecos AS e ON e.id = p.endereco_id
     LEFT JOIN pedido_itens AS pi ON pi.pedido_id = p.id
     LEFT JOIN produtos AS pr ON pr.id = pi.produto_id
     LEFT JOIN pagamentos AS pg ON pg.pedido_id = p.id
@@ -131,16 +144,24 @@ SELECT
         usuario_id: row.usuario_id,
         total: row.total,
         status: row.status_pedido,
+        destinatario: {
+          nome: row.cliente_nome,
+          cpf: row.cliente_cpf,
+          email: row.cliente_email,
+          telefone: row.cliente_telefone,
+        },
         endereco: {
-          rua: row.endereco_rua,
-          numero: row.endereco_numero,
-          bairro: row.endereco_bairro,
-          cidade: row.endereco_cidade,
-          estado: row.endereco_estado,
-          cep: row.endereco_cep,
-          complemento: row.endereco_complemento,
+          endereco_id: row.endereco_id,
+          endereco_rua: row.endereco_rua,
+          endereco_numero: row.endereco_numero,
+          endereco_bairro: row.endereco_bairro,
+          endereco_cidade: row.endereco_cidade,
+          endereco_estado: row.endereco_estado,
+          endereco_complemento: row.endereco_complemento || '',
+          endereco_cep: row.endereco_cep,
         },
         frete: {
+          frete_id: row.frete_id,
           nome: row.frete_nome,
           logo: row.frete_logo,
           valor: row.frete_valor,
@@ -173,6 +194,10 @@ SELECT
         produto_imagem_url: row.produto_imagem_url,
         nome: row.produto_nome,
         aparelho_nome: row.aparelho_nome,
+        produto_peso: row.produto_peso,
+        produto_comprimento: row.produto_comprimento,
+        produto_largura: row.produto_largura,
+        produto_altura: row.produto_altura,
         quantidade: row.quantidade,
         preco_unitario: row.preco_unitario,
       });
@@ -190,13 +215,19 @@ const getAdminPedidoBySearch = async (value) => {
       p.usuario_id,
       p.total,
       p.status AS status_pedido,
-      p.endereco_rua,
-      p.endereco_numero,
-      p.endereco_bairro,
-      p.endereco_cidade,
-      p.endereco_estado,
-      p.endereco_cep,
-      p.endereco_complemento,
+      p.cliente_nome,
+      p.cliente_cpf,
+      p.cliente_email,
+      p.cliente_telefone,
+      p.endereco_id,
+      e.rua AS endereco_rua,
+      e.numero AS endereco_numero,
+      e.bairro AS endereco_bairro,
+      e.cidade AS endereco_cidade,
+      e.estado AS endereco_estado,
+      e.complemento AS endereco_complemento,
+      e.cep AS endereco_cep,
+      p.frete_id,
       p.frete_nome,
       p.frete_logo,
       p.frete_valor,
@@ -213,6 +244,10 @@ const getAdminPedidoBySearch = async (value) => {
       pi.id AS item_id,
       pi.produto_id,
       pr.nome AS produto_nome,
+      pr.peso AS produto_peso,
+      pr.comprimento AS produto_comprimento,
+      pr.largura AS produto_largura,
+      pr.altura AS produto_altura,
       pi.quantidade,
       pi.preco_unitario,
 
@@ -225,6 +260,7 @@ const getAdminPedidoBySearch = async (value) => {
 
     FROM pedidos p
     JOIN usuarios u ON u.id = p.usuario_id
+    LEFT JOIN enderecos AS e ON e.id = p.endereco_id
     LEFT JOIN pedido_itens pi ON pi.pedido_id = p.id
     LEFT JOIN produtos pr ON pr.id = pi.produto_id
     LEFT JOIN pagamentos pg ON pg.pedido_id = p.id
@@ -241,16 +277,24 @@ const getAdminPedidoBySearch = async (value) => {
         usuario_id: row.usuario_id,
         total: row.total,
         status: row.status_pedido,
+        destinatario: {
+          nome: row.cliente_nome,
+          cpf: row.cliente_cpf,
+          email: row.cliente_email,
+          telefone: row.cliente_telefone,
+        },
         endereco: {
-          rua: row.endereco_rua,
-          numero: row.endereco_numero,
-          bairro: row.endereco_bairro,
-          cidade: row.endereco_cidade,
-          estado: row.endereco_estado,
-          cep: row.endereco_cep,
-          complemento: row.endereco_complemento,
+          endereco_id: row.endereco_id,
+          endereco_rua: row.endereco_rua,
+          endereco_numero: row.endereco_numero,
+          endereco_bairro: row.endereco_bairro,
+          endereco_cidade: row.endereco_cidade,
+          endereco_estado: row.endereco_estado,
+          endereco_complemento: row.endereco_complemento || '',
+          endereco_cep: row.endereco_cep,
         },
         frete: {
+          frete_id: row.frete_id,
           nome: row.frete_nome,
           logo: row.frete_logo,
           valor: row.frete_valor,
@@ -281,6 +325,10 @@ const getAdminPedidoBySearch = async (value) => {
         id: row.item_id,
         produto_id: row.produto_id,
         nome: row.produto_nome,
+        produto_peso: row.produto_peso,
+        produto_comprimento: row.produto_comprimento,
+        produto_largura: row.produto_largura,
+        produto_altura: row.produto_altura,
         quantidade: row.quantidade,
         preco_unitario: row.preco_unitario,
       });
@@ -291,21 +339,48 @@ const getAdminPedidoBySearch = async (value) => {
 };
 
 
-const updateAdminPedido = async (id, dataPedido, novosItens, novoPagamento) => {
-  const { total, status } = dataPedido;
-  await connection.execute('UPDATE pedidos SET total = ?, status = ? WHERE id = ?', [total, status, id]);
+const updateAdminPedido = async (id, dataPedido = {}, novosItens = [], novoPagamento = {}) => {
+  const campos = [];
+  const valores = [];
 
-  for (const item of novosItens) {
+  if (dataPedido.total !== undefined) {
+    campos.push('total = ?');
+    valores.push(dataPedido.total);
+  }
+
+  if (dataPedido.status !== undefined) {
+    campos.push('status = ?');
+    valores.push(dataPedido.status);
+  }
+
+  if (dataPedido.shipment_id !== undefined) {
+    campos.push('shipment_id = ?');
+    valores.push(dataPedido.shipment_id);
+  }
+
+  if (campos.length > 0) {
     await connection.execute(
-      'UPDATE pedido_itens SET quantidade = ? WHERE pedido_id = ? AND produto_id = ?',
-      [item.quantidade, id, item.produto_id]
+      `UPDATE pedidos SET ${campos.join(', ')} WHERE id = ?`,
+      [...valores, id]
     );
   }
 
-  await connection.execute(
-    'UPDATE pagamentos SET metodo_pagamento = ?, status_pagamento = ?, valor_total = ? WHERE pedido_id = ?',
-    [novoPagamento.metodo_pagamento, novoPagamento.status_pagamento, novoPagamento.valor_total, id]
-  );
+  // Atualiza itens (se vierem)
+  for (const item of novosItens) {
+    await connection.execute('UPDATE pedido_itens SET quantidade = ? WHERE pedido_id = ? AND produto_id = ?', [item.quantidade, id, item.produto_id]);
+  }
+
+  // Atualiza pagamento (se vier)
+  if (Object.keys(novoPagamento).length > 0) {
+    await connection.execute('UPDATE pagamentos SET metodo_pagamento = ?, status_pagamento = ?, valor_total = ? WHERE pedido_id = ?',
+      [
+        novoPagamento.metodo_pagamento,
+        novoPagamento.status_pagamento,
+        novoPagamento.valor_total,
+        id
+      ]
+    );
+  }
 
   const [pedidoAtualizado] = await connection.execute('SELECT * FROM pedidos WHERE id = ?', [id]);
   const [itensAtualizados] = await connection.execute('SELECT * FROM pedido_itens WHERE pedido_id = ?', [id]);
