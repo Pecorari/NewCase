@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const  { enviarEmailVerificacao } = require('../utils/confirmEmail');
 const { salvarData, exibirData } = require('../utils/formatarDatas');
-const gerarTokenFirebase = require('../utils/firebaseTokenAdmin.js');
+const { gerarTokenFirebase } = require('../utils/firebaseAdmin');
 
 const createUsuario = async (req, res) => {
   try {

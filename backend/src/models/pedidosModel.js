@@ -353,9 +353,9 @@ const updateAdminPedido = async (id, dataPedido = {}, novosItens = [], novoPagam
     valores.push(dataPedido.status);
   }
 
-  if (dataPedido.shipment_id !== undefined) {
-    campos.push('shipment_id = ?');
-    valores.push(dataPedido.shipment_id);
+  if (dataPedido.etiqueta_url !== undefined) {
+    campos.push('etiqueta_url = ?');
+    valores.push(dataPedido.etiqueta_url);
   }
 
   if (campos.length > 0) {

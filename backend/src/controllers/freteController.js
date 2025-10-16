@@ -1,5 +1,6 @@
 const connection = require('../database/connection');
 const pedidosModel = require('../models/pedidosModel');
+const { uploadEtiquetaPDF } = require("../utils/firebaseAdmin");
 const axios = require('axios');
 require('dotenv').config();
 
@@ -113,92 +114,154 @@ const calcularFrete = async (req, res) => {
   }
 };
 
-
-
-
-
 const gerarEtiqueta = async (req, res) => {
   try {
     const { id } = req.params;
     const accessToken = await getValidToken();
 
-    // 1️⃣ Busca dados do pedido no banco
-    const pedido = await pedidosModel.getAdminPedidoBySearch(id);
+    const pedidos = await pedidosModel.getAdminPedidoBySearch(id);
+    const pedido = pedidos[0];
     if (!pedido) {
-        return res.status(404).json({ error: "Pedido não encontrado" });
+      return res.status(404).json({ error: "Pedido não encontrado" });
     }
 
-    // 2️⃣ Monta o corpo do shipment (dados do pedido + frete escolhido)
-    const shipmentBody = {
-        service: pedido.frete_id,
-        from: {
-            name: "NEWCASE STORE",
-            phone: "19974012628",
-            email: "contato@newcase.com",
-            company_document: "00000000000191",
-            address: "Rua Exemplo",
-            complement: "",
-            number: "123",
-            district: "Centro",
-            city: "São Paulo",
-            state_abbr: "SP",
-            postal_code: "01001000"
-        },
-        to: {
-            name: pedido.cliente_nome,
-            phone: pedido.cliente_telefone,
-            email: pedido.cliente_email,
-            document: pedido.cliente_cpf,
-            address: pedido.endereco_rua,
-            complement: pedido.endereco_complemento || "",
-            number: pedido.endereco_numero,
-            district: pedido.endereco_bairro,
-            city: pedido.endereco_cidade,
-            state_abbr: pedido.endereco_estado,
-            postal_code: pedido.endereco_cep
-        },
-        packages: [
-            {
-                height: pedido.produto_altura,
-                width: pedido.produto_largura,
-                length: pedido.produto_comprimento,
-                weight: pedido.produto_peso
-            }
-        ],
-        options: {
-            insurance_value: pedido.total,
-            receipt: false,
-            own_hand: false,
-            reverse: false,
-            non_commercial: false
-        }
+    const subtotal = Number(pedido.total) - Number(pedido.frete.valor);
+    const totalPeso = pedido.itens.reduce((acc, item) => acc + Number(item.produto_peso) * item.quantidade, 0);
+    const totalAltura = pedido.itens.reduce((acc, item) => acc + Number(item.produto_altura) * item.quantidade, 0);
+
+    const payloadAddEtiquetasCart = {
+      service: pedido.frete.frete_id,
+      from: {
+        name: 'NewCase',
+        postal_code: "13454056",
+        address: "Rua da Batata",
+        number: "123",
+        district: "Centro",
+        city: "São Paulo",
+        state_abbr: "SP"
+      },
+      to: {
+        name: pedido.destinatario.nome,
+        phone: pedido.destinatario.telefone,
+        email: pedido.destinatario.email,
+        document: pedido.destinatario.cpf,
+        address: pedido.endereco.endereco_rua,
+        number: pedido.endereco.endereco_numero,
+        district: pedido.endereco.endereco_bairro,
+        city: pedido.endereco.endereco_cidade,
+        state_abbr: pedido.endereco.endereco_estado,
+        postal_code: pedido.endereco.endereco_cep.replace(/\D/g, ''),
+        complement: pedido.endereco.endereco_complemento
+      },
+      products: pedido.itens.map(item => ({
+        name: item.nome,
+        quantity: Number(item.quantidade),
+        unitary_value: Number(item.preco_unitario)
+      })),
+      volumes: [{
+        height: totalAltura,
+        width: 12,
+        length: 25,
+        weight: totalPeso
+      }],
+      options: {
+        insurance_value: subtotal,
+        receipt: false,
+        own_hand: false,
+        reverse: false,
+        non_commercial: false
+      }
     };
     
-    // 3️⃣ Cria o shipment
-    const shipmentResponse = await axios.post(`https://melhorenvio.com.br/api/v2/shipment`, [shipmentBody], {
+    const response = await axios.post("https://www.melhorenvio.com.br/api/v2/me/cart", payloadAddEtiquetasCart, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'User-Agent': 'NewCase contato@newcase.com'
       }
     });
-    console.log(shipmentResponse);
 
-    const shipmentId = shipmentResponse.data[0]?.id;
-    if (!shipmentId) {
-      throw new Error("Não foi possível criar o shipment no Melhor Envio.");
+    console.log('fretes adicionados ao carrinho:', response.data);
+
+    const comprasEtiquetasCart = await axios.post("https://www.melhorenvio.com.br/api/v2/me/shipment/checkout", { orders: [response.data.id] }, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "NewCase contato@newcase.com"
+      }
+    });
+
+    console.log('Status da compra das etiquetas:', comprasEtiquetasCart.data.purchase.status);
+
+    const etiquetaGerada = await axios.post("https://www.melhorenvio.com.br/api/v2/me/shipment/generate", { orders: [response.data.id] }, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "NewCase contato@newcase.com"
+      }
+    });
+
+    console.log('Status da geraçao da Etiqueta:', etiquetaGerada.data);
+
+    const maxRetries = 3;
+    const delay = 5000;
+    let pdfUrl = null;
+    let lastError = null;
+
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const etiquetaUrlDownload = await axios.get(`https://www.melhorenvio.com.br/api/v2/me/imprimir/pdf/${response.data.id}`, {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "NewCase contato@newcase.com"
+          }
+        });
+        
+        pdfUrl = etiquetaUrlDownload.data[0];
+        console.log(`Link PDF obtido com sucesso na tentativa ${i + 1}: ${pdfUrl}`);
+        break;
+      } catch (error) {
+        lastError = error.response?.data || error.message;
+
+        const isPrintFail = lastError.message?.includes('E-PRT-0007') || error.response?.status >= 500;
+
+        if (i < maxRetries - 1 && isPrintFail) {
+          console.log(`Tentativa ${i + 1} falhou com erro de impressão. Aguardando ${delay / 1000}s para tentar novamente...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        } else {
+          throw error;
+        }
+      }
     }
-    console.log("Shipment criado:", shipmentId);
+
+    console.log('arquivo PDF obtido:', pdfUrl);
+
+    const etiquetaPDF = await axios.get(pdfUrl, {
+      headers: {
+        "User-Agent": "NewCase contato@newcase.com" 
+      },
+      responseType: "arraybuffer"
+    });
+
+    console.log('PDF da etiqueta recebido com sucesso!');
+
+    const fileName = `etiqueta-${id}.pdf`;
+    const pdfBuffer = Buffer.from(etiquetaPDF.data);
+    const etiquetaUrl = await uploadEtiquetaPDF(pdfBuffer, fileName);
+
+    console.log('LOG DE ID DO PEDIDO E URL PARA SALVAR NO BD:', id, etiquetaUrl)
     
-    // salva o shipment_id no pedido
-    pedido.shipment_id = shipmentId;
-    await pedidosModel.updateAdminPedido(id, { shipment_id: shipmentId });
+    await pedidosModel.updateAdminPedido(id, { etiqueta_url: etiquetaUrl });
 
-
-
-
-
-    return res.status(200).json({ message: 'Etiqueta gerada com sucesso!' });
+    return res.status(200).json({
+      message: 'Etiqueta gerada com sucesso!',
+      etiqueta_url: etiquetaUrl
+    });
   } catch (error) {
     console.error("Erro ao gerar etiqueta:", error.response?.data || error.message);
     return res.status(500).json({
