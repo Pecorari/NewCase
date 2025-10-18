@@ -7,6 +7,7 @@ const AdminPedidos = () => {
   const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
   const [erro, setErro] = useState("");
   const [form, setForm] = useState({ searchValue: "" });
+  const [loadingEtiqueta, setLoadingEtiqueta] = useState(false);
 
   useEffect(() => {
     buscarPedidos();
@@ -46,10 +47,23 @@ const AdminPedidos = () => {
   };
 
   async function gerarEtiqueta(id) {
-    console.log('id do pedido:', id);
+    try {
+      setLoadingEtiqueta(true);
+      const response = await api.post(`/frete/${id}/gerar-etiqueta`);
 
-    const response = await api.post(`/pedidos/${id}/gerar-etiqueta`);
-    console.log(response);
+      const { message, etiqueta_url } = response.data;
+
+      console.log(message);
+      console.log("URL da etiqueta:", etiqueta_url);
+
+      setPedidoSelecionado((prev) => ({ ...prev, etiqueta_url }));
+      setPedidos((prev) => prev.map((p) => p.pedido_id === id ? { ...p, etiqueta_url } : p));
+    } catch (error) {
+      console.error("Erro ao gerar etiqueta:", error.response?.data || error);
+      alert("Falha ao gerar etiqueta!");
+    } finally {
+      setLoadingEtiqueta(false);
+    }
   }
 
   return (
@@ -184,7 +198,13 @@ const AdminPedidos = () => {
             </section>
 
             <div className="container-gerar-etiqueta">
-              <button className="gerar-etiqueta" onClick={() => gerarEtiqueta(pedidoSelecionado.pedido_id)}>Gerar Etiqueta</button>
+              {pedidoSelecionado.etiqueta_url ? (
+                <a href={pedidoSelecionado.etiqueta_url} target="_blank" rel="noopener noreferrer" className="gerar-etiqueta">Baixar Etiqueta</a>
+              ) : (
+                <button className="gerar-etiqueta" onClick={() => gerarEtiqueta(pedidoSelecionado.pedido_id)} disabled={loadingEtiqueta}>
+                  {loadingEtiqueta ? "Gerando..." : "Gerar Etiqueta"}
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -92,6 +92,9 @@ const getAdminPedidos = async () => {
       p.frete_logo,
       p.frete_valor,
       p.frete_prazo,
+      p.etiqueta_id,
+      p.etiqueta_url,
+      p.pagbank_ped_id,
       p.criado_em,
       
       -- Usuário
@@ -144,6 +147,9 @@ const getAdminPedidos = async () => {
         usuario_id: row.usuario_id,
         total: row.total,
         status: row.status_pedido,
+        etiqueta_id: row.etiqueta_id,
+        etiqueta_url: row.etiqueta_url,
+        pagbank_ped_id: row.pagbank_ped_id,
         destinatario: {
           nome: row.cliente_nome,
           cpf: row.cliente_cpf,
@@ -232,6 +238,9 @@ const getAdminPedidoBySearch = async (value) => {
       p.frete_logo,
       p.frete_valor,
       p.frete_prazo,
+      p.etiqueta_id,
+      p.etiqueta_url,
+      p.pagbank_ped_id,
       p.criado_em,
 
       -- Usuário
@@ -277,6 +286,9 @@ const getAdminPedidoBySearch = async (value) => {
         usuario_id: row.usuario_id,
         total: row.total,
         status: row.status_pedido,
+        etiqueta_id: row.etiqueta_id,
+        etiqueta_url: row.etiqueta_url,
+        pagbank_ped_id: row.pagbank_ped_id,
         destinatario: {
           nome: row.cliente_nome,
           cpf: row.cliente_cpf,
@@ -356,6 +368,11 @@ const updateAdminPedido = async (id, dataPedido = {}, novosItens = [], novoPagam
   if (dataPedido.etiqueta_url !== undefined) {
     campos.push('etiqueta_url = ?');
     valores.push(dataPedido.etiqueta_url);
+  }
+  
+  if (dataPedido.etiqueta_id !== undefined) {
+    campos.push('etiqueta_id = ?');
+    valores.push(dataPedido.etiqueta_id);
   }
 
   if (campos.length > 0) {

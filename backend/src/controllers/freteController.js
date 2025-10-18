@@ -121,91 +121,129 @@ const gerarEtiqueta = async (req, res) => {
 
     const pedidos = await pedidosModel.getAdminPedidoBySearch(id);
     const pedido = pedidos[0];
-    if (!pedido) {
-      return res.status(404).json({ error: "Pedido não encontrado" });
+    if (!pedido) return res.status(404).json({ error: "Pedido não encontrado" });
+
+    let etiquetaId = pedido.etiqueta_id;
+
+    if (!etiquetaId) {
+      console.log("Pedido sem etiqueta. Gerando e comprando agora...");
+
+      const subtotal = Number(pedido.total) - Number(pedido.frete.valor);
+      const totalPeso = pedido.itens.reduce((acc, item) => acc + Number(item.produto_peso) * item.quantidade, 0);
+      const totalAltura = pedido.itens.reduce((acc, item) => acc + Number(item.produto_altura) * item.quantidade, 0);
+
+      const payloadAddEtiquetasCart = {
+        service: pedido.frete.frete_id,
+        from: {
+          name: 'NewCase',
+          postal_code: "13454056",
+          address: "Rua da Batata",
+          number: "123",
+          district: "Centro",
+          city: "São Paulo",
+          state_abbr: "SP"
+        },
+        to: {
+          name: pedido.destinatario.nome,
+          phone: pedido.destinatario.telefone,
+          email: pedido.destinatario.email,
+          document: pedido.destinatario.cpf,
+          address: pedido.endereco.endereco_rua,
+          number: pedido.endereco.endereco_numero,
+          district: pedido.endereco.endereco_bairro,
+          city: pedido.endereco.endereco_cidade,
+          state_abbr: pedido.endereco.endereco_estado,
+          postal_code: pedido.endereco.endereco_cep.replace(/\D/g, ''),
+          complement: pedido.endereco.endereco_complemento
+        },
+        products: pedido.itens.map(item => ({
+          name: item.nome,
+          quantity: Number(item.quantidade),
+          unitary_value: Number(item.preco_unitario)
+        })),
+        volumes: [{
+          height: totalAltura,
+          width: 12,
+          length: 25,
+          weight: totalPeso
+        }],
+        options: {
+          insurance_value: subtotal,
+          receipt: false,
+          own_hand: false,
+          reverse: false,
+          non_commercial: false
+        }
+      };
+
+      // Adiciona ao carrinho
+      const response = await axios.post("https://www.melhorenvio.com.br/api/v2/me/cart", payloadAddEtiquetasCart, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'User-Agent': 'NewCase contato@newcase.com'
+        }
+      });
+
+      console.log('Adicionado ao carrinho!');
+
+      // Checkout (compra)
+      const comprasEtiquetasCart = await axios.post("https://www.melhorenvio.com.br/api/v2/me/shipment/checkout", { orders: [response.data.id] }, {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "User-Agent": "NewCase contato@newcase.com"
+        }
+      });
+
+      console.log('Etiqueta comprada!');
+
+      // Gerando etiqueta
+      const etiquetaGerada = await axios.post("https://www.melhorenvio.com.br/api/v2/me/shipment/generate", { orders: [response.data.id] }, {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "User-Agent": "NewCase contato@newcase.com"
+        }
+      });
+
+      console.log('Etiqueta gerada!');
+      
+      etiquetaId = response.data.id;
+
+      await pedidosModel.updateAdminPedido(id, { etiqueta_id: etiquetaId });
+      console.log("Etiqueta comprada. ID salvo!");
+
+      const etiquetaUrl = await ObterEtiquetaPDF(id, accessToken, etiquetaId);
+
+      return res.status(200).json({
+        message: 'Etiqueta comprada e gerada PDF com sucesso!',
+        etiqueta_url: etiquetaUrl
+      });
+    } else {
+      console.log("Etiqueta já existente!, Gerando e obtendo arquivo para upload no storage");
+
+      const etiquetaUrl = await ObterEtiquetaPDF(id, accessToken, etiquetaId);
+
+      return res.status(200).json({
+        message: 'Etiqueta gerada PDF com sucesso!',
+        etiqueta_url: etiquetaUrl
+      });
     }
-
-    const subtotal = Number(pedido.total) - Number(pedido.frete.valor);
-    const totalPeso = pedido.itens.reduce((acc, item) => acc + Number(item.produto_peso) * item.quantidade, 0);
-    const totalAltura = pedido.itens.reduce((acc, item) => acc + Number(item.produto_altura) * item.quantidade, 0);
-
-    const payloadAddEtiquetasCart = {
-      service: pedido.frete.frete_id,
-      from: {
-        name: 'NewCase',
-        postal_code: "13454056",
-        address: "Rua da Batata",
-        number: "123",
-        district: "Centro",
-        city: "São Paulo",
-        state_abbr: "SP"
-      },
-      to: {
-        name: pedido.destinatario.nome,
-        phone: pedido.destinatario.telefone,
-        email: pedido.destinatario.email,
-        document: pedido.destinatario.cpf,
-        address: pedido.endereco.endereco_rua,
-        number: pedido.endereco.endereco_numero,
-        district: pedido.endereco.endereco_bairro,
-        city: pedido.endereco.endereco_cidade,
-        state_abbr: pedido.endereco.endereco_estado,
-        postal_code: pedido.endereco.endereco_cep.replace(/\D/g, ''),
-        complement: pedido.endereco.endereco_complemento
-      },
-      products: pedido.itens.map(item => ({
-        name: item.nome,
-        quantity: Number(item.quantidade),
-        unitary_value: Number(item.preco_unitario)
-      })),
-      volumes: [{
-        height: totalAltura,
-        width: 12,
-        length: 25,
-        weight: totalPeso
-      }],
-      options: {
-        insurance_value: subtotal,
-        receipt: false,
-        own_hand: false,
-        reverse: false,
-        non_commercial: false
-      }
-    };
-    
-    const response = await axios.post("https://www.melhorenvio.com.br/api/v2/me/cart", payloadAddEtiquetasCart, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'User-Agent': 'NewCase contato@newcase.com'
-      }
+  } catch (error) {
+    console.error("Erro ao gerar etiqueta:", error.response?.data || error.message);
+    return res.status(500).json({
+      error: "Falha ao gerar etiqueta",
+      details: error.response?.data || error.message
     });
+  }
+};
 
-    console.log('fretes adicionados ao carrinho:', response.data);
-
-    const comprasEtiquetasCart = await axios.post("https://www.melhorenvio.com.br/api/v2/me/shipment/checkout", { orders: [response.data.id] }, {
-      headers: {
-        "Authorization": `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "User-Agent": "NewCase contato@newcase.com"
-      }
-    });
-
-    console.log('Status da compra das etiquetas:', comprasEtiquetasCart.data.purchase.status);
-
-    const etiquetaGerada = await axios.post("https://www.melhorenvio.com.br/api/v2/me/shipment/generate", { orders: [response.data.id] }, {
-      headers: {
-        "Authorization": `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "User-Agent": "NewCase contato@newcase.com"
-      }
-    });
-
-    console.log('Status da geraçao da Etiqueta:', etiquetaGerada.data);
-
+async function ObterEtiquetaPDF(id, accessToken, etiquetaId) {
+  try {
     const maxRetries = 3;
     const delay = 5000;
     let pdfUrl = null;
@@ -213,7 +251,8 @@ const gerarEtiqueta = async (req, res) => {
 
     for (let i = 0; i < maxRetries; i++) {
       try {
-        const etiquetaUrlDownload = await axios.get(`https://www.melhorenvio.com.br/api/v2/me/imprimir/pdf/${response.data.id}`, {
+        // Obtendo link do PDF da etiqueta
+        const etiquetaUrlDownload = await axios.get(`https://www.melhorenvio.com.br/api/v2/me/imprimir/pdf/${etiquetaId}`, {
           headers: {
             "Authorization": `Bearer ${accessToken}`,
             "Content-Type": "application/json",
@@ -221,15 +260,14 @@ const gerarEtiqueta = async (req, res) => {
             "User-Agent": "NewCase contato@newcase.com"
           }
         });
-        
-        pdfUrl = etiquetaUrlDownload.data[0];
-        console.log(`Link PDF obtido com sucesso na tentativa ${i + 1}: ${pdfUrl}`);
+            
+        pdfUrl = Array.isArray(etiquetaUrlDownload.data) ? etiquetaUrlDownload.data[0] : etiquetaUrlDownload.data.url || etiquetaUrlDownload.data;
+
+        console.log('Link PDF obtido!');
         break;
       } catch (error) {
         lastError = error.response?.data || error.message;
-
         const isPrintFail = lastError.message?.includes('E-PRT-0007') || error.response?.status >= 500;
-
         if (i < maxRetries - 1 && isPrintFail) {
           console.log(`Tentativa ${i + 1} falhou com erro de impressão. Aguardando ${delay / 1000}s para tentar novamente...`);
           await new Promise(resolve => setTimeout(resolve, delay));
@@ -239,35 +277,27 @@ const gerarEtiqueta = async (req, res) => {
       }
     }
 
-    console.log('arquivo PDF obtido:', pdfUrl);
-
+    // Baixando arquivo PDF
     const etiquetaPDF = await axios.get(pdfUrl, {
-      headers: {
-        "User-Agent": "NewCase contato@newcase.com" 
-      },
+      headers: { "User-Agent": "NewCase contato@newcase.com" },
       responseType: "arraybuffer"
     });
 
-    console.log('PDF da etiqueta recebido com sucesso!');
+    console.log('PDF da etiqueta baixado com sucesso!');
 
     const fileName = `etiqueta-${id}.pdf`;
     const pdfBuffer = Buffer.from(etiquetaPDF.data);
     const etiquetaUrl = await uploadEtiquetaPDF(pdfBuffer, fileName);
 
-    console.log('LOG DE ID DO PEDIDO E URL PARA SALVAR NO BD:', id, etiquetaUrl)
+    console.log('Upload firebase com sucesso!:', etiquetaUrl)
     
     await pedidosModel.updateAdminPedido(id, { etiqueta_url: etiquetaUrl });
 
-    return res.status(200).json({
-      message: 'Etiqueta gerada com sucesso!',
-      etiqueta_url: etiquetaUrl
-    });
+    console.log('Atualizado o BD!');
+    return etiquetaUrl;
   } catch (error) {
-    console.error("Erro ao gerar etiqueta:", error.response?.data || error.message);
-    return res.status(500).json({
-      error: "Falha ao gerar etiqueta",
-      details: error.response?.data || error.message
-    });
+    console.error("Erro ao obter PDF da etiqueta:", error.response?.data || error.message);
+    throw error;
   }
 };
 
