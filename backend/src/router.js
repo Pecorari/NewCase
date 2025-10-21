@@ -22,6 +22,7 @@ const { validarPedido } = require('./middlewares/pedidosMiddleware');
 const { validarUsuario, validarEditUsuario, validarLogin, validarSenha } = require('./middlewares/usuariosMiddleware');
 const { validarRequisicao, validarId } = require('./middlewares/globalMiddleware');
 const { autenticarToken, verificarPermissao, verificarProprietario } = require('./middlewares/authMiddleware');
+const verifyRecaptchaV3 = require('./middlewares/verifyRecaptchaV3');
 
 const  { enviarContatoEmail } = require('./utils/contatoEmail');
 const freteController = require('./controllers/freteController');
@@ -67,7 +68,7 @@ router.get('/profile', autenticarToken, usuariosController.profile);
 
 // INTEGRAÇAO CHECKOUT PAGBANK
 router.get('/checkout/publicKey', checkoutController.getPublicKeyFromDB);
-router.post('/checkout', autenticarToken, verificarPermissao(['admin', 'cliente']), validarPedido, validarRequisicao, checkoutController.checkout);
+router.post('/checkout', autenticarToken, verificarPermissao(['admin', 'cliente']), verifyRecaptchaV3(0.6), validarPedido, validarRequisicao, checkoutController.checkout);
 router.post('/checkout/notificacao', checkoutController.notificacao);
 
 
@@ -89,10 +90,10 @@ router.get('/pedidos', autenticarToken, verificarPermissao(['admin', 'cliente'])
 router.get('/pedidos/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), pedidosController.getUniquePedido);
 router.put('/pedidos/cancel/:id', autenticarToken, verificarPermissao(['admin', 'cliente']), verificarProprietario('pedidos', 'usuario_id'), validarId, validarRequisicao, pedidosController.cancelarPedido);
 
-router.post('/usuarios/add', validarUsuario, validarRequisicao, usuariosController.createUsuario);
+router.post('/usuarios/add', verifyRecaptchaV3(0.5), validarUsuario, validarRequisicao, usuariosController.createUsuario);
 router.get('/confirmar-email', usuariosController.confirmarEmail);
 router.post('/reenviar-email', usuariosController.reenviarEmail);
-router.post('/usuarios/login', validarLogin, validarRequisicao, usuariosController.loginUsuario);
+router.post('/usuarios/login', verifyRecaptchaV3(0.3), validarLogin, validarRequisicao, usuariosController.loginUsuario);
 router.post('/usuarios/logout', usuariosController.logout);
 router.put('/usuarios/edit', autenticarToken, verificarPermissao(['admin', 'cliente']), validarEditUsuario, validarRequisicao, usuariosController.updateUsuario);
 router.put('/usuarios/alterar-senha', autenticarToken, verificarPermissao(['admin', 'cliente']), validarSenha, validarRequisicao, usuariosController.alterarSenha);

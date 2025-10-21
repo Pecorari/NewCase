@@ -24,8 +24,8 @@ export const AuthProvider = ({ children }) => {
     fetchUser();
   }, []);
 
-  const login = async (email, senha) => {
-    const res = await api.post('/usuarios/login', { email, senha });
+  const login = async (email, senha, tokenRecaptcha) => {
+    const res = await api.post('/usuarios/login', { email, senha, tokenRecaptcha });
     const dadosUser = await api.get('/profile');
     
     if (res.data.firebaseToken) {
@@ -36,8 +36,8 @@ export const AuthProvider = ({ children }) => {
     setUsuario(dadosUser.data);
   };
 
-  const cadastro = async (nome, cpf, telefone, data_nasc, email, senha) => {
-    await api.post('usuarios/add', { nome, cpf, telefone, data_nasc, email, senha });
+  const cadastro = async (nome, cpf, telefone, data_nasc, email, senha, tokenRecaptcha) => {
+    await api.post('usuarios/add', { nome, cpf, telefone, data_nasc, email, senha, tokenRecaptcha });
   };
 
   const logout = async () => {

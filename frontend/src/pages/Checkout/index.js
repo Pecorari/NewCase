@@ -135,6 +135,9 @@ const Checkout = () => {
 
   const checkout = async (cartaoEncriptado) => {
     try {
+      if (!window.grecaptcha) throw new Error("Erro ao carregar o reCAPTCHA. Recarregue a página e tente novamente.");
+      const tokenRecaptcha = await window.grecaptcha.execute("6Leod_IrAAAAALtjVWtPDPv19R4dsxbzpNLDCTdE", { action: "checkout" });
+
       const valorFrete = Number(freteSelecionado?.price?.toString().replace(',', '.') || 0);
       const subTotal = produtos.reduce((acc, p) => acc + Number(p.preco) * Number(p.quantidade), 0);
       const totalComFrete = Number((subTotal + valorFrete).toFixed(2));
@@ -156,6 +159,7 @@ const Checkout = () => {
       }));
 
       const payload = {
+        tokenRecaptcha,
         dataPedido,
         itens,
         metodo,
@@ -262,7 +266,6 @@ const Checkout = () => {
       setMensagemErro("");
 
       let cartaoEncriptado = null
-
       if (metodo === 'cartao') {
         cartaoEncriptado = await encryptCard();
       }

@@ -23,7 +23,10 @@ function Login() {
     e.preventDefault();
     
     try {
-      await login(form.email, form.senha);
+      if (!window.grecaptcha) throw new Error("Erro ao carregar o reCAPTCHA. Recarregue a página e tente novamente.");
+      const tokenRecaptcha = await window.grecaptcha.execute("6Leod_IrAAAAALtjVWtPDPv19R4dsxbzpNLDCTdE", { action: "login" });
+
+      await login(form.email, form.senha, tokenRecaptcha);
       
       console.log('Login foi um sucesso!');
       setForm({email: '', senha: ''});

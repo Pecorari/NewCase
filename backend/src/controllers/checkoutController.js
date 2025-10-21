@@ -18,7 +18,7 @@ async function getPublicKeyFromDB(req, res) {
       }
     }
 
-    const response = await axios.post("https://sandbox.api.pagseguro.com/public-keys", { type: "card" }, {
+    const response = await axios.post(`${process.env.PAGBANK_API}/public-keys`, { type: "card" }, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.PAGBANK_TOKEN}`

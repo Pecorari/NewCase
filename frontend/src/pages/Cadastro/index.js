@@ -32,7 +32,10 @@ function Cadastro() {
     }
 
     try {
-      const result = await api.post('usuarios/add', { nome: form.nome, cpf: form.cpf, telefone: form.telefone, data_nasc: form.data_nasc, email: form.email, senha: form.senha });
+      if (!window.grecaptcha) throw new Error("Erro ao carregar o reCAPTCHA. Recarregue a página e tente novamente.");
+      const tokenRecaptcha = await window.grecaptcha.execute("6Leod_IrAAAAALtjVWtPDPv19R4dsxbzpNLDCTdE", { action: "cadastro" });
+
+      const result = await api.post('usuarios/add', { nome: form.nome, cpf: form.cpf, telefone: form.telefone, data_nasc: form.data_nasc, email: form.email, senha: form.senha, tokenRecaptcha });
 
       setForm({nome: '', cpf: '', telefone: '', data_nasc: '', email: '', senha: '', senha_confirm: ''});
       navigate('/cadastro/verificar-email', {state: { id: result.data.id, email: result.data.email }});
