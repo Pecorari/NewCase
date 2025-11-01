@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from '../../components/LoadSkeleton/LoadSkeleton';
 
 import api from '../../hooks/useApi';
 
@@ -53,10 +52,10 @@ function ProductCard() {
           {[1, 2, 3].map((s) => (
             <div key={s} className="link-dstq">
               <div className="produto-card-dstq">
-                <Skeleton width={`100%`} height={`70%`} className="imagem-container-dtq skeleton" />
+                <Skeleton width={`100%`} height={`70%`} marginBottom={10} />
 
-                <Skeleton width={`50%`} height={20} className="skeleton" />
-                <Skeleton width={`100%`} height={20} className="skeleton" />
+                <Skeleton width={`50%`} height={20} marginBottom={5} />
+                <Skeleton width={`100%`} height={20} />
                 <div className="botao-dstq">
                   <p className="texto-adicionar-dstq">ADICIONAR</p>
                 </div>
@@ -75,7 +74,7 @@ function ProductCard() {
                 <div className="produto-card-dstq">
                   <div className="imagem-container-dtq">
                     {!imagensCarregadas[produto.id] && (
-                      <Skeleton width={`100%`} height={`100%`} className="imagem-container-dtq skeleton" />
+                      <Skeleton width={`100%`} height={`100%`} />
                     )}
                     {imagens.length > 0 && (
                       <>

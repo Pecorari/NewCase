@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from '../../components/LoadSkeleton/LoadSkeleton';
+
 
 import api from '../../hooks/useApi';
 import { useAuth } from "../../context/AuthContext";
@@ -206,13 +206,13 @@ const MinhaConta = () => {
                 <div className="enderecos">
                   {[1, 2, 3].map((s) => (
                     <div key={s} className="endereco-card">
-                      <Skeleton width={`75%`} height={16} className="skeleton" />
-                      <Skeleton width={`55%`} height={16} className="skeleton" />
-                      <Skeleton width={`40%`} height={16} className="skeleton" />
-                      <Skeleton width={`70%`} height={16} className="skeleton" />
+                      <Skeleton width={`75%`} height={16} marginBottom={2} />
+                      <Skeleton width={`55%`} height={16} marginBottom={2} />
+                      <Skeleton width={`40%`} height={16} marginBottom={2} />
+                      <Skeleton width={`70%`} height={16} marginBottom={2} />
                       <div style={{ display:'flex', width: '500px', gap: '20px' }}>
-                        <Skeleton width={`100%`} height={`70%`} className="submit-endereco skeleton" />
-                        <Skeleton width={`100%`} height={`70%`} className="submit-endereco skeleton" />
+                        <Skeleton width={`100%`} height={`70%`} />
+                        <Skeleton width={`100%`} height={`70%`} />
                       </div>
                     </div>
                   ))}
@@ -258,7 +258,7 @@ const MinhaConta = () => {
             {loading ? (
               <div className="pedidos">
                 {[1, 2, 3].map((s) => (
-                  <Skeleton height={70} className="pedido-card skeleton" />
+                  <Skeleton height={70} marginBottom={15} />
                 ))}
               </div>
             ) : (

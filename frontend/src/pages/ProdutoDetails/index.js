@@ -2,8 +2,9 @@
   import { useParams, useNavigate } from 'react-router-dom';
   import { useAuth } from "../../context/AuthContext";
   import { useCarrinho } from '../../context/CarrinhoContext';
-  import Skeleton from 'react-loading-skeleton'
-  import 'react-loading-skeleton/dist/skeleton.css'
+  // import Skeleton from 'react-loading-skeleton'
+  // import 'react-loading-skeleton/dist/skeleton.css'
+  import Skeleton from '../../components/LoadSkeleton/LoadSkeleton';
 
   import api from '../../hooks/useApi';
   import { calcularFrete } from '../../services/freteService';
@@ -181,7 +182,7 @@
             <div className="imagens-section-detail">
               <div className="imagem-principal-detail">
                 {!imagensCarregadas[imagemSelecionada] && (
-                  <Skeleton width={`100%`} height={`100%`} borderRadius={10} className="imagem-zoom-detail-detail skeleton" />
+                  <Skeleton width={`100%`} height={`100%`} rounded={10} />
                 )}
                 <img src={produto?.imagens?.[imagemSelecionada]} alt={produto?.nome} className="imagem-zoom-detail-detail"
                   style={{ display: imagensCarregadas[imagemSelecionada] ? 'block' : 'none' }}
@@ -198,7 +199,7 @@
                 {produto?.imagens.map((img, idx) => (
                   <div key={idx} className="miniatura-wrapper">
                     {!imagensCarregadas[`mini-${idx}`] && (
-                      <Skeleton width={70} height={70} borderRadius={8} className="miniatura skeleton" />
+                      <Skeleton width={70} height={70} rounded={8} />
                     )}
                     <img
                       src={img}
@@ -223,10 +224,10 @@
               <div className="col-esquerda">
                 {loading ? (
                   <>
-                    <Skeleton width={`80%`} height={42} className="titulo-detail skeleton" />
-                    <Skeleton width={`40%`} height={22} className="title-star skeleton" />
-                    <Skeleton width={`100%`} height={22} className="descricao-detail skeleton" />
-                    <Skeleton width={`30%`} height={26} className="preco-detail skeleton" />
+                    <Skeleton width={`80%`} height={42} marginBottom={5}/>
+                    <Skeleton width={`40%`} height={22} marginBottom={5}/>
+                    <Skeleton width={`100%`} height={22} marginBottom={15}/>
+                    <Skeleton width={`30%`} height={26} marginBottom={5}/>
                   </>
                 ) : (
                   <>
@@ -310,15 +311,15 @@
             <h2 className='section-title-ct'>Características</h2>
             {loading ? (
               <div className='caracteristicas-dados'>
-                <Skeleton width={`10%`} height={20} className="skeleton" style={{ marginBottom: '5px' }} />
-                <Skeleton width={`15%`} height={20} className="skeleton" style={{ marginBottom: '5px' }} />
-                <Skeleton width={`13%`} height={20} className="skeleton" style={{ marginBottom: '5px' }} />
+                <Skeleton width={`10%`} height={20} marginBottom={5} />
+                <Skeleton width={`15%`} height={20} marginBottom={5} />
+                <Skeleton width={`13%`} height={20} marginBottom={5} />
                 <br/>
-                <Skeleton width={`17%`} height={20} className="skeleton" style={{ marginBottom: '5px' }} />
-                <Skeleton width={`13%`} height={20} className="skeleton" style={{ marginBottom: '5px' }} />
-                <Skeleton width={`15%`} height={20} className="skeleton" style={{ marginBottom: '5px' }} />
+                <Skeleton width={`17%`} height={20} marginBottom={5} />
+                <Skeleton width={`13%`} height={20} marginBottom={5} />
+                <Skeleton width={`15%`} height={20} marginBottom={5} />
                 <br/>
-                <Skeleton width={`20%`} height={20} className="skeleton" style={{ marginBottom: '5px' }} />
+                <Skeleton width={`20%`} height={20} marginBottom={5} />
               </div>
             ) : (
               <div className='caracteristicas-dados'>

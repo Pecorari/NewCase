@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from '../../components/LoadSkeleton/LoadSkeleton';
 
 import { BsTrash3 } from "react-icons/bs";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -83,15 +82,15 @@ const Carrinho = () => {
             {[1, 2, 3].map((s) => (
               <li key={s} className="item">
                 <div className="imagem-carrinho-container">
-                  <Skeleton width={`100%`} height={`100%`} borderRadius={8} className="skeleton" />
+                  <Skeleton width={`100%`} height={`100%`} rounded={8} />
                 </div>
                 <div className="info-item">
-                  <Skeleton width={`60%`} height={16} className="skeleton" />
-                  <Skeleton width={`40%`} height={16} className="skeleton" />
+                  <Skeleton width={`60%`} height={16} />
+                  <Skeleton width={`40%`} height={16} />
                 </div>
                 <div className="info-preco-item">
-                  <Skeleton width={`30%`} height={16} className="skeleton" />
-                  <Skeleton width={`40%`} height={18} className="skeleton" />
+                  <Skeleton width={`30%`} height={16} />
+                  <Skeleton width={`40%`} height={18} />
                 </div>
               </li>
             ))}
@@ -106,7 +105,7 @@ const Carrinho = () => {
                 <li key={index} className="item" onClick={() => navigate(`/produto/${produto.produto_id}`)}>
                   <div className="imagem-carrinho-container">
                     {!imagensCarregadas[produto.carrinho_id] && (
-                      <Skeleton width={`100%`} height={`100%`} borderRadius={8} className="produto-img skeleton" />
+                      <Skeleton width={`100%`} height={`100%`} rounded={8} />
                     )}
                     {imagens.length > 0 && (
                       <>
@@ -150,10 +149,10 @@ const Carrinho = () => {
         <div className="total-container">
           {loading ? (
             <>
-              <Skeleton width={150} height={20} className="skeleton" />
+              <Skeleton width={150} height={20} />
               <div className='btn-total'>
-                <Skeleton width={130} height={40} className="skeleton" />
-                <Skeleton width={130} height={40} className="skeleton" />
+                <Skeleton width={130} height={40} />
+                <Skeleton width={130} height={40} />
               </div>
             </>
           ) : (

@@ -18,12 +18,14 @@ async function getPublicKeyFromDB(req, res) {
       }
     }
 
-    const response = await axios.post(`${process.env.PAGBANK_API}/public-keys`, { type: "card" }, {
+    const response = await axios.post(`${process.env.PAGBANK_API}/public-key`, { type: "card" }, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.PAGBANK_TOKEN}`
       }
     });
+      console.log("==== RESPOSTA DA PUBLIC_KEY DO PAGBANK -> PRODUÇAO =====");
+      console.log(JSON.stringify(response.data, null, 2));
 
     const public_key = response.data.public_key;
 
@@ -46,6 +48,8 @@ const checkout = async (req, res) => {
     const { pedido, itensPedido } = await pedidosModel.createPedidoWithConn(conn, dataPedido, cliente, itens, req.usuario.id);
   
     const body = montarBodyPagbank(pedido, itensPedido, metodo, cliente, endereco_entrega, pagamento);
+      console.log("==== BODY ENVIADO PARA PAGBANK -> PRODUÇAO =====");
+      console.log(JSON.stringify(body, null, 2));
 
     const response = await axios.post(`${process.env.PAGBANK_API}/orders`, body, {
       headers: {
@@ -53,6 +57,8 @@ const checkout = async (req, res) => {
         "Authorization": `Bearer ${process.env.PAGBANK_TOKEN}`
       }
     });
+      console.log("==== RESPOSTA DO PAGBANK -> PRODUÇAO =====");
+      console.log(JSON.stringify(response.data, null, 2));
 
     const dadosOrder = response.data;
     
@@ -101,6 +107,9 @@ const checkout = async (req, res) => {
 const notificacao = async (req, res) => { 
   try {
     const webhook = req.body;
+      console.log("==== NOTIFICAÇAO DO PAGBANK -> PRODUÇAO =====");
+      console.log(JSON.stringify(webhook, null, 2));
+
     const { reference_id, charges } = webhook;
     const pedidoId = Number(reference_id);
     const charge = charges[0];

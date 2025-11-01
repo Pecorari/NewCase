@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from '../../components/LoadSkeleton/LoadSkeleton';
 
 import './sidebarFiltros.css';
 
@@ -31,10 +30,10 @@ const SidebarFiltros = ({
     <aside className={`sidebar ${mostrarSidebar ? 'ativo' : ''}`}>
       {loading ? (
         <div className='sidebar-content'>
-            <Skeleton height={200} width="90%" style={{ marginBottom: '25px' }} className='skeleton' />
-            <Skeleton height={160} width="90%" style={{ marginBottom: '25px' }} className='skeleton' />
-            <Skeleton height={50} width="90%" style={{ marginBottom: '55px' }} className='skeleton' />
-            <Skeleton height={30} width="50%" style={{ marginLeft: '20%' }} className='skeleton' />
+            <Skeleton height={200} width="90%" marginBottom={20} />
+            <Skeleton height={160} width="90%" marginBottom={20} />
+            <Skeleton height={50} width="90%" marginBottom={30} />
+            <Skeleton height={30} width="50%" />
         </div>
         ) : (
         <div className='sidebar-content'>

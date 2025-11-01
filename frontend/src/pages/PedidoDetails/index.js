@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from "qrcode.react";
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+// import Skeleton from 'react-loading-skeleton'
+// import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from '../../components/LoadSkeleton/LoadSkeleton';
+
 import api from '../../hooks/useApi';
 
 import Header from '../../components/Header';
@@ -60,18 +62,18 @@ function PedidoDetail() {
           <button className="btn-voltar" onClick={() => navigate('/perfil')}>&larr; Voltar</button>
           {loading ? (
             <div>
-              <Skeleton width={`25%`} height={32} style={{ marginLeft: '35%' }} className="skeleton" />
+              <Skeleton width={`25%`} height={32} marginLeft={'35%'} />
 
               <div className='column-container'>
                 <div className='right-column'>
-                  <Skeleton width={`100%`} height={120} className="secao-info skeleton" />
-                  <Skeleton width={`100%`} height={270} className="secao-endereco skeleton" />
-                  <Skeleton width={`100%`} height={170} className="secao-itens skeleton" />
+                  <Skeleton width={`100%`} height={120} marginBottom={15} />
+                  <Skeleton width={`100%`} height={270} marginBottom={15} />
+                  <Skeleton width={`100%`} height={170} marginBottom={15} />
                 </div>
 
                 <div className='left-column'>
-                  <Skeleton width={`100%`} height={220} className="secao-pagamento skeleton" />
-                  <Skeleton width={`100%`} height={140} className="secao-frete skeleton" />
+                  <Skeleton width={`100%`} height={220} marginBottom={15} />
+                  <Skeleton width={`100%`} height={140} marginBottom={15} />
                 </div>
               </div>
             </div>
@@ -106,7 +108,7 @@ function PedidoDetail() {
                     <ul>
                       {itens.map((item) => (
                         <li key={item.id} className="item-pd" onClick={() => navigate(`/produto/${item.produto_id}`)}>
-                          {!imagensCarregadas[item.imagens[0]] && <Skeleton width={110} height={100} borderRadius={8} className="skeleton" />}
+                          {!imagensCarregadas[item.imagens[0]] && <Skeleton width={110} height={100} rounded={8} />}
                           <img src={item.imagens[0]} alt='Imagem do produto' className='img-item'
                             style={{ display: imagensCarregadas[item.imagens[0]] ? 'block' : 'none' }}
                             onLoad={() =>

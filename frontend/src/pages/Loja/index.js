@@ -2,8 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from '../../components/LoadSkeleton/LoadSkeleton';
 
 import Header from '../../components/Header';
 import SidebarFiltros from '../../components/SidebarFiltros';
@@ -232,7 +231,7 @@ const Loja = () => {
           {loading ? (
             <div className="grid-produtos grid-prod-skeleton">
               {Array.from({ length: 18 }).map((s) => (
-                <Skeleton key={s} height={`100%`} className="card-produto skeleton" />
+                <Skeleton key={s} height={`100%`}/>
               ))}
             </div>
           ) : (
@@ -245,7 +244,7 @@ const Loja = () => {
                   <div key={produto.id} className="card-produto" onClick={() => navigate(`/produto/${produto.id}`)}>
                     <div className="imagem-container">
                       {!imagensCarregadas[produto.id] && (
-                        <Skeleton width={`100%`} height='100%' borderRadius={8} className="skeleton" />
+                        <Skeleton width={`100%`} height='100%' rounded={8} />
                       )}
                       {imagens.length > 0 && (
                         <>

@@ -8,8 +8,10 @@ import { FaRegCreditCard, FaLock } from "react-icons/fa6";
 
 import { Stepper } from 'react-form-stepper';
 import { IMaskInput } from "react-imask";
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+// import Skeleton from 'react-loading-skeleton'
+// import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from "../../components/LoadSkeleton/LoadSkeleton";
+
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { calcularFrete } from '../../services/freteService';
@@ -369,14 +371,14 @@ const Checkout = () => {
                   <div className="enderecos-lista">
                     {[1, 2, 3].map((s) => (
                         <div className="endereco-card">
-                          <Skeleton width={`70%`} height={16} className="skeleton" />
-                          <Skeleton width={`60%`} height={16} className="skeleton" />
-                          <Skeleton width={`30%`} height={16} className="skeleton" />
-                          <Skeleton width={`40%`} height={16} className="skeleton" />
+                          <Skeleton width={`70%`} height={16} marginBottom={5} />
+                          <Skeleton width={`60%`} height={16} marginBottom={5}/>
+                          <Skeleton width={`30%`} height={16} marginBottom={5} />
+                          <Skeleton width={`40%`} height={16} marginBottom={5} />
                         </div>
                     ))}
                     <div className="endereco-card add-novo">
-                      <Skeleton width={`30%`} height={20} className="skeleton" />
+                      <Skeleton width={`30%`} height={20} />
                     </div>
                   </div>
                 ) : (
@@ -426,12 +428,12 @@ const Checkout = () => {
                   {[1, 2, 3].map((s) => (
                     <li className="frete-item-checkout">
                       <div style={{ width: '25%' }}>
-                      <Skeleton width={`100%`} height={60} className="frete-logo-checkout skeleton" />
+                      <Skeleton width={`100%`} height={60} />
 
                       </div>
                       <div className="frete-detalhes-checkout">
-                        <Skeleton width={`70%`} height={16} className="frete-title skeleton" />
-                        <Skeleton width={`50%`} height={16} className="skeleton" />
+                        <Skeleton width={`70%`} height={16} marginBottom={10} />
+                        <Skeleton width={`50%`} height={16} />
                       </div>
                     </li>
                   ))}
