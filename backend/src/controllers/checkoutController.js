@@ -14,11 +14,13 @@ async function getPublicKeyFromDB(req, res) {
       
       const expired = (Date.now() - createdAt.getTime()) > (30 * 24 * 60 * 60 * 1000);
       if (!expired) {
+        console.log("==== CHAVE PUBLICA NAO ESTAVA EXPIRADA ====");
+        console.log(public_key);
         return res.status(200).json(public_key);
       }
     }
 
-    const response = await axios.post(`${process.env.PAGBANK_API}/public-key`, { type: "card" }, {
+    const response = await axios.post(`${process.env.PAGBANK_API}/public-keys`, { type: "card" }, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.PAGBANK_TOKEN}`
