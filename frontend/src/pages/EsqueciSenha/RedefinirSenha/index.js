@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSearchParams  } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
@@ -15,6 +15,7 @@ function RedefinirSenha() {
   const [senha, setSenha] = useState('');
   const [confirmSenha, setConfirmSenha] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const mudarSenha = async(e) => {
     e.preventDefault();
@@ -66,7 +67,7 @@ function RedefinirSenha() {
 
       <CustomModal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => {setModalOpen(false); navigate('/Login');}}
         title="Senha alterada com sucesso!"
       >
         <p>Ir para o Login!</p>

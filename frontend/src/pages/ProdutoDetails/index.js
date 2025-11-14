@@ -61,12 +61,16 @@
     const diminuir = () => setQuantidade(q => (q > 1 ? q - 1 : 1));
 
     const adicionarAoCarrinho = async () => {
-      try {
-        await api.post('/carrinho/add', { produto_id: id, quantidade });
-        atualizarQtdCarrinho();
-        navigate('/carrinho');
-      } catch (error) {
-        console.log("Erro ao adicionar no carrinho:", error.response.data);
+      if(!usuario) {
+        navigate('/login');
+      } else {
+        try {
+          await api.post('/carrinho/add', { produto_id: id, quantidade });
+          atualizarQtdCarrinho();
+          navigate('/carrinho');
+        } catch (error) {
+          console.log("Erro ao adicionar no carrinho:", error.response.data);
+        }
       }
     };
 

@@ -41,6 +41,13 @@ function Cadastro() {
       navigate('/cadastro/verificar-email', {state: { id: result.data.id, email: result.data.email }});
     } catch (err) {
       console.error('Erro ao criar usuario:', err);
+      if (err.response && err.response.data && err.response.data.mensagem) {
+        setErro(err.response.data.mensagem);
+      } else if (err.message) {
+        setErro(err.message);
+      } else {
+        setErro('Ocorreu um erro ao criar o usuário. Tente novamente.');
+      }
     }
   };
 

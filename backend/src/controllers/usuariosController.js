@@ -23,12 +23,23 @@ const createUsuario = async (req, res) => {
       email: usuario.email
     });
 
-
     enviarEmailVerificacao(email, tokenVerificacao).catch(err => {
       console.error('Erro ao enviar e-mail de verificação:', err);
     });
+
   } catch (error) {
     console.error('Erro no createUsuario:', error);
+
+    if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
+      if (error.sqlMessage.includes('cpf')) {
+        return res.status(400).json({ mensagem: 'Este CPF já está cadastrado.' });
+      }
+      if (error.sqlMessage.includes('email')) {
+        return res.status(400).json({ mensagem: 'Este e-mail já está cadastrado. Tente outro ou faça login.' });
+      }
+      return res.status(400).json({ mensagem: 'Já existe um registro com esses dados.' });
+    }
+
     return res.status(500).json({ mensagem: 'Erro interno no servidor.' });
   }
 };
@@ -78,7 +89,7 @@ const reenviarEmail = async (req, res) => {
   const { id, email } = req.body;
 
   try {
-    const usuario = await usuarioModel.getUsuarioById(id);
+    const usuario = await usuarioModel.getUsuarioBySearch(id);
 
     if (!usuario) {
       return res.status(404).json({ mensagem: 'Usuário não encontrado.' });
@@ -94,7 +105,7 @@ const reenviarEmail = async (req, res) => {
 
     res.status(200).json({ message: 'E-mail reenviado com sucesso' });
   } catch (error) {
-    console.error('Erro ao confirmar e-mail:', error);
+    console.error('Erro ao reenviar e-mail:', error);
     return res.status(500).json({ mensagem: 'Erro interno no servidor.' });
   }
 };
@@ -218,7 +229,7 @@ const alterarSenha = async (req, res) => {
   const { senhaAtual, novaSenha } = req.body;
 
   try {
-    const usuario = await usuarioModel.getUsuarioById(req.usuario.id);
+    const usuario = await usuarioModel.getUsuarioBySearch(req.usuario.id);
 
     const senhaValida = await bcrypt.compare(senhaAtual, usuario.senha);
     if (!senhaValida) return res.status(400).json({ errors: "Senha atual incorreta." });

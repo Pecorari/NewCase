@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 const enviarContatoEmail = async (nome, email, mensagem) => {
   const mailOptions = {
     from: `"Contato Site" <${email}>`,
-    to: `"MyCell Store" <${process.env.EMAIL_USER}>`,
+    to: `"NewCase Store" <${process.env.EMAIL_USER}>`,
     subject: `Mensagem de Contato de ${nome}`,
     text: `
       Nome: ${nome}

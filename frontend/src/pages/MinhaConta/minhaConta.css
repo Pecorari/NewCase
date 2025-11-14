@@ -126,6 +126,7 @@ form .lb-password {
 }
 .pedidos {
   max-height: 400px;
+  padding: 1px 10px;
   overflow-y: auto;
 
   scrollbar-width: none;

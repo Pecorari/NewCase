@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from "qrcode.react";
-// import Skeleton from 'react-loading-skeleton'
-// import 'react-loading-skeleton/dist/skeleton.css'
 import Skeleton from '../../components/LoadSkeleton/LoadSkeleton';
 
 import api from '../../hooks/useApi';
@@ -18,6 +16,7 @@ function PedidoDetail() {
   const [pedido, setPedido] = useState(null);
   const [itens, setItens] = useState([]);
   const [pagamento, setPagamento] = useState(null);
+  const [endereco, setEndereco] = useState(null);
   const [loading, setLoading] = useState(true);
   const [imagensCarregadas, setImagensCarregadas] = useState({});
   const [erro, setErro] = useState(null);
@@ -32,10 +31,19 @@ function PedidoDetail() {
     setLoading(true);
     try {
       const response = await api.get(`/pedidos/${id}`);
+      const pedidoData = response.data;
 
-      setPedido(response.data.pedido[0]);
-      setItens(response.data.itens);
-      setPagamento(response.data.pagamento[0]);
+      setPedido(pedidoData.pedido[0]);
+      setItens(pedidoData.itens);
+      setPagamento(pedidoData.pagamento[0]);
+      
+      if (!pedidoData.pedido[0].endereco_id) {
+        setEndereco(null);
+        return;
+      }
+
+      const responseEnd = await api.get(`/enderecos/${response.data.pedido[0].endereco_id}`);
+      setEndereco(responseEnd.data?.[0] || null);
     } catch (error) {
       setErro('Não foi possível carregar o pedido.');
     } finally {
@@ -94,13 +102,13 @@ function PedidoDetail() {
 
                   <section className="secao-endereco">
                     <h2>Endereço a ser entregue</h2>
-                    <p>Rua: {pedido.endereco_rua}</p>
-                    <p>Número: {pedido.endereco_numero}</p>
-                    <p>Bairro: {pedido.endereco_bairro}</p>
-                    <p>Cidade: {pedido.endereco_cidade}</p>
-                    <p>Estado: {pedido.endereco_estado}</p>
-                    <p>Complemento: {pedido.endereco_complemento}</p>
-                    <p>CEP: {pedido.endereco_cep}</p>
+                    <p>Rua: {endereco?.rua || '-'}</p>
+                    <p>Número: {endereco?.numero || '-'}</p>
+                    <p>Bairro: {endereco?.bairro || '-'}</p>
+                    <p>Cidade: {endereco?.cidade || '-'}</p>
+                    <p>Estado: {endereco?.estado || '-'}</p>
+                    <p>Complemento: {endereco?.complemento || '-'}</p>
+                    <p>CEP: {endereco?.cep || '-'}</p>
                   </section>
 
                   <section className="secao-itens">

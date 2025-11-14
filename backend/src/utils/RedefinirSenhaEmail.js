@@ -12,14 +12,14 @@ const enviarLinkRedefinicao = async (email, token) => {
   const link = `${process.env.BASE_URL}/redefinir-senha?token=${token}`;
 
   const mailOptions = {
-    from: `"MyCell Store" <${process.env.EMAIL_USER}>`,
+    from: `"NewCase Store" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Redefinição de Senha',
     html: `
       <div style="max-width: 600px; margin: auto; font-family: Arial, sans-serif; background-color:rgb(255, 255, 255); color:rgb(0, 0, 0);">
         <!-- Logo -->
         <div style="text-align: center; margin-bottom: 10px;">
-          <img src="https://firebasestorage.googleapis.com/v0/b/mycellstore-da6f9.firebasestorage.app/o/produtos%2FMyCell%20Logo%20-%20760x760.png?alt=media&token=75927860-4c5d-4dda-9f76-b3c73b097314" alt="Logo da loja" style="width: 150px; height: 150px;">
+          <img src="https://firebasestorage.googleapis.com/v0/b/newcase-a6d58.firebasestorage.app/o/logo_com_nome.png?alt=media&token=6f0dfb24-7c17-4cc1-aa7c-d461519683fc" alt="Logo da loja" style="width: 190px; height: 165px;">
         </div>
 
         <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 20px 0;">
@@ -49,7 +49,7 @@ const enviarLinkRedefinicao = async (email, token) => {
 
         <!-- Rodapé -->
         <p style="font-size: 12px; color:rgb(100, 100, 100); text-align: center;">
-          Você está recebendo este e-mail porque alguém solicitou uma redefinição de senha para sua conta na <strong>MyCell Store</strong>.
+          Você está recebendo este e-mail porque alguém solicitou uma redefinição de senha para sua conta na <strong>NewCase Store</strong>.
           <br>Se não foi você, pode ignorar este e-mail com segurança.
         </p>
       </div>
