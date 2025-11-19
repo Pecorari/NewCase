@@ -14,8 +14,6 @@ async function getPublicKeyFromDB(req, res) {
       
       const expired = (Date.now() - createdAt.getTime()) > (30 * 24 * 60 * 60 * 1000);
       if (!expired) {
-        console.log("==== CHAVE PUBLICA NAO ESTAVA EXPIRADA ====");
-        console.log(public_key);
         return res.status(200).json(public_key);
       }
     }
@@ -26,8 +24,8 @@ async function getPublicKeyFromDB(req, res) {
         "Authorization": `Bearer ${process.env.PAGBANK_TOKEN}`
       }
     });
-      console.log("==== RESPOSTA DA PUBLIC_KEY DO PAGBANK -> PRODUÇAO =====");
-      console.log(JSON.stringify(response.data, null, 2));
+    console.log("==== RESPOSTA DA PUBLIC_KEY DO PAGBANK -> PRODUÇAO =====");
+    console.log(JSON.stringify(response.data, null, 2));
 
     const public_key = response.data.public_key;
 
