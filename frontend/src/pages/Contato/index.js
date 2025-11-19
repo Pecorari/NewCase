@@ -61,7 +61,7 @@ function Contato() {
               <a href="/" target="_blank" rel="noopener noreferrer">
                 <img src='/redes/whatsapp.svg' alt="WhatsApp" />
               </a>
-              <a href="/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/newcase.ofc/" target="_blank" rel="noopener noreferrer">
                 <img src='/redes/instagram.svg' alt="Instagram" />
               </a>
               <a href="/" target="_blank" rel="noopener noreferrer">

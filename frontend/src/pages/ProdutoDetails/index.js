@@ -295,7 +295,10 @@
                           className="frete-logo"
                         />
                         <div className="frete-detalhes">
-                          <h4>{freteSimulado.name}Frete a partir de R$ {freteSimulado.valor} - {freteSimulado.prazo} dias úteis</h4>
+                          <div className="title-frete">
+                            <h4>{freteSimulado.name}Frete a partir de R$ {freteSimulado.valor}</h4>
+                            <h4>{freteSimulado.prazo} Dias úteis</h4>
+                          </div>
                           {freteSimulado.error ? (
                             <p>{freteSimulado.error}</p>
                           ) : (

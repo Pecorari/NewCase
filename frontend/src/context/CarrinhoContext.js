@@ -9,14 +9,16 @@ export const CarrinhoProvider = ({ children }) => {
   const { usuario } = useAuth();
 
   const atualizarQtdCarrinho = async () => {
-    if(usuario) {
-      try {
-        const response = await api.get('/carrinhoQtd');
-        setQtdCarrinho(response.data);
-      } catch (err) {
-        console.error('Erro ao atualizar carrinho:', err);
-      }
-    } else {
+    if (!usuario) {
+      setQtdCarrinho(0);
+      return;
+    }
+
+    try {
+      const response = await api.get('/carrinhoQtd');
+      setQtdCarrinho(response.data);
+    } catch (err) {
+      console.error('Erro ao atualizar carrinho:', err);
       setQtdCarrinho(0);
     }
   };
@@ -24,7 +26,7 @@ export const CarrinhoProvider = ({ children }) => {
   useEffect(() => {
     atualizarQtdCarrinho();
     // eslint-disable-next-line
-  }, []);
+  }, [usuario]);
 
   return (
     <CarrinhoContext.Provider value={{ qtdCarrinho, atualizarQtdCarrinho }}>

@@ -237,7 +237,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 90%;
+  width: 95%;
   padding: 0.5rem;
   border: 1px solid #444;
   border-radius: 8px;
@@ -254,13 +254,18 @@
   max-width: 80px;
   object-fit: contain;
 }
+.resultado-frete .frete-lista .frete-item .frete-detalhes .title-frete {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
 .resultado-frete .frete-lista .frete-item .frete-detalhes h4 {
   font-size: 0.8rem;
   font-weight: bold;
 }
 .resultado-frete .frete-lista .frete-item .frete-detalhes p {
-  margin-top: 5px;
-  font-size: 0.8rem;
+  margin-top: 10px;
+  font-size: 0.65rem;
   color: #ccc;
 }
 
@@ -597,13 +602,13 @@
 
 
   .resultado-frete .frete-lista .frete-item {
-    max-width: 500px;
+    max-width: 600px;
   }
   .resultado-frete .frete-lista .frete-item .frete-detalhes h4 {
     font-size: 1rem;
   }
   .resultado-frete .frete-lista .frete-item .frete-detalhes p {
-    font-size: 1rem;
+    font-size: 0.75rem;
   }
 
 
@@ -658,7 +663,7 @@
 
   
   .resultado-frete .frete-lista .frete-item {
-    max-width: 500px;
+    max-width: 600px;
     padding: 0.8rem;
   }
 

@@ -95,7 +95,7 @@ function PedidoDetail() {
                     <h2>Informações Gerais</h2>
                     <p>Status: {pedido.status}</p>
                     <p>Data do Pedido: {formatarDataHora(pedido.criado_em)}</p>
-                    <p>Subtotal: R$ {pedido.total - pedido.frete_valor}</p>
+                    <p>Subtotal: R$ {(Number(pedido.total) - Number(pedido.frete_valor)).toFixed(2)}</p>
                     <p>Frete: R$ {pedido.frete_valor}</p>
                     <p>Total: R$ {pedido.total}</p>
                   </section>

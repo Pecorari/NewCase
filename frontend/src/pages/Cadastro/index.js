@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useRecaptcha } from "../../hooks/useRecaptcha";
 
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
@@ -21,6 +22,7 @@ function Cadastro() {
     senha_confirm: ''
   });
 
+  useRecaptcha();
   const navigate = useNavigate();
 
   const userAdd = async (e) => {

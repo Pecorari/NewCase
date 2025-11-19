@@ -15,7 +15,7 @@
   cursor: pointer;
   transition: color 0.3s ease;
   width: max-content;
-  margin-top: 11rem;
+  margin-top: 9rem;
   margin-left: 1rem;
 }
 .btn-voltar-checkout:hover {
@@ -29,9 +29,9 @@
 }
 
 .checkout-step {
-  padding: 1.5rem;
   max-width: 800px;
-  margin: 2rem auto;
+  padding: 0.5rem 1.5rem 1.5rem 1.5rem;
+  margin: 0rem auto;
 }
 .checkout-step h3 {
   margin-bottom: 40px;
@@ -150,7 +150,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
+  margin-bottom: 0.5rem;
   font-size: 0.75rem;
   font-weight: 500;
   color: #999999ab;
@@ -233,7 +234,6 @@
 .cartao-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
 }
 
 .entradas-box {
@@ -326,8 +326,8 @@
 
 /* Info segurança */
 .info-seguranca {
-  margin: 1rem auto 1rem auto;
-  font-size: 0.7rem;
+  margin: 0.5rem auto 0.5rem auto;
+  font-size: 0.65rem;
   text-align: center;
   color: #555;
   max-width: 80%;
@@ -481,6 +481,14 @@
     margin-left: 2rem;
   }
 
+  .processado-por {
+    margin-bottom: 1.5rem;
+  }
+
+  .cartao-container {
+    gap: 2rem;
+  }
+
   /* Mockup do Cartão */
   .cartao-mockup {
     height: 180px;
@@ -504,6 +512,7 @@
   /* Info segurança */
   .info-seguranca {
     font-size: 0.85rem;
+    margin: 1rem auto 1rem auto;
   }
 }
 
@@ -538,6 +547,10 @@
   .btn-voltar-checkout {
     margin-left: 5rem;
     margin-top: 8.5rem;
+  }
+
+  .checkout-step {
+    padding: 1.5rem;
   }
 
   /* ====== ENDEREÇO ====== */

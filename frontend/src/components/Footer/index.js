@@ -38,18 +38,18 @@ function Footer() {
 
         <div className="footer-section">
           <h3>Contato</h3>
-          <p className="contato-email">Email: contato@mycell.com</p>
+          <p className="contato-email">Email: newcase.contato@gmail.com</p>
           <p>WhatsApp: (19) 97401-2628</p>
           <div className="socials">
-            <a href="/"><img src='/redes/facebook.svg' alt="Facebook" /></a>
-            <a href="/"><img src='/redes/instagram.svg' alt="Instagram" /></a>
-            <a href="/"><img src='/redes/whatsapp.svg' alt="Whatsapp" /></a>
+            <a href="/" target="_blank" rel="noopener noreferrer"><img src='/redes/facebook.svg' alt="Facebook" /></a>
+            <a href="https://www.instagram.com/newcase.ofc/" target="_blank" rel="noopener noreferrer"><img src='/redes/instagram.svg' alt="Instagram" /></a>
+            <a href="/" target="_blank" rel="noopener noreferrer"><img src='/redes/whatsapp.svg' alt="Whatsapp" /></a>
           </div>
         </div>
       </div>
       
       <div className="footer-bottom">
-        <p>&copy; 2025 NewCase. Todos os direitos reservados.</p>
+        <p>&copy; 2025 NewCase. Todos os direitos reservados | Responsável técnico: Thiago Pecorari Clemente.</p>
       </div>
     </div>
   );

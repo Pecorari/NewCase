@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useRecaptcha } from "../../hooks/useRecaptcha";
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -15,8 +16,8 @@ function Login() {
     senha: ''
   });
 
+  useRecaptcha();
   const { login } = useAuth();
-  
   const navigate = useNavigate();
   
   const userLogin = async (e) => {

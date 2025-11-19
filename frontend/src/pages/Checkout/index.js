@@ -8,14 +8,14 @@ import { FaRegCreditCard, FaLock } from "react-icons/fa6";
 
 import { Stepper } from 'react-form-stepper';
 import { IMaskInput } from "react-imask";
-// import Skeleton from 'react-loading-skeleton'
-// import 'react-loading-skeleton/dist/skeleton.css'
 import Skeleton from "../../components/LoadSkeleton/LoadSkeleton";
 
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { calcularFrete } from '../../services/freteService';
 import { useCarrinho } from '../../context/CarrinhoContext';
+import { useRecaptcha } from "../../hooks/useRecaptcha";
+
 import api from '../../hooks/useApi';
 
 import "./checkout.css";
@@ -45,9 +45,11 @@ const Checkout = () => {
   const [statusPagamento, setStatusPagamento] = useState(null);
   const [mensagemErro, setMensagemErro] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const navigate = useNavigate();
-
+  useRecaptcha();
+  
   useEffect(() => {
     async function fetchKey() {
       try {
@@ -68,6 +70,26 @@ const Checkout = () => {
     listarEnderecos();
     getProdutos();
   }, []);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const steps = isMobile
+  ? [
+      { label: "Destinatário" },
+      { label: "Endereço" },
+      { label: "Frete" },
+      { label: "Pagamento" }
+    ]
+  : [
+      { label: "Destinatário" },
+      { label: "Escolha o Endereço" },
+      { label: "Escolha o Frete" },
+      { label: "Pagamento" }
+    ];
 
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
@@ -311,12 +333,7 @@ const Checkout = () => {
         <div className="checkout-box">
           <div className="p-8">
             <Stepper
-              steps={[
-                { label: "Destinatário" },
-                { label: "Escolha o Endereço" },
-                { label: "Escolha o Frete" },
-                { label: "Pagamento" }
-              ]}
+              steps={steps}
               activeStep={step}
               styleConfig={{
                 activeBgColor: "#ff007f",

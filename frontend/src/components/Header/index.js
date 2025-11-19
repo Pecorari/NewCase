@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { MdLogin } from "react-icons/md";
 import { FiUser } from "react-icons/fi";
-import { BsBag, BsSearch } from "react-icons/bs";
+import { BsCart, BsSearch } from "react-icons/bs";
 import { IoIosArrowForward } from "react-icons/io";
 import { useAuth } from "../../context/AuthContext";
 import { useCarrinho } from '../../context/CarrinhoContext';
@@ -142,8 +142,10 @@ function Header({ inLoja }) {
             )}
 
             <Link to="/carrinho" className="cart">
-              <BsBag className="iconCart"/>
-              <p className="cart-count">{qtdCarrinho}</p>
+              <BsCart className="iconCart"/>
+              {qtdCarrinho !== 0 ?
+                <p className="cart-count">{qtdCarrinho}</p> : <></>
+              }
             </Link>
           </div>
         </div>
