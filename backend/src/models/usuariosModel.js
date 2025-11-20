@@ -44,9 +44,16 @@ const getAllUsuarios = async () => {
 };
 
 const getUsuarioBySearch = async (value) => {
-  const [usuario] = await connection.execute(`SELECT * FROM usuarios WHERE id = ? OR LOWER(nome) LIKE CONCAT('%', LOWER(?), '%')`, [value, value]);
+  const [usuario] = await connection.execute(`
+    SELECT *
+    FROM usuarios
+    WHERE 
+      id = ?
+      OR LOWER(nome) LIKE CONCAT('%', LOWER(?), '%')
+      OR REPLACE(REPLACE(cpf, '.', ''), '-', '') LIKE REPLACE(REPLACE(?, '.', ''), '-', '')
+  `, [value, value, value]);
 
-  return usuario[0];
+  return usuario[0] || null;
 };
 
 const updateUsuario = async (dataUser, idLogado) => {

@@ -38,6 +38,7 @@ const AdminPedidos = () => {
 
     try {
       const response = await api.get(`/pedidosAdmin/search/${form.searchValue}`);
+      console.log(response.data)
       setPedidos(response.data);
       setForm({ searchValue: "" });
     } catch (err) {
@@ -102,11 +103,11 @@ const AdminPedidos = () => {
 
           {pedidos.map((pedido) => (
             <div className="pedido-row" key={pedido.pedido_id} onClick={() => setPedidoSelecionado(pedido)}>
-              <span>{pedido.pedido_id}</span>
-              <span>{pedido.usuario.nome}</span>
-              <span>R$ {pedido.total}</span>
-              <span>{pedido.status}</span>
-              <span>{new Date(pedido.criado_em).toLocaleDateString()}</span>
+              <span data-label="ID">{pedido.pedido_id}</span>
+              <span data-label="Cliente">{pedido.usuario.nome}</span>
+              <span data-label="Total">R$ {pedido.total}</span>
+              <span data-label="Status">{pedido.status}</span>
+              <span data-label="Criado em">{new Date(pedido.criado_em).toLocaleDateString()}</span>
             </div>
           ))}
         </div>
@@ -123,7 +124,7 @@ const AdminPedidos = () => {
                 <section>
                   <h3 className="subtitles-sections-adm">Informações Gerais</h3>
                   <p>Status: {pedidoSelecionado.status}</p>
-                  <p>Data do Pedido:{new Date(pedidoSelecionado.criado_em).toLocaleString()}</p>
+                  <p>Data do Pedido: {new Date(pedidoSelecionado.criado_em).toLocaleString()}</p>
                   <p>Total: R$ {pedidoSelecionado.total}</p>
                 </section>
 
@@ -135,23 +136,25 @@ const AdminPedidos = () => {
                   <p>Cidade: {pedidoSelecionado.endereco.endereco_cidade}</p>
                   <p>Estado: {pedidoSelecionado.endereco.endereco_estado}</p>
                   <p>CEP: {pedidoSelecionado.endereco.endereco_cep}</p>
-                  <p>Complemento: {pedidoSelecionado.endereco.endereco_complemento}</p>
+                  <p>Complemento: {pedidoSelecionado.endereco.endereco_complemento ? pedidoSelecionado.endereco.endereco_complemento : 'S/N'}</p>
+                </section>
+
+                <section>
+                  <h3 className="subtitles-sections-adm">Destinatario</h3>
+                  <p>Nome: {pedidoSelecionado.destinatario.nome}</p>
+                  <p>CPF: {pedidoSelecionado.destinatario.cpf}</p>
+                  <p>Email: {pedidoSelecionado.destinatario.email}</p>
+                  <p>Telefone: {pedidoSelecionado.destinatario.telefone}</p>
                 </section>
               </div>
 
               <div>
                 <section>
-                  <h3 className="subtitles-sections-adm">destinatario</h3>
-                  {pedidoSelecionado.destinatario ? (
-                    <>
-                      <p>Nome: {pedidoSelecionado.destinatario.nome}</p>
-                      <p>CPF: {pedidoSelecionado.destinatario.cpf}</p>
-                      <p>Email: {pedidoSelecionado.destinatario.email}</p>
-                      <p>Telefone: {pedidoSelecionado.destinatario.telefone}</p>
-                    </>
-                  ) : (
-                    <p>Sem pagamento registrado</p>
-                  )}
+                  <h3 className="subtitles-sections-adm">Usuario</h3>
+                  <p>Nome: {pedidoSelecionado.usuario.nome}</p>
+                  <p>CPF: {pedidoSelecionado.usuario.cpf}</p>
+                  <p>Email: {pedidoSelecionado.usuario.email}</p>
+                  <p>Telefone: {pedidoSelecionado.usuario.telefone}</p>
                 </section>
 
                 <section>
@@ -160,7 +163,9 @@ const AdminPedidos = () => {
                     <>
                       <p>Forma de Pagamento: {pedidoSelecionado.pagamento.metodo}</p>
                       <p>Status: {pedidoSelecionado.pagamento.status}</p>
-                      <p>Pago em: {new Date(pedidoSelecionado.pagamento.pago_em).toLocaleString()}</p>
+                      <p>Valor: R$ {pedidoSelecionado.pagamento.valor}</p>
+                      <p>Pago em: {pedidoSelecionado.pagamento.pago_em ? new Date(pedidoSelecionado.pagamento.pago_em).toLocaleString() : 'Aguardando Confirmaçao'}</p>
+                      <p>PagBank: {pedidoSelecionado.pagbank_ped_id}</p>
                     </>
                   ) : (
                     <p>Sem pagamento registrado</p>
@@ -172,11 +177,13 @@ const AdminPedidos = () => {
                   <p>Serviço: {pedidoSelecionado.frete.nome}</p>
                   <p>Entrega: {pedidoSelecionado.frete.prazo} dias úteis</p>
                   <p>Valor: R$ {pedidoSelecionado.frete.valor}</p>
+                  <p>Etiqueta ID: {pedidoSelecionado.etiqueta_id}</p>
+                  <p>Codigo de Rastreio: {pedidoSelecionado.cod_rastreio}</p>
                 </section>
               </div>
             </div>
 
-            <section>
+            <section className="section-itens">
               <h3 className="subtitles-sections-adm">Itens do Pedido</h3>
               <div className="itens-grid-adm">
                 {pedidoSelecionado.itens.map((item, i) => (
@@ -184,12 +191,12 @@ const AdminPedidos = () => {
                     <img src={item.produto_imagem_url} alt='Imagem do produto' className='img-item-adm'/>
                     <div className="item-pd-info-adm">
                       <div className='boxes-info-pd-adm'>
-                        <h3>{item.nome} <span className='span-id-adm'>ID: #{item.produto_id}</span></h3>
+                        <h3>{item.nome} <span style={{ fontSize: '0.9rem' }}>#{item.produto_id}</span></h3>
                         <p className='compatibilidade-adm'>{item.aparelho_nome}</p>
                       </div>
                       <div className='boxes-valor-pd-adm'>
                         <p>Qtd: {item.quantidade}</p>
-                        <p>R$ {item.preco_unitario}</p>
+                        <p><strong>R$ {item.preco_unitario}</strong></p>
                       </div>
                     </div>
                   </div>
@@ -201,7 +208,9 @@ const AdminPedidos = () => {
               {pedidoSelecionado.etiqueta_url ? (
                 <a href={pedidoSelecionado.etiqueta_url} target="_blank" rel="noopener noreferrer" className="gerar-etiqueta">Baixar Etiqueta</a>
               ) : (
-                <button className="gerar-etiqueta" onClick={() => gerarEtiqueta(pedidoSelecionado.pedido_id)} disabled={loadingEtiqueta}>
+                <button className="gerar-etiqueta" onClick={() => {
+                  gerarEtiqueta(pedidoSelecionado.pedido_id)
+                  }} disabled={loadingEtiqueta}>
                   {loadingEtiqueta ? "Gerando..." : "Gerar Etiqueta"}
                 </button>
               )}

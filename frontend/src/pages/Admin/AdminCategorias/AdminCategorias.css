@@ -16,7 +16,6 @@ body {
 
 .form-admin-categoria {
   display: flex;
-  flex-direction: row;
   gap: 1.5rem;
 }
 
@@ -33,24 +32,40 @@ body {
   background-color: #2a2a2a;
   color: #fff;
 }
+
 .input-admin-categoria::placeholder {
   color: #aaa;
 }
 
 .form-btn-admin-categoria {
-  background-color:  var(--color-primary);
+  background-color: var(--color-primary);
   color: white;
   cursor: pointer;
   transition: background 0.3s;
 }
+
 .form-btn-admin-categoria:hover {
-  background-color:  var(--color-strong);
+  background-color: var(--color-strong);
 }
 
 
 .categoria-grid {
   display: grid;
   gap: 5px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.categoria-grid::-webkit-scrollbar {
+  width: 8px;
+}
+.categoria-grid::-webkit-scrollbar-track {
+  background: #1b1b1b;
+}
+.categoria-grid::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
 }
 
 .categoria-header,
@@ -60,7 +75,8 @@ body {
   align-items: center;
   padding: 5px 0;
   border-bottom: 1px solid #444;
-  width: max-content;
+  width: 100%;
+  max-width: 100%;
 }
 
 .categoria-header {
@@ -71,6 +87,7 @@ body {
 .categoria-row {
   transition: background 0.2s;
 }
+
 .categoria-row:hover {
   background-color: #333;
 }
@@ -83,4 +100,83 @@ body {
   border-radius: 5px;
   cursor: pointer;
   border: none;
+}
+
+
+.categoria-cards {
+  display: none;
+}
+
+.categoria-card {
+  background: #111;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #222;
+  box-shadow: 0 0 8px rgba(255, 0, 128, 0.15);
+  transition: 0.2s ease;
+}
+
+.categoria-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 12px rgba(255, 0, 128, 0.3);
+}
+
+.categoria-card span {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.categoria-cards {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.categoria-cards::-webkit-scrollbar {
+  width: 6px;
+}
+.categoria-cards::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
+}
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .form-admin-categoria {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .input-admin-categoria,
+  .form-btn-admin-categoria {
+    width: 100% !important;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    display: grid;
+  }
+}
+
+@media (max-width: 420px) {
+  .admin-container {
+    padding: 1rem;
+  }
+
+  .title-admin-categoria {
+    font-size: 1.2rem;
+  }
 }

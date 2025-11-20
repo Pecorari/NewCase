@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 import { storage } from '../../../services/firebase';
 import api from '../../../hooks/useApi';
@@ -15,6 +16,7 @@ const AdminProdutos = () => {
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [formAberto, setFormAberto] = useState(false);
   const [erro, setErro] = useState('');
+  const [formSearch, setFormSearch] = useState('');
   const [form, setForm] = useState({
     nome: '',
     aparelho_id: '',
@@ -32,6 +34,8 @@ const AdminProdutos = () => {
     imagens: []
   });
   const [editandoId, setEditandoId] = useState(null);
+  const [modalProduto, setModalProduto] = useState(null);
+  const [indiceImagem, setIndiceImagem] = useState({});
 
   useEffect(() => {
     buscarProdutos(1);
@@ -41,12 +45,13 @@ const AdminProdutos = () => {
 
   const buscarProdutos = async (valuePage = 1) => {
     try {
-      const response = await api.get(`/produtos?page=${valuePage}`);
+      const response = await api.get(`/produtos?page=${valuePage}&limit=${16}`);
 
       console.log(response.data.produtos);
       setProdutos(response.data.produtos);
       setPage(response.data.page);
       setTotalPaginas(response.data.totalPaginas);
+      setFormSearch('')
     } catch (err) {
       setErro(err.response.data.mensagem);
       console.error('Erro ao buscar produtos:', err);
@@ -89,6 +94,30 @@ const AdminProdutos = () => {
       setForm({ ...form, imagens: updatedImages });
     } else {
       setForm({ ...form, [name]: value });
+    }
+  };
+
+  const handleInputSearchChange = (e) => {
+    setFormSearch(e.target.value);
+  };
+
+  const searchProdutos = async (e) => {
+    e.preventDefault();
+
+    const isNumber = !isNaN(formSearch) && formSearch.trim() !== "";
+
+    if (!isNumber && formSearch.length < 2) {
+      setErro("Digite pelo menos 2 caracteres para buscar.");
+      return;
+    }
+
+    try {
+      const response = await api.get(`/produtos/search?busca=${formSearch}`);
+      setProdutos(response.data);
+      setFormSearch('');
+      setErro('');
+    } catch (err) {
+      setErro(err.response?.data?.mensagem || "Erro ao buscar produtos");
     }
   };
 
@@ -206,6 +235,70 @@ const AdminProdutos = () => {
     }
   };
 
+  const proximaImagem = (produtoId, imagens) => {
+    setIndiceImagem(prev => ({
+      ...prev,
+      [produtoId]: ((prev[produtoId] || 0) + 1) % imagens.length
+    }));
+  };
+
+  const imagemAnterior = (produtoId, imagens) => {
+    setIndiceImagem(prev => ({
+      ...prev,
+      [produtoId]: ((prev[produtoId] || 0) - 1 + imagens.length) % imagens.length
+    }));
+  };
+  
+  const ModalProduto = ({ produto, onClose }) => {
+    if (!produto) return null;
+
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={e => e.stopPropagation()}>
+          
+          <button className="modal-close" onClick={onClose}>X</button>
+
+          <h2>{produto.nome} <span style={{ fontSize: '1rem' }}>#{produto.id}</span></h2>
+
+          <div className='modal-info' style={{ marginBottom: '10px' }}>
+            <p><strong>Aparelho:</strong> {produto.aparelho_nome}</p>
+            <p><strong>Categoria:</strong> {produto.categoria_nome}</p>
+            <p><strong>Descrição:</strong> {produto.descricao}</p>
+          </div>
+
+          <div className='modal-dms-info'>
+            <div className='modal-info'>
+              <p><strong>Altura:</strong> {produto.altura}</p>
+              <p><strong>Comprimento:</strong> {produto.comprimento}</p>
+              <p><strong>Largura:</strong> {produto.largura}</p>
+              <p><strong>Peso:</strong> {produto.peso}</p>
+            </div>
+            <div className='modal-info'>
+              <p><strong>Material:</strong> {produto.material}</p>
+              <p><strong>Cor:</strong> {produto.cor}</p>
+              <p><strong>Estoque:</strong> {produto.estoque}</p>
+              <p><strong>Destaque:</strong> {produto.destaque}</p>
+            </div>
+          </div>
+          <div className='modal-info'>
+            <p className="tag-preco"><strong>Preco:</strong> {produto.preco}</p>
+          </div>
+
+          <div className="modal-imgs">
+            {produto.imagens?.map((img, i) => (
+              <img key={i} src={img.url} alt={produto.nome} />
+            ))}
+          </div>
+
+          <div className="modal-botoes">
+            <button className="btn-deletar" onClick={() => {handleDeletar(produto.id); onClose();}}>Deletar</button>
+            <button className="btn-editar" onClick={() => {handleEditar(produto); onClose();}}>Editar</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className='admin-container'>
       {erro && <span className='erro'>{erro}</span>}
@@ -267,58 +360,68 @@ const AdminProdutos = () => {
         </form>
       </div>
 
-      <br/><br/><hr/><br/><br/>
+      <br/><br/><hr/><br/>
 
       <h2 className='title-admin-produto'>Lista de Produtos</h2>
+
+      <form className='form-admin-search-produto' onSubmit={searchProdutos}>
+        <input className='input-admin-search-produto' type="text" placeholder="ID, Nome, Categoria, Aparelho, Cor" value={formSearch} onChange={handleInputSearchChange} />
+        <button className='form-btn-admin-search-produto' type="submit">Pesquisar</button>
+        <button type="button" onClick={() => buscarProdutos(1)}>Limpar</button>
+      </form>
+
       {produtos.length === 0 ? (
         <p>Nenhum produto cadastrado.</p>
       ) : (
-        <div className="produto-grid">
-          <div className="produto-header">
-            <span>Imagens</span>
-            <span>ID</span>
-            <span>Nome</span>
-            <span>Aparelho</span>
-            <span>Cor</span>
-            <span>Descrição</span>
-            <span>Preço</span>
-            <span>Categoria</span>
-            <span>Estoque</span>
-            <span>Destaque</span>
-            <span>Peso</span>
-            <span>Altura</span>
-            <span>Largura</span>
-            <span>Comprimento</span>
-            <span>Ações</span>
-          </div>
+        <div className="cards-container">
+          {produtos.map((produto) => {
+            const imagens = produto.imagens || [];
+            const indice = indiceImagem[produto.id] || 0;
 
-          {produtos.map((produto) => (
-            <div className="produto-row" key={produto.id}>
-              <div className="produto-imagens">
-                {produto.imagens?.map((img, i) => (
-                  <img key={i} src={img.url} alt={produto.nome} />
-                ))}
-              </div>
-              <span>{produto.id}</span>
-              <span>{produto.nome}</span>
-              <span>{produto.aparelho_nome}</span>
-              <span>{produto.cor}</span>
-              <span>{produto.descricao}</span>
-              <span>R$ {produto.preco}</span>
-              <span>{produto.categoria_nome}</span>
-              <span>{produto.estoque}</span>
-              <span>{produto.destaque}</span>
-              <span>{produto.peso} g</span>
-              <span>{produto.altura} cm</span>
-              <span>{produto.largura} cm</span>
-              <span>{produto.comprimento} cm</span>
-              <div className="produto-acoes">
-                <button onClick={() => handleEditar(produto)}>Editar</button>
-                <button onClick={() => handleDeletar(produto.id)}>Deletar</button>
-              </div>
-            </div>
-          ))}
+            return(
+              <div className="produto-card" key={produto.id}>
+                
+                <div className="produto-card-imgs">
+                  {imagens?.[indice] && (
+                    <div className="carousel">
+                      <button
+                        className="carousel-btn"
+                        onClick={() => imagemAnterior(produto.id, produto.imagens)}
+                      >
+                        <IoIosArrowBack />
+                      </button>
 
+                      <img
+                        src={produto.imagens[indiceImagem[produto.id] || 0]?.url}
+                        alt="imagem produto"
+                        className="carousel-img"
+                        onError={(e) => e.target.src="/placeholder-img.svg"}
+                      />
+
+                      <button
+                        className="carousel-btn"
+                        onClick={() => proximaImagem(produto.id, produto.imagens)}
+                      >
+                        <IoIosArrowForward />
+                      </button>
+                    </div>
+
+                  )}
+                </div>
+
+                <div className="produto-card-info">
+                  <h3><span style={{ fontSize: '0.85rem' }}>#{produto.id}</span> {produto.nome}</h3>
+                  <p>{produto.aparelho_nome}</p>
+                  <span><strong>R$ {produto.preco}</strong></span>
+                </div>
+
+                <button className="btn-verDetalhes" onClick={() => setModalProduto(produto)}>
+                  Ver detalhes
+                </button>
+
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -333,6 +436,7 @@ const AdminProdutos = () => {
               Próxima
             </button>
           </div>
+      <ModalProduto produto={modalProduto} onClose={() => setModalProduto(null)} />
     </div>
   );
 };

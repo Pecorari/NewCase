@@ -18,7 +18,9 @@ const getAllAparelhos = async () => {
 };
 
 const getSearchAparelhos = async (busca) => {
-    const [aparelhos] = await connection.execute('SELECT * FROM aparelhos WHERE nome LIKE ? LIMIT 10', [busca]);
+    const [aparelhos] = await connection.execute(`SELECT * FROM aparelhos WHERE nome LIKE ? OR id = ? LIMIT 10`,
+        [`%${busca}%`, busca]
+    );
     return aparelhos;
 };
 

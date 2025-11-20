@@ -6,6 +6,7 @@ import './AdminUsuarios.css';
 const AdminUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [usuariosExibir, setUsuariosExibir] = useState([]);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
   const [erro, setErro] = useState('');
   const [form, setForm] = useState({
     searchValue: ''
@@ -28,7 +29,7 @@ const AdminUsuarios = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setForm({ [name]: value });
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -43,6 +44,7 @@ const AdminUsuarios = () => {
       const response = await api.get(`/usuarios/${form.searchValue}`);
       setUsuariosExibir([response.data]);
       setForm({searchValue: ''});
+      setErro('');
     } catch (err) {
       setErro(err.response.data.mensagem);
       console.error('Erro ao buscar usuario:', err);
@@ -54,7 +56,14 @@ const AdminUsuarios = () => {
       {erro ? <span className='erro'>{erro}</span> : <></>}
       <h2 className='title-admin-usuario'>Buscar Usuario</h2>
       <form className='form-admin-usuario' onSubmit={handleSubmit}>
-        <input className='input-admin-usuario' type="text" name="searchValue" placeholder="ID / Nome do usuario" value={form.searchValue} onChange={handleInputChange} />
+        <input 
+          className='input-admin-usuario'
+          type="text"
+          name="searchValue"
+          placeholder="ID / Nome do usuario"
+          value={form.searchValue}
+          onChange={handleInputChange}
+        />
         <button className='form-btn-admin-usuario' type="submit">Buscar</button>
       </form>
 
@@ -69,26 +78,41 @@ const AdminUsuarios = () => {
             <span>ID</span>
             <span>Nome</span>
             <span>CPF</span>
-            <span>Telefone</span>
-            <span>Data de Nascimento</span>
-            <span>Email</span>
-            <span>Tipo</span>
-            <span>Criado em</span>
           </div>
           {usuariosExibir.map((usuario) => (
-            <div className="user-row" key={usuario.id}>
-              <span>{usuario.id}</span>
-              <span>{usuario.nome}</span>
-              <span>{usuario.cpf}</span>
-              <span>{usuario.telefone}</span>
-              <span>{usuario.data_nasc}</span>
-              <span>{usuario.email}</span>
-              <span>{usuario.tipo}</span>
-              <span>{new Date(usuario.criado_em).toLocaleString()}</span>
+            <div className="user-row" key={usuario.id} onClick={() => setUsuarioSelecionado(usuario)}>
+              <span data-label="ID">{usuario.id}</span>
+              <span data-label="Nome">{usuario.nome}</span>
+              <span data-label="CPF">{usuario.cpf}</span>
             </div>
           ))}
         </div>
       )}
+
+      {usuarioSelecionado && (
+        <div className="modal-adm">
+          <div className="modal-content-adm">
+            <button className="close-modal-adminPedidos" onClick={() => setUsuarioSelecionado(null)}>X</button>
+            <h2>Usuario #{usuarioSelecionado.id}</h2>
+
+            <div className="modal-grid-adm">
+              <section>
+                <h3 className="subtitles-sections-adm">Informações Gerais</h3>
+                <p>Nome: {usuarioSelecionado.nome}</p>
+                <p>CPF: {usuarioSelecionado.cpf}</p>
+                <p>Telefone: {usuarioSelecionado.telefone}</p>
+                <p>E-mail: {usuarioSelecionado.email}</p>
+                <p>Datra de Nascimento: {usuarioSelecionado.data_nasc}</p>
+                <br/><br/>
+                <p>Tipo: {usuarioSelecionado.tipo}</p>
+                <p>Email Verificado: {usuarioSelecionado.email_verificado === 1 ? 'Sim' : 'Não'}</p>
+                <p>Criado em: {new Date(usuarioSelecionado.criado_em).toLocaleString()}</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

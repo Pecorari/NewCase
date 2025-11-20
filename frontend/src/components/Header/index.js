@@ -106,7 +106,7 @@ function Header({ inLoja }) {
           </Link>
         </div>
 
-        {usuario?.tipo === 'admin' && <button className='btn-entrar-dashboard' onClick={() => navigate('/admin')} ref={dashBtnRef}>Dashboard</button>}
+        {usuario?.tipo === 'admin' && <button className='btn-entrar-dashboard-header' onClick={() => navigate('/admin')} ref={dashBtnRef}>Dashboard</button>}
 
         <div className="top-bar">
           <div className="actions">

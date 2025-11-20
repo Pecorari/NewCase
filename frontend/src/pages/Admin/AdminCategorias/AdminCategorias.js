@@ -73,20 +73,36 @@ const AdminCategorias = () => {
       {categorias.length === 0 ? (
         <p>Nenhuma categoria cadastrada.</p>
       ) : (
-        <div className="categoria-grid">
-          <div className="categoria-header">
-            <span>ID</span>
-            <span>Nome</span>
-            <span>Ações</span>
-          </div>
-          {categorias.map((categoria) => (
-            <div className="categoria-row" key={categoria.id}>
-              <span>{categoria.id}</span>
-              <span>{categoria.nome}</span>
-              <button className='btn-dell-categoria' onClick={() => handleDeletar(categoria.id)}>Deletar</button>
+        <>
+          <div className="categoria-grid desktop-only">
+            <div className="categoria-header">
+              <span>ID</span>
+              <span>Nome</span>
+              <span>Ações</span>
             </div>
-          ))}
-        </div>
+
+            {categorias.map((categoria) => (
+              <div className="categoria-row" key={categoria.id}>
+                <span>{categoria.id}</span>
+                <span>{categoria.nome}</span>
+                <button className='btn-dell-categoria' onClick={() => handleDeletar(categoria.id)}>Deletar</button>
+              </div>
+            ))}
+          </div>
+
+          <div className="categoria-cards mobile-only">
+            {categorias.map((categoria) => (
+              <div className="categoria-card" key={categoria.id}>
+                <span><strong>ID:</strong> {categoria.id}</span>
+                <span><strong>Nome:</strong> {categoria.nome}</span>
+
+                <button className='btn-dell-categoria' onClick={() => handleDeletar(categoria.id)}>
+                  Deletar
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

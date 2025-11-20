@@ -44,15 +44,21 @@ const getProdutosDestaque = async (req, res) => {
 };
 
 const getSearchHeader = async (req, res) => {
-    const { busca } = req.query;
+    let { busca } = req.query;
     
-    if (!busca || busca.length < 2) {
-      return res.status(400).json({ error: 'É necessário fornecer pelo menos 2 caracteres para busca.' });
+    if (!busca) {
+        return res.status(400).json({ error: 'Busca inválida.' });
+    }
+
+    busca = busca.trim();
+    const isNumber = !isNaN(busca) && busca !== '';
+    
+    if (!isNumber && busca.length < 2) {
+        return res.status(400).json({ error: 'Digite pelo menos 2 caracteres para buscar.' });
     }
 
     try {
         const produtos = await produtosModel.getSearchHeader(busca);
-        
         return res.status(200).json(produtos);
     } catch (error) {
         console.error('Erro em getSearchHeader:', error);
@@ -74,14 +80,10 @@ const getFilteredProdutos = async (req, res) => {
             avaliacao: req.query.avaliacao ? Number(req.query.avaliacao) : null,
         };
 
-        const { produtos: results, total } = await produtosModel.getFilteredProdutos(filtros, page, limit);
-
-        const produtos = results.map(produto => ({
-            ...produto,
-            imagens: produto.imagens ? produto.imagens.split(',') : []
-        }));
+        const { produtos, total } = await produtosModel.getFilteredProdutos(filtros, page, limit);
 
         const totalPaginas = Math.ceil(total / limit);
+
         return res.status(200).json({ produtos, total, totalPaginas, page });
     } catch (error) {
         console.error('Erro em getFilteredProdutos:', error);

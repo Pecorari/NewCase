@@ -77,18 +77,42 @@ const getProdutosDestaque = async () => {
 const getSearchHeader = async (busca) => {
     const [produtos] = await connection.execute(`
         SELECT 
-            produtos.*,
-            categorias.nome AS categoria,
-            aparelhos.nome AS aparelho
-        FROM produtos
-        JOIN categorias ON produtos.categoria_id = categorias.id
-        JOIN aparelhos ON produtos.aparelho_id = aparelhos.id
+            p.id,
+            p.nome,
+            p.cor,
+            p.descricao,
+            p.preco,
+            p.material,
+            p.estoque,
+            p.destaque,
+            p.peso,
+            p.altura,
+            p.largura,
+            p.comprimento,
+            p.aparelho_id,
+            a.nome AS aparelho_nome,
+            p.categoria_id,
+            c.nome AS categoria_nome
+        FROM produtos p
+        JOIN categorias c ON p.categoria_id = c.id
+        JOIN aparelhos a ON p.aparelho_id = a.id
         WHERE 
-            produtos.nome LIKE CONCAT(?) OR
-            produtos.cor LIKE CONCAT(?) OR
-            categorias.nome LIKE CONCAT(?) OR
-            aparelhos.nome LIKE CONCAT(?)`, [busca, busca, busca, busca]
+            p.id = ? OR
+            p.nome LIKE CONCAT('%', ?, '%') OR
+            p.cor LIKE CONCAT('%', ?, '%') OR
+            c.nome LIKE CONCAT('%', ?, '%') OR
+            a.nome LIKE CONCAT('%', ?, '%')
+        LIMIT 20`, [busca, busca, busca, busca, busca]
     );
+
+    for (const produto of produtos) {
+        const [imgs] = await connection.execute(
+            `SELECT id, url FROM produto_imagens WHERE produto_id = ?`,
+            [produto.id]
+        );
+        produto.imagens = imgs;
+    }
+
     return produtos;
 };
 
@@ -106,29 +130,93 @@ const getFilteredProdutos = async (filtros, page = 1, limit = 16) => {
     if (avaliacao != null) { whereSql += ' AND p.avaliacao_media = ?'; params.push(avaliacao); }
 
     const offset = (page - 1) * limit;
+    const limitInt = parseInt(limit, 10);
+    const offsetInt = parseInt(offset, 10);
 
-    const [produtos] = await connection.execute(`
-        SELECT p.*, GROUP_CONCAT(pi.url) AS imagens
+    const [rows] = await connection.execute(`
+        SELECT 
+            p.*,
+            a.nome AS aparelho_nome,
+            c.nome AS categoria_nome,
+            JSON_ARRAYAGG(
+                JSON_OBJECT('id', pi.id, 'url', pi.url)
+            ) AS imagens
         FROM produtos p
-        LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
         JOIN categorias c ON p.categoria_id = c.id
         JOIN aparelhos a ON p.aparelho_id = a.id
+        LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
         ${whereSql}
         GROUP BY p.id
-        LIMIT ${parseInt(limit, 10)} OFFSET ${parseInt(offset, 10)}
+        LIMIT ${limitInt} OFFSET ${offsetInt}
     `, params);
+
+    const produtos = rows.map(row => {
+        let imagens = [];
+
+        if (typeof row.imagens === "string") {
+            try {
+                imagens = JSON.parse(row.imagens);
+            } catch (error) {
+                console.error("Erro ao parsear imagens:", error);
+            }
+        } else if (Array.isArray(row.imagens)) {
+            imagens = row.imagens;
+        }
+
+        return {
+            ...row,
+            imagens
+        };
+    });
 
     const [countResult] = await connection.execute(`
         SELECT COUNT(*) AS total
         FROM produtos p
         JOIN categorias c ON p.categoria_id = c.id
         JOIN aparelhos a ON p.aparelho_id = a.id
-        ${whereSql}`, params);
+        ${whereSql}
+    `, params);
 
-    const total = countResult[0].total;
-
-    return { produtos, total };
+    return { produtos, total: countResult[0].total };
 };
+
+// const getFilteredProdutos = async (filtros, page = 1, limit = 16) => {
+//     const { categoria, aparelho, preco_min, preco_max, cor, avaliacao } = filtros;
+
+//     let whereSql = 'WHERE 1=1';
+//     let params = [];
+
+//     if (categoria) { whereSql += ' AND c.nome = ?'; params.push(categoria); }
+//     if (aparelho) { whereSql += ' AND a.nome = ?'; params.push(aparelho); }
+//     if (preco_min != null) { whereSql += ' AND p.preco >= ?'; params.push(preco_min); }
+//     if (preco_max != null) { whereSql += ' AND p.preco <= ?'; params.push(preco_max); }
+//     if (cor) { whereSql += ' AND p.cor = ?'; params.push(cor); }
+//     if (avaliacao != null) { whereSql += ' AND p.avaliacao_media = ?'; params.push(avaliacao); }
+
+//     const offset = (page - 1) * limit;
+
+//     const [produtos] = await connection.execute(`
+//         SELECT p.*, GROUP_CONCAT(pi.url) AS imagens
+//         FROM produtos p
+//         LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
+//         JOIN categorias c ON p.categoria_id = c.id
+//         JOIN aparelhos a ON p.aparelho_id = a.id
+//         ${whereSql}
+//         GROUP BY p.id
+//         LIMIT ${parseInt(limit, 10)} OFFSET ${parseInt(offset, 10)}
+//     `, params);
+
+//     const [countResult] = await connection.execute(`
+//         SELECT COUNT(*) AS total
+//         FROM produtos p
+//         JOIN categorias c ON p.categoria_id = c.id
+//         JOIN aparelhos a ON p.aparelho_id = a.id
+//         ${whereSql}`, params);
+
+//     const total = countResult[0].total;
+
+//     return { produtos, total };
+// };
 
 const getUniqueProduto = async (id) => {
     const [produto] = await connection.execute(`

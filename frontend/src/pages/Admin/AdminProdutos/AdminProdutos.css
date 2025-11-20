@@ -162,6 +162,52 @@ textarea {
 
 
 
+.form-admin-search-produto {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 15px;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.input-admin-search-produto {
+  flex: 1;
+  min-width: 180px;
+  padding: 10px;
+  border: 1px solid #444;
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 6px;
+  outline: none;
+}
+
+.form-btn-admin-search-produto,
+.form-admin-search-produto button {
+  padding: 10px 16px;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .form-admin-search-produto {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .form-admin-search-produto button {
+    width: 100%;
+  }
+}
+
+
+
+
 .produto-grid {
   display: grid;
   gap: 10px;
@@ -204,6 +250,33 @@ textarea {
   height: 50px;
   object-fit: cover;
   border-radius: 6px;
+}
+
+.carousel {
+  position: static;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.carousel-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 20px 10px;
+}
+.carousel-btn:hover {
+  color: rgb(166, 166, 166);
 }
 
 .produto-acoes {
@@ -269,4 +342,194 @@ textarea {
   font-size: 1rem;
   color: #fff;
   font-weight: 500;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.produto-card {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #333;
+  transition: transform 0.2s;
+}
+
+.produto-card:hover {
+  transform: translateY(-4px);
+  background: #222;
+}
+
+.produto-card-imgs img {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.produto-card-info {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.btn-verDetalhes {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background: #444;
+  cursor: pointer;
+  color: #fff;
+}
+.btn-verDetalhes:hover {
+  background: #666;
+}
+
+/*-------- MODAL --------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #1a1a1a;
+  width: 90%;
+  max-width: 600px;
+  padding: 25px;
+  border-radius: 12px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  background: #900;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.modal-info {
+  margin-top: 10px;
+}
+
+.modal-dms-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25%;
+}
+
+.tag-preco {
+  font-weight: bold;
+}
+
+.modal-imgs {
+  display: flex;
+  gap: 10px;
+
+  margin: 20px 0;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-behavior: smooth;
+  flex-wrap: nowrap;
+}
+.modal-imgs::-webkit-scrollbar {
+  height: 3px;
+}
+.modal-imgs::-webkit-scrollbar-thumb {
+  background: #ff3b9b;
+  border-radius: 8px;
+}
+
+.modal-imgs img {
+  width: 140px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.modal-botoes {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 25px;
+}
+
+.btn-editar {
+  background: #ffaa00;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-deletar {
+  background: #ff3b3b;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+
+
+@media (max-width: 768px) {
+  .form-wrapper.aberto {
+    padding: 10px 0;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr !important; /* vira 1 coluna */
+    gap: 10px;
+  }
+
+  .form-admin-produto {
+    gap: 15px;
+  }
+
+  .form-col {
+    gap: 12px;
+  }
+
+  .input-admin-produto,
+  textarea {
+    font-size: 16px; /* evita zoom no iPhone */
+    padding: 12px;
+  }
+
+    .preview-container {
+    justify-content: center;
+  }
+
+  .preview-item img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .form-btn-admin-produto,
+  .form-btn-admin-produto-cancel {
+    width: 100%;
+  }
+
+  .form-btn {
+    padding: 1.2rem;
+    font-size: 18px;
+  }
 }

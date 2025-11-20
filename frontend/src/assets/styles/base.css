@@ -18,23 +18,3 @@ body {
   margin: 0 auto;
   padding: 1rem;
 }
-
-/* ====== ANIMATION SKELETON ====== */
-/* .skeleton {
-  position: relative;
-  overflow: hidden;
-  background-color: #24243a;
-  background-image: linear-gradient(90deg, #2a2a40 25%, #3a3a55 50%, #2a2a40 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite linear;
-  border-radius: 8px;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-} */

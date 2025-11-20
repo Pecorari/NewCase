@@ -83,6 +83,7 @@ const Loja = () => {
       const response = await api.get(`${endpoint}?${query.toString()}`);
 
       setProdutos(response.data.produtos);
+      console.log(response.data);
       setTotalPaginas(Math.ceil(response.data.total / itensPorPagina));
     } catch (err) {
       console.error('Erro ao buscar produtos:', err);

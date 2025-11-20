@@ -249,7 +249,7 @@ const getAdminPedidoBySearch = async (value) => {
       u.telefone AS usuario_telefone,
       u.email AS usuario_email,
 
-      -- Itens do pedido
+      -- Itens
       pi.id AS item_id,
       pi.produto_id,
       pr.nome AS produto_nome,
@@ -273,9 +273,15 @@ const getAdminPedidoBySearch = async (value) => {
     LEFT JOIN pedido_itens pi ON pi.pedido_id = p.id
     LEFT JOIN produtos pr ON pr.id = pi.produto_id
     LEFT JOIN pagamentos pg ON pg.pedido_id = p.id
-    WHERE p.id = ? OR LOWER(u.nome) LIKE CONCAT('%', LOWER(?), '%')
+    
+    WHERE 
+      p.id = ?
+      OR LOWER(u.nome) LIKE CONCAT('%', LOWER(?), '%')
+      OR REPLACE(u.cpf, '.', '') LIKE REPLACE(?, '.', '')
+      OR REPLACE(u.cpf, '-', '') LIKE REPLACE(?, '-', '')
+
     ORDER BY p.id, pi.id;
-  `, [value, value]);
+  `, [value, value, value, value]);
 
   const pedidosMap = {};
 
@@ -329,8 +335,8 @@ const getAdminPedidoBySearch = async (value) => {
               pago_em: row.pago_em,
             }
           : null,
-      }
-    };
+      };
+    }
 
     if (row.item_id) {
       pedidosMap[row.pedido_id].itens.push({
@@ -349,7 +355,6 @@ const getAdminPedidoBySearch = async (value) => {
 
   return Object.values(pedidosMap);
 };
-
 
 const updateAdminPedido = async (id, dataPedido = {}, novosItens = [], novoPagamento = {}) => {
   const campos = [];
