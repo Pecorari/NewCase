@@ -178,7 +178,9 @@ const AdminPedidos = () => {
                   <p>Entrega: {pedidoSelecionado.frete.prazo} dias úteis</p>
                   <p>Valor: R$ {pedidoSelecionado.frete.valor}</p>
                   <p>Etiqueta ID: {pedidoSelecionado.etiqueta_id}</p>
-                  <p>Codigo de Rastreio: {pedidoSelecionado.cod_rastreio}</p>
+                  <p>Protocolo da Etiqueta: {pedidoSelecionado.frete_protocolo}</p>
+                  <p>Codigo de Rastreio: {pedidoSelecionado.frete_rastreio}</p>
+                  <p>Status de Entrega: {pedidoSelecionado.frete_status}</p>
                 </section>
               </div>
             </div>

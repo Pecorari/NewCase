@@ -7,6 +7,12 @@ require('dotenv').config();
 
 const app = express();
 
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
+}));
+
 BigInt.prototype.toJSON = function () {
   return this.toString();
 };

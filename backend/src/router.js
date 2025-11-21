@@ -41,6 +41,7 @@ router.post('/contato-email', async (req, res) => {
 router.get('/oauth/callback', freteController.obterToken);
 router.post('/calcular-frete', freteController.calcularFrete);
 router.post('/frete/:id/gerar-etiqueta', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, freteController.gerarEtiqueta);
+router.post('/webhook/melhorenvio', freteController.melhorEnvioWebhook);
 
 router.post('/produtos/add', autenticarToken, verificarPermissao(['admin']), validarProduto, validarRequisicao, produtosController.createProduto);
 router.get('/produtos', produtosController.getAllProdutos);

@@ -381,10 +381,7 @@ const updateAdminPedido = async (id, dataPedido = {}, novosItens = [], novoPagam
   }
 
   if (campos.length > 0) {
-    await connection.execute(
-      `UPDATE pedidos SET ${campos.join(', ')} WHERE id = ?`,
-      [...valores, id]
-    );
+    await connection.execute(`UPDATE pedidos SET ${campos.join(', ')} WHERE id = ?`, [...valores, id]);
   }
 
   // Atualiza itens (se vierem)
@@ -415,6 +412,28 @@ const updateAdminPedido = async (id, dataPedido = {}, novosItens = [], novoPagam
   };
 };
 
+const updatePedidoByEtiquetaId = async (etiquetaId, data) => {
+  const campos = [];
+  const valores = [];
+
+  if (data.frete_rastreio !== undefined) {
+    campos.push("frete_rastreio = ?");
+    valores.push(data.frete_rastreio);
+  }
+  if (data.frete_protocolo !== undefined) {
+    campos.push("frete_protocolo = ?");
+    valores.push(data.frete_protocolo);
+  }
+  if (data.frete_status !== undefined) {
+    campos.push("frete_status = ?");
+    valores.push(data.frete_status);
+  }
+
+  if (campos.length > 0) {
+    await connection.execute(`UPDATE pedidos SET ${campos.join(", ")} WHERE etiqueta_id = ?`, [...valores, etiquetaId]);
+  }
+};
+
 const deletePedido = async (id) => {
   const [result] = await connection.execute('DELETE FROM pedidos WHERE id = ?', [id]);
 
@@ -429,5 +448,6 @@ module.exports = {
   getAdminPedidos,
   getAdminPedidoBySearch,
   updateAdminPedido,
+  updatePedidoByEtiquetaId,
   deletePedido
 }

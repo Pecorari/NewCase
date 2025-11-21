@@ -210,6 +210,8 @@ function PedidoDetail() {
                       <p>Serviço: {pedido.frete_nome}</p>
                       <p>Entrega: {pedido.frete_prazo} dias úteis</p>
                       <p>Valor: {pedido.frete_valor}</p>
+                      {pedido.frete_status && <p>{pedido.frete_status}</p>}
+                      {pedido.frete_rastreio && <p>{pedido.frete_rastreio}</p>}
                     </section>
                   )}
                 </div>
