@@ -29,7 +29,7 @@ const createPedidoWithConn = async (conn, dataPedido, cliente, itens, idLogado) 
 };
 
 const getAllMyPedidos = async (idLogado) => {
-  const [pedidos] = await connection.execute('SELECT * FROM pedidos WHERE usuario_id = ?', [idLogado]);
+  const [pedidos] = await connection.execute('SELECT * FROM pedidos WHERE usuario_id = ? ORDER BY id DESC', [idLogado]);
 
   return pedidos;
 };
@@ -135,7 +135,7 @@ const getAdminPedidos = async () => {
     LEFT JOIN pagamentos AS pg ON pg.pedido_id = p.id
     LEFT JOIN produto_imagens AS pri ON pri.produto_id = pr.id
     LEFT JOIN aparelhos ON pr.aparelho_id = aparelhos.id
-    ORDER BY p.id, pi.id;
+    ORDER BY p.id DESC, pi.id ASC;
   `);
 
   const pedidosMap = {};
@@ -210,7 +210,10 @@ const getAdminPedidos = async () => {
     }
   });
 
-  return Object.values(pedidosMap);
+  const pedidos = Object.values(pedidosMap);
+  pedidos.sort((a, b) => b.pedido_id - a.pedido_id);
+
+  return pedidos;
 };
 
 const getAdminPedidoBySearch = async (value) => {
@@ -280,7 +283,7 @@ const getAdminPedidoBySearch = async (value) => {
       OR REPLACE(u.cpf, '.', '') LIKE REPLACE(?, '.', '')
       OR REPLACE(u.cpf, '-', '') LIKE REPLACE(?, '-', '')
 
-    ORDER BY p.id, pi.id;
+    ORDER BY p.id DESC, pi.id ASC;
   `, [value, value, value, value]);
 
   const pedidosMap = {};
@@ -352,8 +355,11 @@ const getAdminPedidoBySearch = async (value) => {
       });
     }
   });
+  
+  const pedidos = Object.values(pedidosMap);
+  pedidos.sort((a, b) => b.pedido_id - a.pedido_id);
 
-  return Object.values(pedidosMap);
+  return pedidos;
 };
 
 const updateAdminPedido = async (id, dataPedido = {}, novosItens = [], novoPagamento = {}) => {

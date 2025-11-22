@@ -93,7 +93,7 @@ function montarBodyPagbank(pedido, itensPedido, metodo, cliente, endereco_entreg
             due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
             instruction_lines: {
               line_1: "Pagamento do pedido",
-              line_2: "YourCase",
+              line_2: "NewCase",
             },
             holder: {
               name: cliente.nome,

@@ -31,7 +31,8 @@ const getCarrinhoByUser = async (idLogado) => {
         JOIN aparelhos a ON p.aparelho_id = a.id
         LEFT JOIN produto_imagens i ON p.id = i.produto_id
         WHERE c.usuario_id = ?
-        GROUP BY c.id, c.usuario_id, c.produto_id, c.quantidade, p.nome, p.preco`,
+        GROUP BY c.id, c.usuario_id, c.produto_id, c.quantidade, p.nome, p.preco
+        ORDER BY c.id DESC`,
         [idLogado]);
     return produtos;
 };

@@ -13,7 +13,7 @@ const createCategoria = async (dataCategoria) => {
 };
 
 const getAllCategorias = async () => {
-    const [categorias] = await connection.execute('SELECT * FROM categorias');
+    const [categorias] = await connection.execute('SELECT * FROM categorias ORDER BY id DESC');
     return categorias;
 };
 

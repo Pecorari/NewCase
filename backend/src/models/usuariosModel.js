@@ -38,19 +38,17 @@ const loginUsuario = async (email) => {
 };
 
 const getAllUsuarios = async () => {
-  const [usuarios] = await connection.execute('SELECT * FROM usuarios');
+  const [usuarios] = await connection.execute('SELECT * FROM usuarios ORDER BY id DESC');
 
   return usuarios;
 };
 
 const getUsuarioBySearch = async (value) => {
   const [usuario] = await connection.execute(`
-    SELECT *
-    FROM usuarios
-    WHERE 
-      id = ?
+    SELECT * FROM usuarios WHERE id = ?
       OR LOWER(nome) LIKE CONCAT('%', LOWER(?), '%')
       OR REPLACE(REPLACE(cpf, '.', ''), '-', '') LIKE REPLACE(REPLACE(?, '.', ''), '-', '')
+    ORDER BY id DESC
   `, [value, value, value]);
 
   return usuario[0] || null;

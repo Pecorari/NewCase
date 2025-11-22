@@ -36,6 +36,7 @@ const getAllProdutos = async (page, limit) => {
         JOIN categorias c ON p.categoria_id = c.id
         LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
         GROUP BY p.id
+        ORDER BY p.id DESC
         LIMIT ${limitInt} OFFSET ${offsetInt}
     `);
 
@@ -69,7 +70,9 @@ const getProdutosDestaque = async () => {
         FROM produtos p
         LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
         WHERE p.destaque = 'sim'
-        GROUP BY p.id;`);
+        GROUP BY p.id
+        ORDER BY p.id DESC
+    `);
 
     return produtos;
 };
@@ -102,6 +105,7 @@ const getSearchHeader = async (busca) => {
             p.cor LIKE CONCAT('%', ?, '%') OR
             c.nome LIKE CONCAT('%', ?, '%') OR
             a.nome LIKE CONCAT('%', ?, '%')
+        ORDER BY p.id DESC
         LIMIT 20`, [busca, busca, busca, busca, busca]
     );
 
@@ -147,6 +151,7 @@ const getFilteredProdutos = async (filtros, page = 1, limit = 16) => {
         LEFT JOIN produto_imagens pi ON p.id = pi.produto_id
         ${whereSql}
         GROUP BY p.id
+        ORDER BY p.id DESC
         LIMIT ${limitInt} OFFSET ${offsetInt}
     `, params);
 
@@ -232,6 +237,7 @@ const getUniqueProduto = async (id) => {
         LEFT JOIN avaliacoes av ON p.id = av.produto_id
         WHERE p.id = ?
         GROUP BY p.id, a.nome;
+        ORDER BY p.id DESC
         `, [id]);
 
     return produto[0];

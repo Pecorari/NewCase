@@ -13,12 +13,12 @@ const createAparelho = async (dataAparelho) => {
 };
 
 const getAllAparelhos = async () => {
-    const [aparelhos] = await connection.execute('SELECT * FROM aparelhos');
+    const [aparelhos] = await connection.execute('SELECT * FROM aparelhos ORDER BY id DESC');
     return aparelhos;
 };
 
 const getSearchAparelhos = async (busca) => {
-    const [aparelhos] = await connection.execute(`SELECT * FROM aparelhos WHERE nome LIKE ? OR id = ? LIMIT 10`,
+    const [aparelhos] = await connection.execute(`SELECT * FROM aparelhos WHERE nome LIKE ? OR id = ? ORDER BY id DESC LIMIT 10`,
         [`%${busca}%`, busca]
     );
     return aparelhos;

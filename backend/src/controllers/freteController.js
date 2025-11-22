@@ -177,48 +177,48 @@ const gerarEtiqueta = async (req, res) => {
 
       const cartResponse = await axios.post('https://www.melhorenvio.com.br/api/v2/me/cart', payloadAddEtiquetasCart, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'User-Agent': 'NewCase contato@newcase.com'
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": 'application/json',
+          "Accept": 'application/json',
+          "User-Agent": 'NewCase contato@newcase.com'
         }
       });
-
-      console.log('Adicionado ao carrinho!', cartResponse.data);
+      console.log('Adicionado ao carrinho:', cartResponse.data);
 
       const comprasEtiquetasCart = await axios.post('https://www.melhorenvio.com.br/api/v2/me/shipment/checkout', { orders: [cartResponse.data.id] }, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'User-Agent': 'NewCase contato@newcase.com'
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": 'application/json',
+          "Accept": 'application/json',
+          "User-Agent": 'NewCase contato@newcase.com'
         }}
       );
+      console.log('Feio a compra da etiqueta:', comprasEtiquetasCart.data);
 
-      console.log('Resposta do checkout:', comprasEtiquetasCart.data);
-
-      const etiquetaCompra = Array.isArray(comprasEtiquetasCart.data) ? comprasEtiquetasCart.data[0] : comprasEtiquetasCart.data;
-
-      const generateResponse = await axios.post('https://www.melhorenvio.com.br/api/v2/me/shipment/generate', { orders: [etiquetaCompra.id] }, {
+      const generateResponse = await axios.post('https://www.melhorenvio.com.br/api/v2/me/shipment/generate', { orders: [cartResponse.data.id] }, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'User-Agent': 'NewCase contato@newcase.com'
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": 'application/json',
+          "Accept": 'application/json',
+          "User-Agent": 'NewCase contato@newcase.com'
         }}
       );
+      console.log('Geração de PDF OK.');
 
-      console.log('Pedido de geração de PDF enviado:', generateResponse.data);
+      console.log(
+        'frete_status do cartResponse:', cartResponse.data.status,
+        'frete_status do comprasEtiquetasCart:', comprasEtiquetasCart.data.status
+      );
 
-      await pedidosModel.updateAdminPedido(id, {
-        etiqueta_id: etiquetaCompra.id,
-        frete_protocolo: etiquetaCompra.protocol,
-        frete_rastreio: etiquetaCompra.tracking,
-        frete_status: etiquetaCompra.status
+      await pedidosModel.updateAdminPedido(id, { etiqueta_id: cartResponse.data.id, });
+      await pedidosModel.updatePedidoByEtiquetaId(id, {
+        frete_protocolo: cartResponse.data.protocol,
+        frete_rastreio: cartResponse.data.tracking,
+        frete_status: cartResponse.data.status
       });
       console.log('Dados de rastreio e id salvos no pedido!');
 
-      const etiquetaUrl = await ObterEtiquetaPDF(id, accessToken, etiquetaCompra.id);
+      const etiquetaUrl = await ObterEtiquetaPDF(id, accessToken, cartResponse.data.id);
 
       return res.status(200).json({
         message: 'Etiqueta comprada e gerada PDF com sucesso!',
@@ -245,7 +245,7 @@ const gerarEtiqueta = async (req, res) => {
 
 async function ObterEtiquetaPDF(id, accessToken, etiquetaId) {
   try {
-    const maxRetries = 3;
+    const maxRetries = 5;
     const delay = 5000;
     let pdfUrl = null;
 
@@ -253,9 +253,9 @@ async function ObterEtiquetaPDF(id, accessToken, etiquetaId) {
       try {
         const etiquetaUrlDownload = await axios.get(`https://www.melhorenvio.com.br/api/v2/me/imprimir/pdf/${etiquetaId}`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'User-Agent': 'NewCase contato@newcase.com'
           }
         });
@@ -286,8 +286,8 @@ async function ObterEtiquetaPDF(id, accessToken, etiquetaId) {
     }
 
     const etiquetaPDF = await axios.get(pdfUrl, {
-      headers: { 'User-Agent': 'NewCase contato@newcase.com' },
-      responseType: 'arraybuffer'
+      'headers': { 'User-Agent': 'NewCase contato@newcase.com' },
+      'responseType': 'arraybuffer'
     });
 
     console.log('PDF da etiqueta baixado com sucesso!');

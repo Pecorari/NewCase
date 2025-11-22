@@ -13,12 +13,12 @@ const createEndereco = async (dataEndereco, idLogado) => {
 };
 
 const getUserEnderecos = async (idLogado) => {
-    const [enderecos] = await connection.execute('SELECT * FROM enderecos WHERE usuario_id = ?', [idLogado]);
+    const [enderecos] = await connection.execute('SELECT * FROM enderecos WHERE usuario_id = ? ORDER BY id DESC', [idLogado]);
     return enderecos;
 };
 
 const getUniqueUserEnderecos = async (id) => {
-    const [endereco] = await connection.execute('SELECT * FROM enderecos WHERE id = ?', [id]);
+    const [endereco] = await connection.execute('SELECT * FROM enderecos WHERE id = ? ORDER BY id DESC', [id]);
     return endereco;
 };
 
