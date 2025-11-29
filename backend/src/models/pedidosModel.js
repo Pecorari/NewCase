@@ -94,6 +94,9 @@ const getAdminPedidos = async () => {
       p.frete_prazo,
       p.etiqueta_id,
       p.etiqueta_url,
+      p.frete_protocolo,
+      p.frete_rastreio,
+      p.frete_status,
       p.pagbank_ped_id,
       p.criado_em,
       
@@ -149,6 +152,9 @@ const getAdminPedidos = async () => {
         status: row.status_pedido,
         etiqueta_id: row.etiqueta_id,
         etiqueta_url: row.etiqueta_url,
+        frete_protocolo: row.frete_protocolo,
+        frete_rastreio: row.frete_rastreio,
+        frete_status: row.frete_status,
         pagbank_ped_id: row.pagbank_ped_id,
         destinatario: {
           nome: row.cliente_nome,
@@ -243,6 +249,9 @@ const getAdminPedidoBySearch = async (value) => {
       p.frete_prazo,
       p.etiqueta_id,
       p.etiqueta_url,
+      p.frete_protocolo,
+      p.frete_rastreio,
+      p.frete_status,
       p.pagbank_ped_id,
       p.criado_em,
 
@@ -297,6 +306,9 @@ const getAdminPedidoBySearch = async (value) => {
         status: row.status_pedido,
         etiqueta_id: row.etiqueta_id,
         etiqueta_url: row.etiqueta_url,
+        frete_protocolo: row.frete_protocolo,
+        frete_rastreio: row.frete_rastreio,
+        frete_status: row.frete_status,
         pagbank_ped_id: row.pagbank_ped_id,
         destinatario: {
           nome: row.cliente_nome,
@@ -384,6 +396,19 @@ const updateAdminPedido = async (id, dataPedido = {}, novosItens = [], novoPagam
   if (dataPedido.etiqueta_id !== undefined) {
     campos.push('etiqueta_id = ?');
     valores.push(dataPedido.etiqueta_id);
+  }
+
+  if (dataPedido.frete_rastreio !== undefined) {
+    campos.push("frete_rastreio = ?");
+    valores.push(dataPedido.frete_rastreio);
+  }
+  if (dataPedido.frete_protocolo !== undefined) {
+    campos.push("frete_protocolo = ?");
+    valores.push(dataPedido.frete_protocolo);
+  }
+  if (dataPedido.frete_status !== undefined) {
+    campos.push("frete_status = ?");
+    valores.push(dataPedido.frete_status);
   }
 
   if (campos.length > 0) {

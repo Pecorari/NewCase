@@ -18,7 +18,7 @@ function Home() {
           <section className="hero">
             <div className="hero-content">
               <div className="hero-image">
-                <img src='/destaqueHome/capaDestaque1.svg' alt="capa em destaque" className="produto-banner" />
+                <img src='/destaqueHome/capaDestaque1.png' alt="capa em destaque" className="produto-banner" />
               </div>
               <div className="hero-text">
                 <h1 className="title-hero">PROTEJA SEU CELULAR COM ESTILO</h1>
@@ -26,7 +26,7 @@ function Home() {
                 <Link to="/loja"><button className="hero-btn">ACESSAR A LOJA</button></Link>
               </div>
             </div>
-            <img src='/destaqueHome/color-explosion2.svg' alt="explosão de cores" className="backgroundImg"/>
+            <img src='/destaqueHome/color-explosion2.jpg' alt="explosão de cores" className="backgroundImg"/>
           </section>
 
           <section className="produtos-destaques">

@@ -128,7 +128,9 @@ const AdminProdutos = () => {
       if (imagem.acao === "nova" && imagem.file) {
         const nomeArquivo = `produtos/${uuidv4()}-${imagem.file.name}`;
         const imagemRef = ref(storage, nomeArquivo);
-        await uploadBytes(imagemRef, imagem.file);
+        await uploadBytes(imagemRef, imagem.file, {
+          cacheControl: 'public, max-age=31536000'
+        });
         const url = await getDownloadURL(imagemRef);
 
         uploaded.push({ url, acao: "nova" });
@@ -225,7 +227,6 @@ const AdminProdutos = () => {
   };
 
   const handleDeletar = async (id) => {
-    if (!window.confirm('Tem certeza que deseja deletar este produto?')) return;
     try {
       await api.delete(`/produtos/del/${id}`);
       buscarProdutos();

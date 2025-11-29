@@ -451,7 +451,7 @@ textarea {
   flex-wrap: nowrap;
 }
 .modal-imgs::-webkit-scrollbar {
-  height: 3px;
+  height: 4px;
 }
 .modal-imgs::-webkit-scrollbar-thumb {
   background: #ff3b9b;
@@ -531,5 +531,9 @@ textarea {
   .form-btn {
     padding: 1.2rem;
     font-size: 18px;
+  }
+
+  .modal-imgs::-webkit-scrollbar {
+    height: 6px;
   }
 }

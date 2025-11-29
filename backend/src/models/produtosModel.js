@@ -237,7 +237,6 @@ const getUniqueProduto = async (id) => {
         LEFT JOIN avaliacoes av ON p.id = av.produto_id
         WHERE p.id = ?
         GROUP BY p.id, a.nome;
-        ORDER BY p.id DESC
         `, [id]);
 
     return produto[0];
