@@ -497,8 +497,8 @@ const Checkout = () => {
                   <button className={`aba ${metodo === "boleto" ? "ativa" : ""}`} onClick={() => setMetodo("boleto")}>
                     Boleto
                   </button>
-                  {/* // |------ PIX DESATIVADO TEMPORARIAMENTE ----------| */}
-                  <button style={{ display: 'none' }} className={`aba ${metodo === "pix" ? "ativa" : ""}`} onClick={() => setMetodo("pix")}>
+                  {/* // |------ PIX ATIVADO TEMPORARIAMENTE ----------| */}
+                  <button className={`aba ${metodo === "pix" ? "ativa" : ""}`} onClick={() => setMetodo("pix")}>
                     <img src='bandeiras/pix2.svg' className="icon-pix" alt="icone do PIX" />
                     PIX
                   </button>
