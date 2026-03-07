@@ -41,7 +41,7 @@ router.post('/contato-email', async (req, res) => {
 router.get('/oauth/callback', freteController.obterToken);
 router.post('/calcular-frete', freteController.calcularFrete);
 router.post('/frete/:id/gerar-etiqueta', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, freteController.gerarEtiqueta);
-router.post('/webhook/melhorenvio', freteController.melhorEnvioWebhook);
+// router.post('/webhook/melhorenvio', freteController.melhorEnvioWebhook);
 
 router.post('/produtos/add', autenticarToken, verificarPermissao(['admin']), validarProduto, validarRequisicao, produtosController.createProduto);
 router.get('/produtos', produtosController.getAllProdutos);
@@ -50,7 +50,13 @@ router.get('/produtos/search', produtosController.getSearchHeader);
 router.get('/produtos/filters', produtosController.getFilteredProdutos);
 router.get('/produtos/:id', produtosController.getUniqueProduto);
 router.put('/produtos/edit/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarProduto, validarRequisicao, produtosController.updateProduto);
+// router.put('/produtos/mockup-padrao/:produto_id', autenticarToken, verificarPermissao(['admin']), produtosController.setMockupPadrao);
 router.delete('/produtos/del/:id', autenticarToken, verificarPermissao(['admin']), validarId, validarRequisicao, produtosController.deleteProduto);
+
+// router.post('/mockups-aparelhos/add', autenticarToken, verificarPermissao(['admin']), mockupsAparelhosController.create);
+// router.get('/mockups-aparelhos/:aparelho_id', mockupsAparelhosController.getByAparelho);
+// router.put('/mockups-aparelhos/edit/:id', autenticarToken, verificarPermissao(['admin']), mockupsAparelhosController.update);
+// router.delete('/mockups-aparelhos/del/:id', autenticarToken, verificarPermissao(['admin']), mockupsAparelhosController.delete);
 
 router.post('/avaliacoes/add', autenticarToken, verificarPermissao(['admin', 'cliente']), avaliacoesController.createAvaliacao);
 router.get('/avaliacoes/:produtoId', avaliacoesController.getProductAvaliacoes);
@@ -70,7 +76,7 @@ router.get('/profile', autenticarToken, usuariosController.profile);
 // INTEGRAÇAO CHECKOUT PAGBANK
 router.get('/checkout/publicKey', checkoutController.getPublicKeyFromDB);
 router.post('/checkout', autenticarToken, verificarPermissao(['admin', 'cliente']), verifyRecaptchaV3(0.6), validarPedido, validarRequisicao, checkoutController.checkout);
-router.post('/checkout/notificacao', checkoutController.notificacao);
+// router.post('/checkout/notificacao', checkoutController.notificacao);
 
 
 // Rotas para manipular apenas os próprios dados. ex.: Editar apenas o próprio pedido

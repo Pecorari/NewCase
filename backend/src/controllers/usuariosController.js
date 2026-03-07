@@ -136,10 +136,14 @@ const loginUsuario = async (req, res) => {
     });
 
     let firebaseToken = null;
-    if (usuario.tipo === 'admin') {
-      firebaseToken = await gerarTokenFirebase(usuario.id.toString());
+    try {
+      if (usuario.tipo === 'admin') {
+        firebaseToken = await gerarTokenFirebase(usuario.id.toString());
+      }
+    } catch(error) {
+      console.error('Erro ao gerar token Firebase', error);
     }
-
+    
     return res.status(200).json({ id: usuario.id, nome: usuario.nome, email: usuario.email, firebaseToken });
   } catch (error) {
     console.error('Erro no loginUsuario:', error);

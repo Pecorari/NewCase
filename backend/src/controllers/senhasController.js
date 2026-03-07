@@ -13,11 +13,11 @@ const solicitarRedefinicao = async (req, res) => {
     const token = crypto.randomBytes(32).toString('hex');
     await senhasModel.atualizarTokenVerificacao(email, token);
     
-    res.status(200).json({ mensagem: 'E-mail enviado com link para redefinição de senha.' });
-
     enviarLinkRedefinicao(email, token).catch(err => {
       console.error('Erro ao enviar e-mail de verificação:', err);
     });
+
+    res.status(200).json({ mensagem: 'E-mail enviado com link para redefinição de senha.' });
   } catch (err) {
     console.error('Erro ao solicitar redefinição:', err);
     res.status(500).json({ mensagem: 'Erro interno do servidor' });
